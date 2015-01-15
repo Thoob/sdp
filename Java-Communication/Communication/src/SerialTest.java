@@ -13,7 +13,16 @@ class SerialTest {
 	public static void main(String[] args) {
 		printAvailablePorts();
 		String message = "Go up";
-		sendMessageViaPort(message);
+		//sendMessageViaPort(message);
+
+		try {
+			serialPort = new SerialPort("/dev/ttyACM1");
+			serialPort.openPort();
+			serialPort.writeInt(1);
+		} catch (SerialPortException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	static void printAvailablePorts() {
@@ -39,11 +48,11 @@ class SerialTest {
 	}
 
 	static void sendMessageViaPort(String message) {
-		serialPort = new SerialPort("COM1");
+		serialPort = new SerialPort("/dev/ttyACM0");
 		try {
 			serialPort.openPort();
 
-			serialPort.setParams(SerialPort.BAUDRATE_9600,
+			serialPort.setParams(SerialPort.BAUDRATE_115200,
 					SerialPort.DATABITS_8, SerialPort.STOPBITS_1,
 					SerialPort.PARITY_NONE);
 
@@ -53,7 +62,7 @@ class SerialTest {
 			serialPort.addEventListener(new PortReader(),
 					SerialPort.MASK_RXCHAR);
 
-			serialPort.writeString(message);
+			serialPort.writeInt(1);
 		} catch (SerialPortException ex) {
 			System.out
 					.println("There are an error on writing string to port т: "
