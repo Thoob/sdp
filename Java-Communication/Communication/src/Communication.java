@@ -2,7 +2,7 @@ import jssc.SerialPort;
 import jssc.SerialPortException;
 import jssc.SerialPortList;
 
-// http://www.codeproject.com/Tips/801262/Sending-and-receiving-strings-from-COM-port-via-jS 
+// From http://www.codeproject.com/Tips/801262/Sending-and-receiving-strings-from-COM-port-via-jS 
 
 class Communication {
 

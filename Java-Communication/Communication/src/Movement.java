@@ -1,5 +1,5 @@
 public enum Movement {
-	UP(0), DOWN(1), RIGHT(2), LEFT(3);
+	START(0), STOP(1), UP(2), DOWN(3), RIGHT(4), LEFT(5);
 
 	private final int value;
 
@@ -9,5 +9,25 @@ public enum Movement {
 
 	public int value() {
 		return value;
+	}
+
+	public static int getValue(String action) {
+		System.out.println(action);
+		switch (action) {
+		case "Start":
+			return START.value();
+		case "Stop":
+			return STOP.value();
+		case "Up":
+			return UP.value();
+		case "Down":
+			return DOWN.value();
+		case "Right":
+			return RIGHT.value();
+		case "Left":
+			return LEFT.value();
+		default:
+			return -1;
+		}
 	}
 }

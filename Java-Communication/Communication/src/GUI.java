@@ -6,135 +6,125 @@ import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JDesktopPane;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
-
+import javax.swing.JPanel;
 
 public class GUI extends JFrame {
+	private static final long serialVersionUID = 1L;
+	private String[] portNames;
+	private JPanel buttonsPanel;
+	private JComboBox<String> portNamesList;
+	private ActionListener listener;
+	private boolean serialPortInitialized = false;
 
-	public GUI(){
+	private Communication mCommunication;
+
+	public GUI() {
+		mCommunication = new Communication();
+		this.portNames = mCommunication.getAvailablePorts();
+
+		createFrame();
+		addMovementBtns();
+	}
+
+	private void createFrame() {
 		setTitle("Controller");
-        
-        setSize(300,300);
-        
-        JDesktopPane desktopPane = new JDesktopPane();
-        desktopPane.setBackground(Color.WHITE);
-        getContentPane().add(desktopPane, BorderLayout.CENTER);
-        
-        JButton Start = new JButton("Start");
-        Start.setSelectedIcon(null);
-        Start.setIcon(null);
-        Start.setForeground(Color.BLACK);
-        desktopPane.setLayer(Start, 0);
-        Start.setBackground(Color.GREEN);
-        Start.setBounds(0, 220, 101, 42);
-        desktopPane.add(Start);
-        Start.addActionListener(new ActionListener() {
+
+		setSize(300, 400);
+		setResizable(false);
+
+		// set window to middle of screen
+		setLocationRelativeTo(null);
+
+		buttonsPanel = new JPanel();
+		buttonsPanel.setBackground(Color.WHITE);
+		add(buttonsPanel);
+
+		portNamesList = new JComboBox<String>(portNames);
+		buttonsPanel.add(portNamesList);
+
+		JButton initBtn = new JButton("Initialize");
+		initBtn.addActionListener(new ActionListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Start");
-				// TODO Auto-generated method stub
-				
+			public void actionPerformed(ActionEvent e) {
+				mCommunication.initializeSerialPort(String.valueOf(portNamesList.getSelectedItem()));
+				serialPortInitialized = true;
+				System.out.println("SerialPort initialized");
 			}
-        	
-        });
+		});
+		buttonsPanel.add(initBtn);
 
-        
-        JButton Stop = new JButton("Stop");
-        Stop.setBackground(Color.RED);
-        Stop.setForeground(new Color(0, 0, 0));
-        Stop.setBounds(177, 220, 107, 42);
-        desktopPane.add(Stop);
-        Stop.addActionListener(new ActionListener() {
+		listener = new ActionListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Stop");
-				// TODO Auto-generated method stub
-				
+			public void actionPerformed(ActionEvent e) {
+				if (serialPortInitialized) {					
+					String action = e.getActionCommand();
+					int value = Movement.getValue(action);
+					mCommunication.sendNumberViaPort(value);
+					System.out.println(action + ": " + value);
+				} else {
+					System.out.println("Serial port not initialized");
+				}
 			}
-        	
-        });
-        
-        JButton button_left = new JButton();
-        button_left.setBounds(25, 61, 70, 70);
-        ImageIcon left = new ImageIcon("assets\\left.png");
-        button_left.setIcon(left);
-        Image left1 = left.getImage().getScaledInstance(button_left.getWidth(), button_left.getHeight(), Image.SCALE_DEFAULT);
-        left.setImage(left1);
-        desktopPane.add(button_left);
-        button_left.addActionListener(new ActionListener() {
+		};
+	}
 
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Left");
-				// TODO Auto-generated method stub
-				
-			}
-        	
-        });
+	private void addMovementBtns() {
 
-        
-        JButton button_up = new JButton();
-        button_up.setBounds(105, 11, 70, 70);
-        ImageIcon up = new ImageIcon("assets\\up.png");
-        button_up.setIcon(up);
-        Image up1 = up.getImage().getScaledInstance(button_up.getWidth(), button_up.getHeight(), Image.SCALE_DEFAULT);
-        up.setImage(up1);
-        desktopPane.add(button_up);
-        button_up.addActionListener(new ActionListener() {
+		JButton startBtn = new JButton("Start");
+		startBtn.setForeground(Color.BLACK);
+		startBtn.setBackground(Color.GREEN);
+		startBtn.setSize(100, 50);
+		buttonsPanel.add(startBtn, BorderLayout.SOUTH);
+		startBtn.addActionListener(listener);
 
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Up");
-				// TODO Auto-generated method stub
-				
-			}
-        	
-        });
+		JButton stopBtn = new JButton("Stop");
+		stopBtn.setBackground(Color.RED);
+		stopBtn.setForeground(Color.BLACK);
+		stopBtn.setSize(100, 50);
+		buttonsPanel.add(stopBtn);
+		stopBtn.addActionListener(listener);
 
-        
-        JButton button_right = new JButton();
-        button_right.setBounds(187, 61, 70, 70);
-        ImageIcon right = new ImageIcon("assets\\right.png");
-        button_right.setIcon(right);
-        Image right1 = right.getImage().getScaledInstance(button_right.getWidth(), button_right.getHeight(), Image.SCALE_DEFAULT);
-        right.setImage(right1);
-        desktopPane.add(button_right);
-        button_right.addActionListener(new ActionListener() {
+		JButton leftBtn = new JButton("Left");
+		leftBtn.setSize(50, 50);
+		ImageIcon leftIcon = new ImageIcon("assets\\left.png");
+		leftBtn.setIcon(leftIcon);
+		leftIcon.setImage(leftIcon.getImage().getScaledInstance(
+				leftBtn.getWidth(), leftBtn.getHeight(), Image.SCALE_DEFAULT));
+		buttonsPanel.add(leftBtn);
+		leftBtn.addActionListener(listener);
 
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Right");
-				// TODO Auto-generated method stub
-				
-			}
-        	
-        });
+		JButton upBtn = new JButton("Up");
+		upBtn.setSize(50, 50);
+		ImageIcon upIcon = new ImageIcon("assets\\up.png");
+		upBtn.setIcon(upIcon);
+		upIcon.setImage(upIcon.getImage().getScaledInstance(upBtn.getWidth(),
+				upBtn.getHeight(), Image.SCALE_DEFAULT));
+		buttonsPanel.add(upBtn);
+		upBtn.addActionListener(listener);
 
-        
-        JButton button_down = new JButton();
-        button_down.setBounds(105, 113, 70, 70);
-        ImageIcon down = new ImageIcon("assets\\down.png");
-        button_down.setIcon(down);
-        Image down1 = down.getImage().getScaledInstance(button_down.getWidth(), button_down.getHeight(), Image.SCALE_DEFAULT);
-        down.setImage(down1);
-        desktopPane.add(button_down);
-        button_down.addActionListener(new ActionListener() {
+		JButton rightBtn = new JButton("Right");
+		rightBtn.setSize(50, 50);
+		ImageIcon rightIcon = new ImageIcon("assets\\right.png");
+		rightBtn.setIcon(rightIcon);
+		rightIcon
+				.setImage(rightIcon.getImage().getScaledInstance(
+						rightBtn.getWidth(), rightBtn.getHeight(),
+						Image.SCALE_DEFAULT));
+		buttonsPanel.add(rightBtn);
+		rightBtn.addActionListener(listener);
 
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				JButton o =(JButton) (arg0.getSource());
-				
-				System.out.println("Down");
-				// TODO Auto-generated method stub
-				
-			}
-        	
-        });
+		JButton downBtn = new JButton("Down");
+		downBtn.setSize(50, 50);
+		ImageIcon downIcon = new ImageIcon("assets\\down.png");
+		downBtn.setIcon(downIcon);
+		downIcon.setImage(downIcon.getImage().getScaledInstance(
+				downBtn.getWidth(), downBtn.getHeight(), Image.SCALE_DEFAULT));
+		buttonsPanel.add(downBtn);
+		downBtn.addActionListener(listener);
 
-
-        setVisible(true);
 	}
 }
