@@ -8,9 +8,10 @@ public class Main {
 		for (int i = 0; i < portNames.length; i++) {
 			System.out.println(portNames[i]);
 		}
+		GUI gui = new GUI();
 		mCommunication.initializeSerialPort(portNames[0]);
 		mCommunication.sendNumberViaPort(1);
 		
-		//GUI gui = new GUI();
+		
 	}
 }
