@@ -125,6 +125,13 @@ public class GUI extends JFrame {
 				downBtn.getWidth(), downBtn.getHeight(), Image.SCALE_DEFAULT));
 		buttonsPanel.add(downBtn);
 		downBtn.addActionListener(listener);
+		
+		JButton kickBtn = new JButton("Kick");
+		kickBtn.setSize(50, 50);
+		kickBtn.setBackground(Color.GRAY);
+		kickBtn.setForeground(Color.BLACK);
+		buttonsPanel.add(kickBtn);
+		kickBtn.addActionListener(listener);
 
 	}
 }

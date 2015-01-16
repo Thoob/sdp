@@ -1,5 +1,5 @@
 public enum Movement {
-	START(0), STOP(1), UP(2), DOWN(3), RIGHT(4), LEFT(5);
+	START(0), STOP(1), UP(2), DOWN(3), RIGHT(4), LEFT(5), KICK(6);
 
 	private final int value;
 
@@ -26,6 +26,8 @@ public enum Movement {
 			return RIGHT.value();
 		case "Left":
 			return LEFT.value();
+		case "Kick":
+			return KICK.value();
 		default:
 			return -1;
 		}
