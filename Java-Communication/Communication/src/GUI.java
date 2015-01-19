@@ -31,7 +31,7 @@ public class GUI extends JFrame {
 	private void createFrame() {
 		setTitle("Controller");
 
-		setSize(300, 400);
+		setSize(120, 360);
 		setResizable(false);
 
 		// set window to middle of screen
@@ -89,45 +89,27 @@ public class GUI extends JFrame {
 		stopBtn.addActionListener(listener);
 
 		JButton leftBtn = new JButton("Left");
-		leftBtn.setSize(50, 50);
-		ImageIcon leftIcon = new ImageIcon("assets\\left.png");
-		leftBtn.setIcon(leftIcon);
-		leftIcon.setImage(leftIcon.getImage().getScaledInstance(
-				leftBtn.getWidth(), leftBtn.getHeight(), Image.SCALE_DEFAULT));
+		leftBtn.setSize(100, 50);
 		buttonsPanel.add(leftBtn);
 		leftBtn.addActionListener(listener);
 
 		JButton upBtn = new JButton("Up");
-		upBtn.setSize(50, 50);
-		ImageIcon upIcon = new ImageIcon("assets\\up.png");
-		upBtn.setIcon(upIcon);
-		upIcon.setImage(upIcon.getImage().getScaledInstance(upBtn.getWidth(),
-				upBtn.getHeight(), Image.SCALE_DEFAULT));
+		upBtn.setSize(100, 50);
 		buttonsPanel.add(upBtn);
 		upBtn.addActionListener(listener);
 
 		JButton rightBtn = new JButton("Right");
-		rightBtn.setSize(50, 50);
-		ImageIcon rightIcon = new ImageIcon("assets\\right.png");
-		rightBtn.setIcon(rightIcon);
-		rightIcon
-				.setImage(rightIcon.getImage().getScaledInstance(
-						rightBtn.getWidth(), rightBtn.getHeight(),
-						Image.SCALE_DEFAULT));
+		rightBtn.setSize(100, 50);
 		buttonsPanel.add(rightBtn);
 		rightBtn.addActionListener(listener);
 
 		JButton downBtn = new JButton("Down");
-		downBtn.setSize(50, 50);
-		ImageIcon downIcon = new ImageIcon("assets\\down.png");
-		downBtn.setIcon(downIcon);
-		downIcon.setImage(downIcon.getImage().getScaledInstance(
-				downBtn.getWidth(), downBtn.getHeight(), Image.SCALE_DEFAULT));
+		downBtn.setSize(100, 50);
 		buttonsPanel.add(downBtn);
 		downBtn.addActionListener(listener);
 		
 		JButton kickBtn = new JButton("Kick");
-		kickBtn.setSize(50, 50);
+		kickBtn.setSize(100, 50);
 		kickBtn.setBackground(Color.GRAY);
 		kickBtn.setForeground(Color.BLACK);
 		buttonsPanel.add(kickBtn);
