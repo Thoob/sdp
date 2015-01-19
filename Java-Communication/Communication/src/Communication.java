@@ -21,7 +21,7 @@ class Communication {
 	void sendNumberViaPort(int number) {
 		try {
 			serialPort.openPort();
-			serialPort.writeInt(number);
+			serialPort.writeString(""+number);
 			serialPort.closePort();
 		} catch (SerialPortException e) {
 			e.printStackTrace();
