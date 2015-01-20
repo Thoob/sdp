@@ -1,13 +1,17 @@
+package com.sdp.group13;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class GUI extends JFrame {
@@ -18,18 +22,17 @@ public class GUI extends JFrame {
 	private ActionListener listener;
 	private boolean serialPortInitialized = false;
 
-	private Communication mCommunication;
+	// private Communication mCommunication;
 
 	public GUI() {
-		mCommunication = new Communication();
-		this.portNames = mCommunication.getAvailablePorts();
+		this.portNames = Communication.getInstance().getAvailablePorts();
 
 		createFrame();
 		addMovementBtns();
 	}
 
 	private void createFrame() {
-		setTitle("Controller");
+		setTitle("Robot Controller");
 
 		setSize(120, 360);
 		setResizable(false);
@@ -49,7 +52,8 @@ public class GUI extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				mCommunication.initializeSerialPort(String.valueOf(portNamesList.getSelectedItem()));
+				Communication.getInstance().initializeSerialPort(
+						String.valueOf(portNamesList.getSelectedItem()));
 				serialPortInitialized = true;
 				System.out.println("SerialPort initialized");
 			}
@@ -60,16 +64,71 @@ public class GUI extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (serialPortInitialized) {					
+				if (serialPortInitialized) {
 					String action = e.getActionCommand();
-					int value = Movement.getValue(action);
-					mCommunication.sendNumberViaPort(value);
-					System.out.println(action + ": " + value);
+					RobotCommunication rc = new RobotCommunication();
+					switch (action) {
+					case "Start":
+
+						break;
+					case "Stop":
+
+						break;
+					case "Up":
+
+						break;
+					case "Down":
+
+						break;
+					case "Right":
+
+						break;
+					case "Left":
+
+						break;
+					case "Kick":
+						rc.sendFKick(1);
+						break;
+					default:
+						break;
+					}
+					System.out.println(action + ": ");
 				} else {
 					System.out.println("Serial port not initialized");
 				}
 			}
 		};
+
+		addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				int code = e.getKeyCode();
+				switch (code) {
+				case KeyEvent.VK_UP:
+					System.out.println("UP");
+					break;
+				case KeyEvent.VK_DOWN:
+					break;
+				case KeyEvent.VK_LEFT:
+					break;
+				case KeyEvent.VK_RIGHT:
+					break;
+				}
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+		});
 	}
 
 	private void addMovementBtns() {
@@ -107,7 +166,7 @@ public class GUI extends JFrame {
 		downBtn.setSize(100, 50);
 		buttonsPanel.add(downBtn);
 		downBtn.addActionListener(listener);
-		
+
 		JButton kickBtn = new JButton("Kick");
 		kickBtn.setSize(100, 50);
 		kickBtn.setBackground(Color.GRAY);

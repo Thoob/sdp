@@ -1,3 +1,4 @@
+package com.sdp.group13;
 public enum Movement {
 	STOP(0), START(1), UP(2), DOWN(3), RIGHT(4), LEFT(5), KICK(6);
 
