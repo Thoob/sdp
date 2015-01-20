@@ -4,6 +4,9 @@
 // January 2015
 // Attacker Code
 
+//Libraries that need to be added:
+//SerialCommand:  Tokenises and interprets a string iout from the serial port
+//AccelStepper:   Similar to the default Stepper library, but allows acceleration and control of different motors
 
 #include <EEPROM.h>
 #include <SerialCommand.h>
@@ -56,6 +59,8 @@ AccelStepper right_stepper(right_forward, right_backward);
 
 // Servo
 Servo grabber;
+
+
 void setup()
 {
   AFMS.begin();
@@ -124,6 +129,7 @@ void set_engine()
   int right_speed;
   left_in = comm.next();
   right_in = comm.next();
+  
   if (left_in != NULL && right_in != NULL)
   {
     left_speed = atof(left_in);
@@ -225,6 +231,7 @@ void run_engine()
   int right_step;
   left_in = comm.next();
   right_in = comm.next();
+  
   if (left_in != NULL && right_in != NULL)
   {
     left_step = atoi(left_in);
