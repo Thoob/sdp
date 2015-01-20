@@ -71,4 +71,7 @@ memory or by the corresponding SET function.
 
 13 "A_RUN_SHOOT (int turn_direction)
 Will rotate the robot in the turn direction for the number
-of steps specified in memory by the SHOOT_STEP
+of steps specified in memory by the SHOOT_STEP. Direction
+currently specified is Right: 1 and Left: 1, although
+this may be different if our motors are round the other
+way
