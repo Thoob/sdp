@@ -2,6 +2,15 @@ package com.sdp.group13;
 
 public class RobotCommunication implements ArduinoCommunication {
 
+	static RobotCommunication instance;
+
+	public static RobotCommunication getInstance() {
+		if (instance == null) {
+			instance = new RobotCommunication();
+		}
+		return instance;
+	}
+
 	@Override
 	public void sendMove(int leftSpeed, int rightSpeed) {
 		String command = String.format("A_SET_ENGINE %d %d", leftSpeed,
@@ -44,6 +53,54 @@ public class RobotCommunication implements ArduinoCommunication {
 	@Override
 	public void sendTShoot(int shootPosition) {
 		String command = String.format("A_SET_TSHOOT %d", shootPosition);
+		Communication.getInstance().sendCommandViaPort(command);
+	}
+
+	@Override
+	public void sendStartMoveUp() {
+		String command = "A_START_MOVE_UP";
+		Communication.getInstance().sendCommandViaPort(command);
+	}
+
+	@Override
+	public void sendStopMoveUp() {
+		String command = "A_STOP_MOVE_UP";
+		Communication.getInstance().sendCommandViaPort(command);
+	}
+
+	@Override
+	public void sendStartMoveDown() {
+		String command = "A_START_MOVE_DOWN";
+		Communication.getInstance().sendCommandViaPort(command);
+	}
+
+	@Override
+	public void sendStopMoveDown() {
+		String command = "A_STOP_MOVE_DOWN";
+		Communication.getInstance().sendCommandViaPort(command);
+	}
+
+	@Override
+	public void sendStartTurnRight() {
+		String command = "A_START_TURN_RIGHT";
+		Communication.getInstance().sendCommandViaPort(command);
+	}
+
+	@Override
+	public void sendStopTurnRight() {
+		String command = "A_STOP_TURN_RIGHT";
+		Communication.getInstance().sendCommandViaPort(command);
+	}
+
+	@Override
+	public void sendStartTurnLeft() {
+		String command = "A_START_TURN_LEFT";
+		Communication.getInstance().sendCommandViaPort(command);
+	}
+
+	@Override
+	public void sendStopTurnLeft() {
+		String command = "A_STOP_TURN_LEFT";
 		Communication.getInstance().sendCommandViaPort(command);
 	}
 }

@@ -22,18 +22,12 @@ public class GUI extends JFrame {
 	private ActionListener listener;
 	private boolean serialPortInitialized = false;
 
-	// private Communication mCommunication;
+	private boolean upBtnPressed, downBtnPressed, rightBtnPressed,
+			leftBtnPressed;
 
 	public GUI() {
 		this.portNames = Communication.getInstance().getAvailablePorts();
-
-		createFrame();
-		addMovementBtns();
-	}
-
-	private void createFrame() {
 		setTitle("Robot Controller");
-
 		setSize(120, 360);
 		setResizable(false);
 
@@ -41,6 +35,14 @@ public class GUI extends JFrame {
 		setLocationRelativeTo(null);
 
 		buttonsPanel = new JPanel();
+
+		createFrame();
+		addMovementBtns();
+
+	}
+
+	private void createFrame() {
+
 		buttonsPanel.setBackground(Color.WHITE);
 		add(buttonsPanel);
 
@@ -69,22 +71,8 @@ public class GUI extends JFrame {
 					RobotCommunication rc = new RobotCommunication();
 					switch (action) {
 					case "Start":
-
 						break;
 					case "Stop":
-
-						break;
-					case "Up":
-
-						break;
-					case "Down":
-
-						break;
-					case "Right":
-
-						break;
-					case "Left":
-
 						break;
 					case "Kick":
 						rc.sendFKick(1);
@@ -99,36 +87,87 @@ public class GUI extends JFrame {
 			}
 		};
 
-		addKeyListener(new KeyListener() {
+		buttonsPanel.addKeyListener(new KeyListener() {
 
 			@Override
 			public void keyTyped(KeyEvent e) {
-				int code = e.getKeyCode();
-				switch (code) {
-				case KeyEvent.VK_UP:
-					System.out.println("UP");
-					break;
-				case KeyEvent.VK_DOWN:
-					break;
-				case KeyEvent.VK_LEFT:
-					break;
-				case KeyEvent.VK_RIGHT:
-					break;
-				}
+
 			}
 
 			@Override
 			public void keyReleased(KeyEvent e) {
-				// TODO Auto-generated method stub
-
+				if (serialPortInitialized) {
+					int code = e.getKeyCode();
+					switch (code) {
+					case KeyEvent.VK_UP:
+						RobotCommunication.getInstance().sendStopMoveUp();
+						System.out.println("Released UP");
+						upBtnPressed = false;
+						break;
+					case KeyEvent.VK_DOWN:
+						RobotCommunication.getInstance().sendStopMoveDown();
+						System.out.println("Released DOWN");
+						downBtnPressed = false;
+						break;
+					case KeyEvent.VK_LEFT:
+						RobotCommunication.getInstance().sendStopTurnLeft();
+						System.out.println("Released LEFT");
+						leftBtnPressed = false;
+						break;
+					case KeyEvent.VK_RIGHT:
+						RobotCommunication.getInstance().sendStopTurnRight();
+						System.out.println("Released RIGHT");
+						rightBtnPressed = false;
+						break;
+					}
+				}
 			}
 
 			@Override
 			public void keyPressed(KeyEvent e) {
-				// TODO Auto-generated method stub
-
+				if (serialPortInitialized) {
+					int code = e.getKeyCode();
+					switch (code) {
+					case KeyEvent.VK_UP:
+						if (!upBtnPressed) {
+							RobotCommunication.getInstance().sendStartMoveUp();
+							System.out.println("Pressed UP");
+							upBtnPressed = true;
+						}
+						break;
+					case KeyEvent.VK_DOWN:
+						if (!downBtnPressed) {
+							RobotCommunication.getInstance()
+									.sendStartMoveDown();
+							System.out.println("Pressed DOWN");
+							downBtnPressed = true;
+						}
+						break;
+					case KeyEvent.VK_LEFT:
+						if (!leftBtnPressed) {
+							RobotCommunication.getInstance()
+									.sendStartTurnLeft();
+							System.out.println("Pressed LEFT");
+							leftBtnPressed = true;
+						}
+						break;
+					case KeyEvent.VK_RIGHT:
+						if (!rightBtnPressed) {
+							RobotCommunication.getInstance()
+									.sendStartTurnRight();
+							System.out.println("Pressed RIGHT");
+							rightBtnPressed = true;
+						}
+						break;
+					}
+				} else {
+					System.out.println("Serial port not initialized");
+				}
 			}
 		});
+
+		buttonsPanel.setFocusable(true);
+		buttonsPanel.requestFocusInWindow();
 	}
 
 	private void addMovementBtns() {
@@ -146,26 +185,6 @@ public class GUI extends JFrame {
 		stopBtn.setSize(100, 50);
 		buttonsPanel.add(stopBtn);
 		stopBtn.addActionListener(listener);
-
-		JButton leftBtn = new JButton("Left");
-		leftBtn.setSize(100, 50);
-		buttonsPanel.add(leftBtn);
-		leftBtn.addActionListener(listener);
-
-		JButton upBtn = new JButton("Up");
-		upBtn.setSize(100, 50);
-		buttonsPanel.add(upBtn);
-		upBtn.addActionListener(listener);
-
-		JButton rightBtn = new JButton("Right");
-		rightBtn.setSize(100, 50);
-		buttonsPanel.add(rightBtn);
-		rightBtn.addActionListener(listener);
-
-		JButton downBtn = new JButton("Down");
-		downBtn.setSize(100, 50);
-		buttonsPanel.add(downBtn);
-		downBtn.addActionListener(listener);
 
 		JButton kickBtn = new JButton("Kick");
 		kickBtn.setSize(100, 50);
