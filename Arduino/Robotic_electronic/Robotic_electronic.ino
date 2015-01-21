@@ -32,6 +32,7 @@ int GRAB_POS;
 // Communications
 SerialCommand comm;
 
+
 // Motorshield
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 
@@ -57,6 +58,7 @@ void right_backward() {
 AccelStepper left_stepper(left_backward, left_forward);
 AccelStepper right_stepper(right_forward, right_backward);
 
+
 // Servo
 Servo grabber;
 
@@ -71,7 +73,9 @@ void setup()
   SHOOT_STEP = EEPROM.read(3);
   KICK_STEP = EEPROM.read(4);
   TURN_STEP = EEPROM.read(5);
-  comm.addCommand("A_SET_ENGINE", set_engine);
+  
+  //This specifies all commands that can be read by the Arduino
+  comm.addCommand("b", set_engine);
   comm.addCommand("A_SET_CATCH", set_catch);
   comm.addCommand("A_SET_KICK", set_kick);
   comm.addCommand("A_SET_FKICK", set_fkick);
@@ -85,10 +89,13 @@ void setup()
   comm.addCommand("A_RUN_GRAB", run_grab);
   comm.addCommand("A_RUN_SHOOT", run_shoot);
   comm.setDefaultHandler(invalid_command);
+  
   left_stepper.setMaxSpeed(MAX_SPEED);
   left_stepper.setAcceleration(MAX_SPEED);
   right_stepper.setMaxSpeed(MAX_SPEED);
   right_stepper.setAcceleration(MAX_SPEED);
+  
+  //Sets the grabber servo to Pin 10
   grabber.attach(10);
   run_grab();
 }
@@ -103,6 +110,7 @@ void loop()
   {
     comm.readSerial();
   }
+  
   if (left_stepper.distanceToGo() == 0 && right_stepper.distanceToGo() == 0)
   {
     left_motor->release();
@@ -229,6 +237,7 @@ void run_engine()
   char *right_in;
   int left_step;
   int right_step;
+  
   left_in = comm.next();
   right_in = comm.next();
   
@@ -272,8 +281,11 @@ void run_kick()
 void run_fkick()
 {
   left_stepper.move(KICK_STEP);
+  right_stepper.move(KICK_STCK_STEP);
   right_stepper.move(KICK_STEP);
+  
   KICKING = 1;
+  
   left_stepper.setMaxSpeed(MAX_SPEED);
   left_stepper.setAcceleration(MAX_SPEED);
   right_stepper.setMaxSpeed(MAX_SPEED);
