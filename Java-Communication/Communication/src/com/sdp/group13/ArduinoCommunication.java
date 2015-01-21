@@ -16,4 +16,19 @@ public interface ArduinoCommunication {
 	public void sendShoot(int shootPosition);
 	
 	public void sendTShoot(int shootPosition);
+	
+	
+	
+	//Temporary (not agreed yet)
+	public void sendStartMoveUp();
+	public void sendStopMoveUp();
+	
+	public void sendStartMoveDown();
+	public void sendStopMoveDown();
+	
+	public void sendStartTurnRight();
+	public void sendStopTurnRight();
+	
+	public void sendStartTurnLeft();
+	public void sendStopTurnLeft();
 }
