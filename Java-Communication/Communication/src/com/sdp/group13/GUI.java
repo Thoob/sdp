@@ -71,22 +71,8 @@ public class GUI extends JFrame {
 					RobotCommunication rc = new RobotCommunication();
 					switch (action) {
 					case "Start":
-
 						break;
 					case "Stop":
-
-						break;
-					case "Up":
-
-						break;
-					case "Down":
-
-						break;
-					case "Right":
-
-						break;
-					case "Left":
-
 						break;
 					case "Kick":
 						rc.sendFKick(1);
@@ -199,26 +185,6 @@ public class GUI extends JFrame {
 		stopBtn.setSize(100, 50);
 		buttonsPanel.add(stopBtn);
 		stopBtn.addActionListener(listener);
-
-		JButton leftBtn = new JButton("Left");
-		leftBtn.setSize(100, 50);
-		buttonsPanel.add(leftBtn);
-		leftBtn.addActionListener(listener);
-
-		JButton upBtn = new JButton("Up");
-		upBtn.setSize(100, 50);
-		buttonsPanel.add(upBtn);
-		upBtn.addActionListener(listener);
-
-		JButton rightBtn = new JButton("Right");
-		rightBtn.setSize(100, 50);
-		buttonsPanel.add(rightBtn);
-		rightBtn.addActionListener(listener);
-
-		JButton downBtn = new JButton("Down");
-		downBtn.setSize(100, 50);
-		buttonsPanel.add(downBtn);
-		downBtn.addActionListener(listener);
 
 		JButton kickBtn = new JButton("Kick");
 		kickBtn.setSize(100, 50);
