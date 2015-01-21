@@ -1,0 +1,7 @@
+Simple document tracking particular trails, tribulations and discoveries at stages of development. Ideally, this is 
+to make writing the final report substantially easier. 
+
+=============== Pre Milestone 1 =================
+
+-> Decision to use ball bearings, specific wheels and motors etc. (other hardware choices?)
+-> Creation of GUI, initial blinker communication with Java
