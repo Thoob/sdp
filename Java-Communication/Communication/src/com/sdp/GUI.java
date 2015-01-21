@@ -1,4 +1,4 @@
-package com.sdp.group13;
+package com.sdp;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
