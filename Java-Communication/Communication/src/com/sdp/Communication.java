@@ -1,4 +1,4 @@
-package com.sdp.group13;
+package com.sdp;
 
 import jssc.SerialPort;
 import jssc.SerialPortException;

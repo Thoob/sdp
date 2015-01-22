@@ -1,8 +1,7 @@
-package com.sdp.group13;
+package com.sdp;
 public class Main {
 	public static void main(String[] args) {
 		GUI gui = new GUI();
 		gui.setVisible(true);
-		
 	}
 }
