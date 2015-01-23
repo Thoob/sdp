@@ -45,7 +45,8 @@ public class DistortionFix implements VideoReceiver {
 			public void update(Observable arg0, Object yamlData) {
 				String pitchName = pitchConstants.getPitchNum() == 0 ? "main"
 						: "side";
-
+				
+				if(yamlData!=null){
 				Map<String, Object> topData = (Map<String, Object>) yamlData;
 				Map<String, Object> data = (Map<String, Object>) topData
 						.get("pitch");
@@ -59,6 +60,9 @@ public class DistortionFix implements VideoReceiver {
 					rotateDegrees = (Integer) rotateDegreesObj;
 				affineTransform = AffineTransform.getRotateInstance(
 						Math.toRadians(rotateDegrees), WIDTH / 2, HEIGHT / 2);
+				}else{
+					System.out.println("YAML data is null");
+				}
 			}
 		});
 	}
