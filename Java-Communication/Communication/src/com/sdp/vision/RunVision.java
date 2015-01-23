@@ -90,14 +90,14 @@ public class RunVision {
 				}
 			});
 
-			ColourThresholdConfigTool ctct = new ColourThresholdConfigTool(gui,
+			/*ColourThresholdConfigTool ctct = new ColourThresholdConfigTool(gui,
 					worldState, pitchConstants, vStream, distortionFix,
 					yamlConfig);
 			gui.addTool(ctct, "Settings");
 			vision.addRecogniser(ctct.new PitchBoundsDebugDisplay());
 			vision.addRecogniser(ctct.new DividerLineDebugDisplay());
 			vision.addRecogniser(ctct.new GoalPositionDebugDisplay());
-
+*/
 			HistogramTool histogramTool = new HistogramTool(gui, pitchConstants);
 			gui.addTool(histogramTool, "Colour Thresholds");
 

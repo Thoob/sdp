@@ -42,7 +42,7 @@ public class Pitch extends Observable {
 			public void update(Observable arg0, Object yamlData) {
 				String pitchName = pitchConstants.getPitchNum() == 0 ? "main"
 						: "side";
-
+				if(yamlData!=null){
 				Map<String, Object> topData = (Map<String, Object>) yamlData;
 				Map<String, Object> data = (Map<String, Object>) topData
 						.get("pitch");
@@ -67,6 +67,9 @@ public class Pitch extends Observable {
 				setPitchCenterFrameX(pitchCenter.get(0));
 				setPitchCenterFrameY(pitchCenter.get(1));
 				setPitchFrameWidth((Integer) frameProjection.get("widthPx"));
+				}else{
+					System.out.println("YAMLdata is null");
+				}
 			}
 		});
 	}

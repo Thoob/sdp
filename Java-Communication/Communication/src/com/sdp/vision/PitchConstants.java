@@ -484,7 +484,7 @@ public class PitchConstants extends Observable {
 		this.rightGoal[2] = 40;
 		
 		for (int i = 0; i < 8; i++){
-			//TODO PitchConstants.pitchOutline[i] = new Position(0,0);
+			PitchConstants.pitchOutline[i] = new Position(0,0);
 		}
 	}
 }
