@@ -175,7 +175,7 @@ public class ColourThresholdConfigTool implements GUITool {
 				break;
 			case VisionSettingsPanel.MOUSE_MODE_PITCH_TOP_BOTTOM:
 				System.out.println("Pitch outline selection.");
-				pitchConstants.getPitchOutline()[currentPitchOutline] = (javax.swing.text.Position) new Position(
+				pitchConstants.getPitchOutline()[currentPitchOutline] = new Position(
 						e.getX(), e.getY());
 				currentPitchOutline = (currentPitchOutline + 1) % 8;
 				break;

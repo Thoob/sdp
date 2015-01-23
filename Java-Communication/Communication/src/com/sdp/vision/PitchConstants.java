@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.Observable;
 import java.util.Scanner;
 
-import javax.swing.text.Position;
 
 /**
  * A class that holds the constants for various values about the pitch, such as
@@ -110,11 +109,11 @@ public class PitchConstants extends Observable {
 	}
 	
 	public static int getPitchOutlineTop(){
-		return (int) ((((Rectangle) pitchOutline[0]).getY() + ((Rectangle) pitchOutline[1]).getY()) / 2);
+		return (int) (( pitchOutline[0].getY() + (pitchOutline[1]).getY()) / 2);
 	}
 	
 	public static int getPitchOutlineBottom(){
-		return (int) ((((Rectangle) pitchOutline[4]).getY() + ((Rectangle) pitchOutline[5]).getY()) / 2);
+		return (int) (((pitchOutline[4]).getY() + (pitchOutline[5]).getY()) / 2);
 	}
 	
 		/**
@@ -346,8 +345,8 @@ public class PitchConstants extends Observable {
 			pitchDimFile.write(String.valueOf(this.rightGoal[1]) + "\n");
 			pitchDimFile.write(String.valueOf(this.rightGoal[2]) + "\n");
 			for (int i = 0; i < 8; i++){
-				pitchDimFile.write(String.valueOf(((Rectangle) PitchConstants.pitchOutline[i]).getX()) + "\n");
-				pitchDimFile.write(String.valueOf(((Rectangle) PitchConstants.pitchOutline[i]).getY()) + "\n");
+				pitchDimFile.write(String.valueOf((PitchConstants.pitchOutline[i]).getX()) + "\n");
+				pitchDimFile.write(String.valueOf((PitchConstants.pitchOutline[i]).getY()) + "\n");
 			}
 			pitchDimFile.close();
 
