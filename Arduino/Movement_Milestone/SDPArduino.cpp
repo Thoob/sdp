@@ -163,4 +163,3 @@ int readDigitalSensorData(int portNum){ //PortNum is the Sensor port used
 }
 
 
-

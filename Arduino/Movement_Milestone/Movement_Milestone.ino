@@ -19,8 +19,6 @@ void setup(){
   comm.addCommand("A_MOVE_UP", move_up);
   comm.addCommand("A_MOVE_DOWN", move_down);
   
-  comm.addCommand("A_ROTATE", rotate);
-
   comm.addCommand("A_TURN_LEFT", turn_left);
   comm.addCommand("A_TURN_RIGHT", turn_right);
   
@@ -68,7 +66,7 @@ void move_down()
 }
 
 
-void set_move(int dir)
+void set_move(int direction)
 {
   char *left_in;
   char *right_in;
@@ -99,13 +97,13 @@ void set_move(int dir)
     }
     
     /*Check whether we are moving up or down */
-    if(dir == 1)
+    if(direction == 1)
     {
       /*motorForward(motorNum, motorPower)*/
       motorForward(1, left_speed); /* set the power of the left motor (num 1)*/
       motorForward(2, right_speed); /* set the power of the right motor (num 2)*/
     }
-    if(dir == 2)
+    if(direction == 2)
     {
       /*motorForward(motorNum, motorPower)*/
       motorBackward(1, left_speed);
@@ -128,38 +126,17 @@ void turn_right()
 }
 
 /*if direction = 1 => LEFT, if direction = 2 => RIGHT*/
-void set_turn(int dir)
+void set_turn(int direction)
 {
   /* TURN LEFT */
-  if(dir == 1)
+  if(direction == 1)
   {
   }
   
   /* TURN RIGHT */
-  if(dir == 2)
+  if(direction == 2)
   {
   }
-}
-
-void rotate(){    
-  
-  char *dir_in;
-  int dir = 1;
-  
-  dir_in = comm.next();
-  
-  dir = atoi(dir_in);
-  
-   //Rotates the robot by moving one engine forward and the other backwards
-    if (dir == 1) {
-      motorBackward(1, 50);
-      motorForward(2, 50);
-    }
-    else if (dir == 2) {
-      motorBackward(2, 50);
-      motorForward(1, 50);
-    }
-   
 }
 
 void set_catch()
