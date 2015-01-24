@@ -7,13 +7,16 @@ int MIN_SPEED = 30;
 int MID_SPEED = 50;
 int MAX_SPEED = 100;
 
+String inputString = "";
+boolean stringComplete = false;
+
 // Communications
 SerialCommand comm;
 
 
 void setup(){
   SDPsetup();
-  
+  /*
   comm.addCommand("A_STOP", stop_motor);
   comm.addCommand("A_STOP_ALL", stop_all);
   
@@ -28,16 +31,68 @@ void setup(){
   comm.addCommand("A_SET_CATCH", set_catch);
   comm.addCommand("A_SET_KICK", set_kick);
   
-  comm.addCommand("A_SET_SHOOT", set_shoot);
+  comm.addCommand("A_SET_SHOOT", set_shoot); */
+  
+  inputString.reserve(200);
 
 }
 
 void loop(){
   
-  comm.readSerial();
+  if(stringComplete)
+  {
+    if(inputString == "A_STOP")
+    {
+      stop_motor();
+    }
+    if(inputString == "A_STOP_ALL")
+    {
+      Serial.println("A_STOP_ALL");
+      stop_all();
+    }
+    if(inputString == "A_MOVE")
+    {
+      move_special();
+    }
+    if(inputString == "A_MOVE_UP")
+    {
+      Serial.println("A_MOVE_UP");
+      move_up();
+    }
+    if(inputString == "A_MOVE_DOWN")
+    {
+      move_down();
+    }
+    if(inputString == "A_ROTATE")
+    {
+      rotate();
+    }
+    if(inputString == "A_SET_KICK")
+    {
+      Serial.println("A_SET_KICK");
+      set_kick();
+    }
+    
+    inputString = "";
+    stringComplete = false;
+  }
+  //comm.readSerial();
   
 }
  
+void serialEvent()
+{
+  while (Serial.available() > 0)
+  {
+    char ch = (char)Serial.read();
+    inputString += ch;
+    if(ch == '\r')
+    {
+      stringComplete = true;
+    }
+    
+  }
+}
 void stop_motor()
 {
   char *motor_num_in;
@@ -114,7 +169,14 @@ void move_special()
 
 void move_up()
 {
-  set_move(1);
+  motorForward(1, 50); /* set the power of the left motor (num 1)*/
+  motorForward(2, 50); /* set the power of the right motor (num 2)*/
+  motorForward(0, 50);
+  motorForward(3, 50);
+  motorForward(4, 50);
+  motorForward(5, 50);
+ // set_move(1);
+ 
 }
 
 void move_down()
@@ -152,13 +214,22 @@ void set_move(int dir)
     {
       right_speed = MAX_SPEED;
     } 
-    
+  }
+  else
+  {
+    left_speed = MID_SPEED;
+    right_speed = MID_SPEED;
+  }
     /*Check whether we are moving up or down */
      if(dir == 1)
     {
 
       motorForward(1, left_speed); /* set the power of the left motor (num 1)*/
       motorForward(2, right_speed); /* set the power of the right motor (num 2)*/
+      motorForward(0, left_speed);
+      motorForward(3, left_speed);
+      motorForward(4, left_speed);
+      motorForward(5, left_speed);
     }
     if(dir == 2)
     {
@@ -169,7 +240,7 @@ void set_move(int dir)
     
     
     
-  } 
+   
 }
 
 void set_turn()
