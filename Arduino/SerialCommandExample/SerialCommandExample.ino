@@ -182,7 +182,7 @@ void move_kick() {
   }
   
   Serial.println("Kicking");
-  motorBackward(4, power);
+  motorBackward(3, power);
   
   delay(time);
   
