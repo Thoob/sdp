@@ -22,10 +22,11 @@ void setup() {
   sCmd.addCommand("ON",    LED_on);          // Turns LED on
   sCmd.addCommand("OFF",   LED_off);         // Turns LED off
   sCmd.addCommand("HELLO", sayHello);        // Echos the string argument back
-  sCmd.addCommand("P",     processCommand);  // Converts two arguments to integers and echos them back
+//  sCmd.addCommand("P",     processCommand);  // Converts two arguments to integers and echos them back
   sCmd.addCommand("FORWARD", move_forward);
   sCmd.addCommand("ROTATE", move_rotate);
   sCmd.addCommand("STOP", move_stop);
+  sCmd.addCommand("KICK", move_kick);
 
 
   sCmd.setDefaultHandler(unrecognized);      // Handler for command that isn't matched  (says "What?")
@@ -83,27 +84,39 @@ void move_forward() {
 }
 
 void move_rotate() {
-  char *arg;
+  char *arg1;
+  char *arg2;
+  char *arg3;
   int dir;
+  int time;
+  int power;
   
-  arg = sCmd.next();
-  dir = atoi(arg);
+  arg1 = sCmd.next();
+  dir = atoi(arg1);
+  
+  arg2 = sCmd.next();
+  time = atoi(arg2);
+  
+  arg3 = sCmd.next();
+  power = atoi(arg3);
+  
+  
   
   Serial.println("Rotating");
   if (dir == 1) {
-  motorForward(4, 50);
-  motorBackward(5, 50);
+  motorForward(4, power);
+  motorBackward(5, power);
   
-    delay(2000);
+    delay(time);
   
   motorAllStop();
   
   }
   else if (dir==2) {
-  motorForward(5, 50);
-  motorBackward(4, 50);
+  motorForward(5, power);
+  motorBackward(4, power);
   
-  delay(2000);
+  delay(time);
   
   motorAllStop();
   
@@ -117,31 +130,35 @@ void move_stop(){
   
 }
 
-
-void processCommand() {
-  int aNumber;
-  char *arg;
-
-  Serial.println("We're in processCommand");
-  arg = sCmd.next();
-  if (arg != NULL) {
-    aNumber = atoi(arg);    // Converts a char string to an integer
-    Serial.print("First argument was: ");
-    Serial.println(aNumber);
+void move_kick() {
+  
+  char *arg1;
+  char *arg2;
+  int time;
+  int power;
+  
+  arg1 = sCmd.next();
+  time = atoi(arg1);
+  
+  arg2 = sCmd.next();
+  power = atoi(arg2);
+  
+  
+  
+  if (time==NULL) {
+    time = 1000;
   }
-  else {
-    Serial.println("No arguments");
+  
+  if (power==NULL) {
+    power = 50;
   }
-
-  arg = sCmd.next();
-  if (arg != NULL) {
-    aNumber = atol(arg);
-    Serial.print("Second argument was: ");
-    Serial.println(aNumber);
-  }
-  else {
-    Serial.println("No second argument");
-  }
+  
+  Serial.println("Kicking");
+  motorBackward(4, power);
+  
+  delay(time);
+  
+  motorAllStop(); 
 }
 
 // This gets set as the default handler, and gets called when no other command matches.
