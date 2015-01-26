@@ -23,7 +23,7 @@ public class GUI extends JFrame {
 	private boolean serialPortInitialized = false;
 
 	private boolean upBtnPressed, downBtnPressed, rightBtnPressed,
-			leftBtnPressed, OnePressed, TwoPressed, ThreePressed;
+			leftBtnPressed, oneBtnPressed, twoBtnPressed, threeBtnPressed;
 
 	public GUI() {
 		this.portNames = Communication.getInstance().getAvailablePorts();
@@ -96,12 +96,13 @@ public class GUI extends JFrame {
 
 			@Override
 			public void keyReleased(KeyEvent e) {
+				int code = e.getKeyCode();
 				if (serialPortInitialized) {
-					int code = e.getKeyCode();
+					System.out.println(code);
 					switch (code) {
 					case KeyEvent.VK_UP:
-						RobotCommunication.getInstance().sendStopMoveUp();
 						System.out.println("Released UP");
+						RobotCommunication.getInstance().sendStopMoveUp();
 						upBtnPressed = false;
 						break;
 					case KeyEvent.VK_DOWN:
@@ -120,19 +121,20 @@ public class GUI extends JFrame {
 						rightBtnPressed = false;
 						break;
 					case KeyEvent.VK_1:
-						OnePressed = false;
+						oneBtnPressed = false;
 						System.out.println("Released 1");
 						break;
 					case KeyEvent.VK_2:
-						TwoPressed = false;
+						twoBtnPressed = false;
 						System.out.println("Released 2");
 						break;
 					case KeyEvent.VK_3:
-						ThreePressed = false;
+						threeBtnPressed = false;
 						System.out.println("Released 3");
 						break;
 					}
-					
+				}else{
+					System.out.println("Serial port not initialized");
 				}
 			}
 
@@ -173,21 +175,21 @@ public class GUI extends JFrame {
 						}
 						break;	
 					case KeyEvent.VK_1:
-						if (!OnePressed){
+						if (!oneBtnPressed){
 							RobotCommunication.getInstance()
 									.sendMoveForward10();
 							System.out.println("Moved Forward 10cm");
 						}
 						break;	
 					case KeyEvent.VK_2:
-						if(!TwoPressed){
+						if(!twoBtnPressed){
 							RobotCommunication.getInstance()
 									.sendMoveForward50();
 							System.out.println("Moved Forward 50cm");
 						}
 						break;
 					case KeyEvent.VK_3:
-						if(!ThreePressed){
+						if(!threeBtnPressed){
 							RobotCommunication.getInstance()
 									.sendMoveBackward10();
 							System.out.println("Moved Backward 10cm");
