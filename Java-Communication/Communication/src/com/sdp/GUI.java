@@ -58,6 +58,8 @@ public class GUI extends JFrame {
 						String.valueOf(portNamesList.getSelectedItem()));
 				serialPortInitialized = true;
 				System.out.println("SerialPort initialized");
+				buttonsPanel.setFocusable(true);
+				buttonsPanel.requestFocusInWindow();
 			}
 		});
 		buttonsPanel.add(initBtn);
@@ -68,19 +70,18 @@ public class GUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if (serialPortInitialized) {
 					String action = e.getActionCommand();
-					RobotCommunication rc = new RobotCommunication();
 					switch (action) {
 					case "Start":
 						break;
 					case "Stop":
 						break;
 					case "Kick":
-						rc.sendFKick(1);
+						RobotCommunication.getInstance().sendKick();
+						System.out.println("Kick");
 						break;
 					default:
 						break;
 					}
-					System.out.println(action + ": ");
 				} else {
 					System.out.println("Serial port not initialized");
 				}
@@ -98,7 +99,6 @@ public class GUI extends JFrame {
 			public void keyReleased(KeyEvent e) {
 				int code = e.getKeyCode();
 				if (serialPortInitialized) {
-					System.out.println(code);
 					switch (code) {
 					case KeyEvent.VK_UP:
 						System.out.println("Released UP");
@@ -122,18 +122,21 @@ public class GUI extends JFrame {
 						break;
 					case KeyEvent.VK_1:
 						oneBtnPressed = false;
+						RobotCommunication.getInstance().sendMoveForward10();
 						System.out.println("Released 1");
 						break;
 					case KeyEvent.VK_2:
 						twoBtnPressed = false;
+						RobotCommunication.getInstance().sendMoveForward50();
 						System.out.println("Released 2");
 						break;
 					case KeyEvent.VK_3:
 						threeBtnPressed = false;
+						RobotCommunication.getInstance().sendMoveBackward10();
 						System.out.println("Released 3");
 						break;
 					}
-				}else{
+				} else {
 					System.out.println("Serial port not initialized");
 				}
 			}
@@ -173,23 +176,23 @@ public class GUI extends JFrame {
 							System.out.println("Pressed RIGHT");
 							rightBtnPressed = true;
 						}
-						break;	
+						break;
 					case KeyEvent.VK_1:
-						if (!oneBtnPressed){
+						if (!oneBtnPressed) {
 							RobotCommunication.getInstance()
 									.sendMoveForward10();
 							System.out.println("Moved Forward 10cm");
 						}
-						break;	
+						break;
 					case KeyEvent.VK_2:
-						if(!twoBtnPressed){
+						if (!twoBtnPressed) {
 							RobotCommunication.getInstance()
 									.sendMoveForward50();
 							System.out.println("Moved Forward 50cm");
 						}
 						break;
 					case KeyEvent.VK_3:
-						if(!threeBtnPressed){
+						if (!threeBtnPressed) {
 							RobotCommunication.getInstance()
 									.sendMoveBackward10();
 							System.out.println("Moved Backward 10cm");
@@ -228,6 +231,6 @@ public class GUI extends JFrame {
 		kickBtn.setForeground(Color.BLACK);
 		buttonsPanel.add(kickBtn);
 		kickBtn.addActionListener(listener);
-		
+
 	}
 }
