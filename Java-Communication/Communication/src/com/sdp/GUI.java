@@ -69,7 +69,7 @@ public class GUI extends JFrame {
 				if (serialPortInitialized) {
 					String action = e.getActionCommand();
 					RobotCommunication rc = new RobotCommunication();
-					switch (action) {
+				/*	switch (action) {
 					case "Start":
 						break;
 					case "Stop":
@@ -79,7 +79,7 @@ public class GUI extends JFrame {
 						break;
 					default:
 						break;
-					}
+					}				*/
 					System.out.println(action + ": ");
 				} else {
 					System.out.println("Serial port not initialized");
