@@ -3,7 +3,7 @@ package com.sdp;
 
 public interface ArduinoCommunication {
 	
-	public void sendMove(int leftSpeed, int rightSpeed);
+	public void sendMove(int leftSpeed, int rightSpeed, int distance);
 	
 	public void sendCatch(int catchPosition);
 	

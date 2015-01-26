@@ -12,9 +12,9 @@ public class RobotCommunication implements ArduinoCommunication {
 	}
 
 	@Override
-	public void sendMove(int leftSpeed, int rightSpeed) {
-		String command = String.format("A_SET_ENGINE %d %d", leftSpeed,
-				rightSpeed);
+	public void sendMove(int leftSpeed, int rightSpeed, int distance) {
+		String command = String.format("A_SET_ENGINE %d %d %d", leftSpeed,
+				rightSpeed, distance);
 		Communication.getInstance().sendCommandViaPort(command);
 	}
 

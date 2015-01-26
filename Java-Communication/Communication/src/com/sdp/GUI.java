@@ -23,7 +23,7 @@ public class GUI extends JFrame {
 	private boolean serialPortInitialized = false;
 
 	private boolean upBtnPressed, downBtnPressed, rightBtnPressed,
-			leftBtnPressed;
+			leftBtnPressed, OnePressed, TwoPressed, ThreePressed;
 
 	public GUI() {
 		this.portNames = Communication.getInstance().getAvailablePorts();
@@ -69,7 +69,7 @@ public class GUI extends JFrame {
 				if (serialPortInitialized) {
 					String action = e.getActionCommand();
 					RobotCommunication rc = new RobotCommunication();
-					/*switch (action) {
+					switch (action) {
 					case "Start":
 						break;
 					case "Stop":
@@ -79,7 +79,7 @@ public class GUI extends JFrame {
 						break;
 					default:
 						break;
-					}*/
+					}
 					System.out.println(action + ": ");
 				} else {
 					System.out.println("Serial port not initialized");
@@ -119,7 +119,20 @@ public class GUI extends JFrame {
 						System.out.println("Released RIGHT");
 						rightBtnPressed = false;
 						break;
+					case KeyEvent.VK_1:
+						OnePressed = false;
+						System.out.println("Released 1");
+						break;
+					case KeyEvent.VK_2:
+						TwoPressed = false;
+						System.out.println("Released 2");
+						break;
+					case KeyEvent.VK_3:
+						ThreePressed = false;
+						System.out.println("Released 3");
+						break;
 					}
+					
 				}
 			}
 
@@ -158,6 +171,27 @@ public class GUI extends JFrame {
 							System.out.println("Pressed RIGHT");
 							rightBtnPressed = true;
 						}
+						break;	
+					case KeyEvent.VK_1:
+						if (!OnePressed){
+							RobotCommunication.getInstance()
+									.sendMoveForward10();
+							System.out.println("Moved Forward 10cm");
+						}
+						break;	
+					case KeyEvent.VK_2:
+						if(!TwoPressed){
+							RobotCommunication.getInstance()
+									.sendMoveForward50();
+							System.out.println("Moved Forward 50cm");
+						}
+						break;
+					case KeyEvent.VK_3:
+						if(!ThreePressed){
+							RobotCommunication.getInstance()
+									.sendMoveBackward10();
+							System.out.println("Moved Backward 10cm");
+						}
 						break;
 					}
 				} else {
@@ -192,6 +226,6 @@ public class GUI extends JFrame {
 		kickBtn.setForeground(Color.BLACK);
 		buttonsPanel.add(kickBtn);
 		kickBtn.addActionListener(listener);
-
+		
 	}
 }
