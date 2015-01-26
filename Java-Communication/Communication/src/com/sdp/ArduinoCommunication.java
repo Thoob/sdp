@@ -32,11 +32,9 @@ public interface ArduinoCommunication {
 	public void sendStopTurnLeft();
 
 	// commands needed for the 1st milestone
-	public void sendMoveForward(int time);
+	public void sendMoveForward(int timeInMillis);
 
-	public void sendMoveForward50();
-
-	public void sendMoveBackward(int time);
+	public void sendMoveBackward(int timeInMillis);
 
 	public void sendKick();
 
