@@ -10,6 +10,7 @@
 
 SerialCommand sCmd;     // The demo SerialCommand object
 
+
 void setup() {
   pinMode(arduinoLED, OUTPUT);      // Configure the onboard LED for output
   digitalWrite(arduinoLED, LOW);    // default to LED off
@@ -24,6 +25,7 @@ void setup() {
   sCmd.addCommand("HELLO", sayHello);        // Echos the string argument back
 //  sCmd.addCommand("P",     processCommand);  // Converts two arguments to integers and echos them back
   sCmd.addCommand("FORWARD", move_forward);
+  sCmd.addCommand("BACKWARD", move_backward);
   sCmd.addCommand("ROTATE", move_rotate);
   sCmd.addCommand("STOP", move_stop);
   sCmd.addCommand("KICK", move_kick);
@@ -65,6 +67,32 @@ void sayHello() {
 
 void move_forward() {
   
+  char *arg1;
+  char *arg2;
+  
+  int time;
+  int power;
+  
+  arg1 = sCmd.next();
+  time = atoi(arg1);
+  
+  arg2 = sCmd.next();
+  power = atoi(arg2);
+  
+  if (time==NULL) {
+    time = 1000;
+  }
+  Serial.println("Moving forward");
+  motorForward(4, power);
+  motorForward(5, power);
+  
+  delay(time);
+  
+  motorAllStop(); 
+}
+
+void move_backward() {
+  
   char *arg;
   int time;
   
@@ -74,9 +102,9 @@ void move_forward() {
   if (time==NULL) {
     time = 1000;
   }
-  Serial.println("Moving forward");
-  motorForward(4, 100);
-  motorForward(5, 100);
+  Serial.println("Moving backward");
+  motorBackward(4, 100);
+  motorBackward(5, 100);
   
   delay(time);
   
