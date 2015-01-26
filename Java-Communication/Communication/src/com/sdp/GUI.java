@@ -78,6 +78,8 @@ public class GUI extends JFrame {
 					case "Kick":
 						RobotCommunication.getInstance().sendKick();
 						System.out.println("Kick");
+						buttonsPanel.setFocusable(true);
+						buttonsPanel.requestFocusInWindow();
 						break;
 					default:
 						break;
@@ -122,7 +124,7 @@ public class GUI extends JFrame {
 						break;
 					case KeyEvent.VK_1:
 						oneBtnPressed = false;
-						RobotCommunication.getInstance().sendMoveForward10();
+						RobotCommunication.getInstance().sendMoveForward(1000);
 						System.out.println("Released 1");
 						break;
 					case KeyEvent.VK_2:
@@ -132,7 +134,7 @@ public class GUI extends JFrame {
 						break;
 					case KeyEvent.VK_3:
 						threeBtnPressed = false;
-						RobotCommunication.getInstance().sendMoveBackward10();
+						RobotCommunication.getInstance().sendMoveBackward(1000);
 						System.out.println("Released 3");
 						break;
 					}
@@ -179,8 +181,8 @@ public class GUI extends JFrame {
 						break;
 					case KeyEvent.VK_1:
 						if (!oneBtnPressed) {
-							RobotCommunication.getInstance()
-									.sendMoveForward10();
+							RobotCommunication.getInstance().sendMoveForward(
+									1000);
 							System.out.println("Moved Forward 10cm");
 						}
 						break;
@@ -194,7 +196,7 @@ public class GUI extends JFrame {
 					case KeyEvent.VK_3:
 						if (!threeBtnPressed) {
 							RobotCommunication.getInstance()
-									.sendMoveBackward10();
+									.sendMoveBackward(1000);
 							System.out.println("Moved Backward 10cm");
 						}
 						break;

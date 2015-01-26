@@ -99,25 +99,28 @@ public class RobotCommunication implements ArduinoCommunication {
 	}
 
 	@Override
-	public void sendMoveForward10() {
-		String command = "FORWARD 1000 100"; // first arg is time in millis,
-												// second power in percentages
+	public void sendMoveForward(int time) {
+		String command = String.format("FORWARD %d 100\n", time);
+		System.out.println(command);
 		Communication.getInstance().sendCommandViaPort(command);
 	}
 
 	public void sendMoveForward50() {
-		String command = "FORWARD 5000 100";
+		String command = "FORWARD 5000 100\n";
+		System.out.println(command);
 		Communication.getInstance().sendCommandViaPort(command);
 	}
 
-	public void sendMoveBackward10() {
-		String command = "BACKWARD 1000 100";
+	public void sendMoveBackward(int time) {
+		String command = String.format("BACKWARD %d 100\n", time);
+		System.out.println(command);
 		Communication.getInstance().sendCommandViaPort(command);
 	}
 
 	@Override
 	public void sendKick() {
-		String command = "KICK 300 100";
+		String command = "KICK 300 100\n";
+		System.out.println(command);
 		Communication.getInstance().sendCommandViaPort(command);
 	}
 }
