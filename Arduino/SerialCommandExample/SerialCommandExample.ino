@@ -35,8 +35,8 @@ void setup() {
   //Remote Control Commands
   sCmd.addCommand("RCFORWARD", rc_forward);
   sCmd.addCommand("RCBACKWARD", rc_backward);
-  sCmd.addCommand("RCROTATEL", rc_rotateL);
-  sCmd.addCommand("RCROTATER", rc_rotateR);
+  sCmd.addCommand("RCROTATL", rc_rotateL);
+  sCmd.addCommand("RCROTATR", rc_rotateR);
 
 
   sCmd.setDefaultHandler(unrecognized);      // Handler for command that isn't matched  (says "What?")
