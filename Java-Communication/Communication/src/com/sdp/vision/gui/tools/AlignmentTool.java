@@ -74,8 +74,6 @@ public class AlignmentTool implements GUITool {
 		public void processFrame(PixelInfo[][] pixels, BufferedImage frame,
 				Graphics2D debugGraphics, BufferedImage debugOverlay,
 				com.sdp.world.StaticWorldState staticWorldState) {
-			// TODO Auto-generated method stub
-			
 		}
 	}
 }

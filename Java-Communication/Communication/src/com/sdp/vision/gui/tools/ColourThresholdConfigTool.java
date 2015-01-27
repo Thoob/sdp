@@ -294,8 +294,6 @@ public class ColourThresholdConfigTool implements GUITool {
 		public void processFrame(PixelInfo[][] pixels, BufferedImage frame,
 				Graphics2D debugGraphics, BufferedImage debugOverlay,
 				com.sdp.vision.interfaces.StaticWorldState staticWorldState) {
-			// TODO Auto-generated method stub
-
 		}
 
 	}
@@ -335,10 +333,7 @@ public class ColourThresholdConfigTool implements GUITool {
 		public void processFrame(PixelInfo[][] pixels, BufferedImage frame,
 				Graphics2D debugGraphics, BufferedImage debugOverlay,
 				com.sdp.vision.interfaces.StaticWorldState staticWorldState) {
-			// TODO Auto-generated method stub
-
 		}
-
 	}
 
 	public class GoalPositionDebugDisplay implements ObjectRecogniser {
@@ -364,10 +359,7 @@ public class ColourThresholdConfigTool implements GUITool {
 		public void processFrame(PixelInfo[][] pixels, BufferedImage frame,
 				Graphics2D debugGraphics, BufferedImage debugOverlay,
 				com.sdp.vision.interfaces.StaticWorldState staticWorldState) {
-			// TODO Auto-generated method stub
-
 		}
-
 	}
 
 	@Override

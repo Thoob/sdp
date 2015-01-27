@@ -431,7 +431,5 @@ public class HistogramTool implements GUITool, ObjectRecogniser {
 	public void processFrame(PixelInfo[][] pixels, BufferedImage frame,
 			Graphics2D debugGraphics, BufferedImage debugOverlay,
 			com.sdp.vision.interfaces.StaticWorldState staticWorldState) {
-		// TODO Auto-generated method stub
-
 	}
 }
