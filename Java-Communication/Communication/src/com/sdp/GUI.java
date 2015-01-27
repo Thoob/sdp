@@ -1,6 +1,5 @@
 package com.sdp;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,8 +18,6 @@ public class GUI extends JFrame {
 	private JComboBox<String> portNamesList;
 	private ActionListener listener;
 	private boolean serialPortInitialized = false;
-
-	private boolean oneBtnPressed, twoBtnPressed, threeBtnPressed;
 
 	public GUI() {
 		this.portNames = Communication.getInstance().getAvailablePorts();
@@ -83,19 +80,20 @@ public class GUI extends JFrame {
 				if (serialPortInitialized) {
 					switch (code) {
 					case KeyEvent.VK_1:
-						oneBtnPressed = false;
-						RobotCommunication.getInstance().sendMoveForward(1000);
-						System.out.println("Released 1");
+						RobotCommunication.getInstance().sendMoveForward(
+								Constants.MOVE_FORWARD_10_TIME);
 						break;
 					case KeyEvent.VK_2:
-						twoBtnPressed = false;
-						RobotCommunication.getInstance().sendMoveForward(3000);
-						System.out.println("Released 2");
+						RobotCommunication.getInstance().sendMoveForward(
+								Constants.MOVE_FORWARD_50_TIME);
 						break;
 					case KeyEvent.VK_3:
-						threeBtnPressed = false;
-						RobotCommunication.getInstance().sendMoveBackward(1000);
-						System.out.println("Released 3");
+						RobotCommunication.getInstance().sendMoveBackward(
+								Constants.MOVE_BACKWARD_10_TIME);
+						break;
+					case KeyEvent.VK_4:
+						RobotCommunication.getInstance().sendKick(
+								Constants.KICK_TIME);
 						break;
 					}
 				} else {
@@ -105,31 +103,6 @@ public class GUI extends JFrame {
 
 			@Override
 			public void keyPressed(KeyEvent e) {
-				if (serialPortInitialized) {
-					int code = e.getKeyCode();
-					switch (code) {
-					case KeyEvent.VK_1:
-						if (!oneBtnPressed) {
-							RobotCommunication.getInstance().sendMoveForward(
-									1000);
-						}
-						break;
-					case KeyEvent.VK_2:
-						if (!twoBtnPressed) {
-							RobotCommunication.getInstance()
-									.sendMoveForward50();
-						}
-						break;
-					case KeyEvent.VK_3:
-						if (!threeBtnPressed) {
-							RobotCommunication.getInstance().sendMoveBackward(
-									1000);
-						}
-						break;
-					}
-				} else {
-					System.out.println("Serial port not initialized");
-				}
 			}
 		});
 
@@ -152,18 +125,7 @@ public class GUI extends JFrame {
 			}
 		});
 		buttonsPanel.add(initBtn);
-		/*
-		 * JButton startBtn = new JButton("Start");
-		 * startBtn.setForeground(Color.BLACK);
-		 * startBtn.setBackground(Color.GREEN); startBtn.setSize(100, 50);
-		 * buttonsPanel.add(startBtn, BorderLayout.SOUTH);
-		 * startBtn.addActionListener(listener);
-		 * 
-		 * JButton stopBtn = new JButton("Stop");
-		 * stopBtn.setBackground(Color.RED); stopBtn.setForeground(Color.BLACK);
-		 * stopBtn.setSize(100, 50); buttonsPanel.add(stopBtn);
-		 * stopBtn.addActionListener(listener);
-		 */
+
 		JButton kickBtn = new JButton("Kick");
 		kickBtn.setSize(100, 50);
 		kickBtn.setBackground(Color.GRAY);
