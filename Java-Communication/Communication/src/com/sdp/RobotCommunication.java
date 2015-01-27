@@ -18,14 +18,32 @@ public class RobotCommunication implements ArduinoCommunication {
 		Communication.getInstance().sendCommandViaPort(command);
 	}
 
+	public void sendMoveForward10() {
+		String command = "FORWARD 410 100\n";
+		System.out.println(command);
+		Communication.getInstance().sendCommandViaPort(command);
+	}	
+	
 	public void sendMoveForward50() {
-		String command = "FORWARD 5000 100\n";
+		String command = "FORWARD 1850 100\n";
 		System.out.println(command);
 		Communication.getInstance().sendCommandViaPort(command);
 	}
 
 	public void sendMoveBackward(int time) {
 		String command = String.format("BACKWARD %d 100\n", time);
+		System.out.println(command);
+		Communication.getInstance().sendCommandViaPort(command);
+	}
+	
+	public void sendMoveBackward20() {
+		String command = String.format("BACKWARD 770 100\n");
+		System.out.println(command);
+		Communication.getInstance().sendCommandViaPort(command);
+	}
+	
+	public void passKick() {
+		String command = String.format("KICK 400 75\n");
 		System.out.println(command);
 		Communication.getInstance().sendCommandViaPort(command);
 	}
@@ -38,25 +56,25 @@ public class RobotCommunication implements ArduinoCommunication {
 	}
 	
 	public void holdForward(){
-		String command = String.format("FORWARD\n");
+		String command = String.format("RCFORWARD\n");
 		System.out.println(command);
 		Communication.getInstance().sendCommandViaPort(command); 
 	}
 	
 	public void holdBackward(){
-		String command = String.format("BACKWARD\n");
+		String command = String.format("RCBACKWARD\n");
 		System.out.println(command);
 		Communication.getInstance().sendCommandViaPort(command); 
 	}
 	
 	public void holdLeft(){
-		String command = String.format("ROTATEL\n");
+		String command = String.format("RCROTATL\n");
 		System.out.println(command);
 		Communication.getInstance().sendCommandViaPort(command); 
 	}
 	
 	public void holdRight(){
-		String command = String.format("ROTATER\n");
+		String command = String.format("RCROTATR\n");
 		System.out.println(command);
 		Communication.getInstance().sendCommandViaPort(command); 
 	}

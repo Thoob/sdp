@@ -116,23 +116,19 @@ public class GUI extends JFrame {
 						break;	
 					//movement test 1 (10cm forward)
 					case KeyEvent.VK_1:
-						RobotCommunication.getInstance().sendMoveForward(
-								Constants.MOVE_FORWARD_10_TIME);
+						RobotCommunication.getInstance().sendMoveForward10();
 						break;
 					//movement test 2 (50cm forward)
 					case KeyEvent.VK_2:
-						RobotCommunication.getInstance().sendMoveForward(
-								Constants.MOVE_FORWARD_50_TIME);
+						RobotCommunication.getInstance().sendMoveForward50();
 						break;
 					//movement test 3 (20cm backward)
 					case KeyEvent.VK_3:
-						RobotCommunication.getInstance().sendMoveBackward(
-								Constants.MOVE_BACKWARD_10_TIME);
+						RobotCommunication.getInstance().sendMoveBackward20();
 						break;
 					//kick test (defence to attack zone)
 					case KeyEvent.VK_4:
-						RobotCommunication.getInstance().sendKick(
-								Constants.KICK_TIME);
+						RobotCommunication.getInstance().passKick();
 						break;
 				}
 			}
