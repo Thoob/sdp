@@ -36,6 +36,6 @@ public interface ArduinoCommunication {
 
 	public void sendMoveBackward(int timeInMillis);
 
-	public void sendKick();
+	public void sendKick(int timeIntMillis);
 
 }

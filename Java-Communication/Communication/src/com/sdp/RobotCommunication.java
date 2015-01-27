@@ -118,8 +118,8 @@ public class RobotCommunication implements ArduinoCommunication {
 	}
 
 	@Override
-	public void sendKick() {
-		String command = "KICK 300 100\n";
+	public void sendKick(int time) {
+		String command = String.format("KICK %d 100\n", time);
 		System.out.println(command);
 		Communication.getInstance().sendCommandViaPort(command);
 	}

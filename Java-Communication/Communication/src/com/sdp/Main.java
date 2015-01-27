@@ -2,7 +2,7 @@ package com.sdp;
 
 public class Main {
 	public static void main(String[] args) {
-		
+
 		if (args.length == 0) {
 			GUI gui = new GUI();
 			gui.setVisible(true);
@@ -11,15 +11,16 @@ public class Main {
 			String portName = "COM3";
 			Communication.getInstance().initializeSerialPort(portName);
 
+			int time = Integer.parseInt(args[1]);
 			if (action.equals("kick")) {
-				RobotCommunication.getInstance().sendKick();
+				RobotCommunication.getInstance().sendKick(time);
 			} else if (action.equals("forward")) {
-				int time = Integer.parseInt(args[1]);
 				RobotCommunication.getInstance().sendMoveForward(time);
 			} else if (action.equals("backward")) {
-				int time = Integer.parseInt(args[1]);
 				RobotCommunication.getInstance().sendMoveBackward(time);
 			}
+
+			System.exit(0);
 		}
 	}
 }

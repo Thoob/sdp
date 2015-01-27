@@ -59,7 +59,7 @@ public class GUI extends JFrame {
 				if (serialPortInitialized) {
 					switch (action) {
 					case "Kick":
-						RobotCommunication.getInstance().sendKick();
+						RobotCommunication.getInstance().sendKick(300);
 						break;
 					default:
 						break;
@@ -141,16 +141,14 @@ public class GUI extends JFrame {
 
 		JButton initBtn = new JButton("Initialize");
 		initBtn.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String portName = String.valueOf(portNamesList
 						.getSelectedItem());
-				Communication.getInstance().initializeSerialPort(
-						portName);
+				Communication.getInstance().initializeSerialPort(portName);
 				serialPortInitialized = true;
-				System.out.println(portName
-						.concat(" serial port initialized"));
+				System.out.println(portName.concat(" serial port initialized"));
 			}
 		});
 		buttonsPanel.add(initBtn);
