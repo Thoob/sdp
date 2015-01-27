@@ -57,6 +57,7 @@ public class GUI extends JFrame {
 					switch (action) {
 					case "Kick":
 						RobotCommunication.getInstance().sendKick(300);
+						System.out.println("KICK");
 						break;
 					default:
 						break;
@@ -76,26 +77,12 @@ public class GUI extends JFrame {
 
 			@Override
 			public void keyReleased(KeyEvent e) {
-				int code = e.getKeyCode();
+//				int code = e.getKeyCode();
 				if (serialPortInitialized) {
-					switch (code) {
-					case KeyEvent.VK_1:
-						RobotCommunication.getInstance().sendMoveForward(
-								Constants.MOVE_FORWARD_10_TIME);
-						break;
-					case KeyEvent.VK_2:
-						RobotCommunication.getInstance().sendMoveForward(
-								Constants.MOVE_FORWARD_50_TIME);
-						break;
-					case KeyEvent.VK_3:
-						RobotCommunication.getInstance().sendMoveBackward(
-								Constants.MOVE_BACKWARD_10_TIME);
-						break;
-					case KeyEvent.VK_4:
-						RobotCommunication.getInstance().sendKick(
-								Constants.KICK_TIME);
-						break;
-					}
+					RobotCommunication.getInstance().stop();
+//					switch (code) {
+//					
+//					}
 				} else {
 					System.out.println("Serial port not initialized");
 				}
@@ -103,8 +90,54 @@ public class GUI extends JFrame {
 
 			@Override
 			public void keyPressed(KeyEvent e) {
+				int code = e.getKeyCode();
+				if(serialPortInitialized){
+					switch (code) {
+					case KeyEvent.VK_W:
+						System.out.println("W");
+						RobotCommunication.getInstance().holdForward();
+						break;
+					case KeyEvent.VK_A:
+						System.out.println("A");
+						RobotCommunication.getInstance().holdLeft();
+						break;
+					case KeyEvent.VK_S:
+						System.out.println("S");
+						RobotCommunication.getInstance().holdBackward();
+						break;
+					case KeyEvent.VK_D:
+						System.out.println("D");
+						RobotCommunication.getInstance().holdRight();
+						break;
+					case KeyEvent.VK_SPACE:
+						System.out.println("KICK");
+						RobotCommunication.getInstance().sendKick(
+								Constants.KICK_TIME);
+						break;	
+					//movement test 1 (10cm forward)
+					case KeyEvent.VK_1:
+						RobotCommunication.getInstance().sendMoveForward(
+								Constants.MOVE_FORWARD_10_TIME);
+						break;
+					//movement test 2 (50cm forward)
+					case KeyEvent.VK_2:
+						RobotCommunication.getInstance().sendMoveForward(
+								Constants.MOVE_FORWARD_50_TIME);
+						break;
+					//movement test 3 (20cm backward)
+					case KeyEvent.VK_3:
+						RobotCommunication.getInstance().sendMoveBackward(
+								Constants.MOVE_BACKWARD_10_TIME);
+						break;
+					//kick test (defence to attack zone)
+					case KeyEvent.VK_4:
+						RobotCommunication.getInstance().sendKick(
+								Constants.KICK_TIME);
+						break;
+				}
 			}
-		});
+		}
+	});
 
 		buttonsPanel.setFocusable(true);
 		buttonsPanel.requestFocusInWindow();
