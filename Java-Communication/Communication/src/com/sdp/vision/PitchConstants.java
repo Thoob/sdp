@@ -410,7 +410,7 @@ public class PitchConstants extends Observable {
 			for (int i = 0; i < 8; i++){
 				int x = scannerDim.nextInt();
 				int y = scannerDim.nextInt();
-				//TODO PitchConstants.pitchOutline[i] = new Position(x,y);
+				PitchConstants.pitchOutline[i] = new Position(x,y);
 			}
 
 			scannerDim.close();

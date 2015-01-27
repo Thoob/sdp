@@ -220,7 +220,7 @@ public class GeneralStrategy implements Strategy {
 				// Straight forward case
 				double ang1 = calculateAngle(attackerRobotX, attackerRobotY,
 						attackerOrientation, goalX, aimY);
-				
+
 				// Cases for when the defending robot is close to the line and
 				// we need to try
 				// a bounce shot against the wall. If we are doing a bounce shot
@@ -230,7 +230,7 @@ public class GeneralStrategy implements Strategy {
 					boolean doBounce = false;
 					if (distanceFromBot > distanceFromTop) {
 						if (Math.abs(enemyDefenderRobotX - rightCheck) < BOUNCE_SHOT_DISTANCE
-								 && (enemyDefenderRobotY > goalY[0])) {
+								&& (enemyDefenderRobotY > goalY[0])) {
 							goalTarget = goalY[0];
 							doBounce = true;
 						} else if (Math.abs(enemyDefenderRobotX - leftCheck) < BOUNCE_SHOT_DISTANCE
@@ -240,7 +240,7 @@ public class GeneralStrategy implements Strategy {
 						}
 					} else {
 						if (Math.abs(enemyDefenderRobotX - rightCheck) < BOUNCE_SHOT_DISTANCE
-								 && (enemyDefenderRobotY < goalY[2])) {
+								&& (enemyDefenderRobotY < goalY[2])) {
 							goalTarget = goalY[2];
 							doBounce = true;
 						} else if (Math.abs(enemyDefenderRobotX - leftCheck) < BOUNCE_SHOT_DISTANCE
@@ -249,15 +249,15 @@ public class GeneralStrategy implements Strategy {
 							doBounce = true;
 						}
 					}
-					
-					if (doBounce){
+
+					if (doBounce) {
 						ang1 = Calculations.GetBounceAngle(attackerRobotX,
 								attackerRobotY, attackerOrientation, goalX,
 								goalTarget, 0, goalY[1]);
 						toExecute.op = Operation.Type.ATKMOVEKICK;
 					}
 				}
-				
+
 				// Check we are pointing in the correct direction to score.
 				// 2 degree threshold seems to work best.
 				if (Math.abs(ang1) > 2) {
@@ -434,36 +434,37 @@ public class GeneralStrategy implements Strategy {
 			} else {
 				targetX = ((rightCheck + defenderCheck) / 2);
 			}
-			double attackerAngle =  
-									  calculateAngle(attackerRobotX,
-									  attackerRobotY, attackerOrientation,
-									  attackerResetX, attackerResetY);
+			double attackerAngle = calculateAngle(attackerRobotX,
+					attackerRobotY, attackerOrientation, attackerResetX,
+					attackerResetY);
 			double angleToPass = 0;
 			if (StrategyController.bouncePassEnabled) {
 				if (leftCheck > defenderCheck) {
 					angleToPass = Calculations.GetBounceAngle(defenderRobotX,
-							defenderRobotY, defenderOrientation, attackerRobotX - 20,
-							attackerRobotY, bounceDirection, goalY[1]);
+							defenderRobotY, defenderOrientation,
+							attackerRobotX - 20, attackerRobotY,
+							bounceDirection, goalY[1]);
 				} else {
 					angleToPass = Calculations.GetBounceAngle(defenderRobotX,
-							defenderRobotY, defenderOrientation, attackerRobotX + 20,
-							attackerRobotY, bounceDirection, goalY[1]);
+							defenderRobotY, defenderOrientation,
+							attackerRobotX + 20, attackerRobotY,
+							bounceDirection, goalY[1]);
 				}
-				
+
 			} else {
-				angleToPass = calculateAngle(defenderRobotX,
-				defenderRobotY, defenderOrientation, attackerRobotX,
-				attackerRobotY);
+				angleToPass = calculateAngle(defenderRobotX, defenderRobotY,
+						defenderOrientation, attackerRobotX, attackerRobotY);
 			}
 			if (attackerNotOnPitch) {
-				angleToPass = calculateAngle(defenderRobotX,defenderRobotY, defenderOrientation, goalX, goalY[2]);
+				angleToPass = calculateAngle(defenderRobotX, defenderRobotY,
+						defenderOrientation, goalX, goalY[2]);
 			}
-			double dist = 
-							  Math.hypot(attackerRobotX - attackerResetX,
-							  attackerRobotY - attackerResetY);
-							 
+			double dist = Math.hypot(attackerRobotX - attackerResetX,
+					attackerRobotY - attackerResetY);
+
 			double attackerAngleToDefender = calculateAngle(attackerRobotX,
-					attackerRobotY, attackerOrientation, defenderRobotX, defenderRobotY);
+					attackerRobotY, attackerOrientation, defenderRobotX,
+					defenderRobotY);
 			if (attackerNotOnPitch) {
 				toExecute.op = Operation.Type.DEFROTATE;
 				if (Math.abs(angleToPass) > 3) {
@@ -520,8 +521,6 @@ public class GeneralStrategy implements Strategy {
 
 	@Override
 	public void sendWorldState(WorldState worldState) {
-		//TODO
-		/*
 		attackerRobotX = worldState.getAttackerRobot().x;
 		attackerRobotY = worldState.getAttackerRobot().y;
 		defenderRobotX = worldState.getDefenderRobot().x;
@@ -543,7 +542,10 @@ public class GeneralStrategy implements Strategy {
 			leftCheck = worldState.dividers[1];
 			rightCheck = worldState.dividers[2];
 			defenderCheck = worldState.dividers[0];
-			defenderResetX = ((defenderCheck - PitchConstants.getPitchOutline()[7].getX()) / 2) + PitchConstants.getPitchOutline()[7].getX() + 20;
+			defenderResetX = ((defenderCheck - PitchConstants.getPitchOutline()[7]
+					.getX()) / 2)
+					+ PitchConstants.getPitchOutline()[7].getX()
+					+ 20;
 			attackerResetX = ((leftCheck + rightCheck) / 2) + 15;
 			goalX = 640;
 			ourGoalX = PitchConstants.getPitchOutline()[7].getX();
@@ -556,7 +558,8 @@ public class GeneralStrategy implements Strategy {
 			leftCheck = worldState.dividers[0];
 			rightCheck = worldState.dividers[1];
 			defenderCheck = worldState.dividers[2];
-			defenderResetX = ((PitchConstants.getPitchOutline()[2].getX() - defenderCheck) / 2) + defenderCheck - 20;
+			defenderResetX = ((PitchConstants.getPitchOutline()[2].getX() - defenderCheck) / 2)
+					+ defenderCheck - 20;
 			attackerResetX = ((leftCheck + rightCheck) / 2) - 15;
 			goalX = 0;
 			ourGoalX = PitchConstants.getPitchOutline()[2].getX();
@@ -566,9 +569,11 @@ public class GeneralStrategy implements Strategy {
 			ourGoalEdges[2] = PitchConstants.getPitchOutline()[3].getY();
 			ourGoalY = worldState.rightGoal;
 		}
-		attackerResetY = (PitchConstants.getPitchOutlineBottom() + PitchConstants.getPitchOutlineTop())/2;
-		defenderResetY = (PitchConstants.getPitchOutlineBottom() + PitchConstants.getPitchOutlineTop())/2;
-*/
+		attackerResetY = (PitchConstants.getPitchOutlineBottom() + PitchConstants
+				.getPitchOutlineTop()) / 2;
+		defenderResetY = (PitchConstants.getPitchOutlineBottom() + PitchConstants
+				.getPitchOutlineTop()) / 2;
+
 	}
 
 	public static double calculateAngle(float robotX, float robotY,
