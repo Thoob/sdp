@@ -19,6 +19,7 @@ import com.sdp.vision.gui.tools.StrategySelectorTool;
 import com.sdp.vision.recognisers.BallRecogniser;
 import com.sdp.vision.recognisers.RobotRecogniser;
 import com.sdp.world.DynamicWorldState;
+import com.sdp.world.MovingObject;
 import com.sdp.world.Pitch;
 import com.sdp.world.oldmodel.WorldState;
 
@@ -53,7 +54,7 @@ public class RunVision {
 		// 0 = default to main pitch
 		final PitchConstants pitchConstants = new PitchConstants(0);
 		final Pitch pitch = new Pitch(yamlConfig, pitchConstants);
-		WorldState worldState = new WorldState(pitch);
+		WorldState worldState = new WorldState(pitch);		
 
 		DynamicWorldState dynamicWorldState = new DynamicWorldState();
 

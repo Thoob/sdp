@@ -57,7 +57,16 @@ public class WorldState {
 	 */
 	public WorldState(Pitch field) {
 		this.playingField = field;
-		InitialiseOracle(field);
+		initialiseOracle(field);
+	}
+	
+	/**
+	 * Constructor, use it for milestone 2 once the playing field data has been assembled
+	 */
+	public WorldState(Pitch field, MovingObject ball){
+		this.playingField = field;
+		this.ball = ball;
+		//initialiseOracle(field);
 	}
 
 	/**
@@ -73,7 +82,7 @@ public class WorldState {
 		this.enemyAttackerRobot = enemyAttackerRobot;
 		this.enemyDefenderRobot = enemyDefenderRobot;
 		this.ball = ball;
-		InitialiseOracle(field);
+		initialiseOracle(field);
 	}
 
 	// get methods
@@ -148,8 +157,8 @@ public class WorldState {
 	/**
 	 * Updates the ball object
 	 * */
-	public void setBall(MovingObject ball_m) {
-		this.ball = ball_m;
+	public void setBall(MovingObject ball) {
+		this.ball = ball;
 	}
 
 	/**
@@ -206,7 +215,7 @@ public class WorldState {
 		return next_state;
 	}
 
-	private void InitialiseOracle(Pitch field) {
+	private void initialiseOracle(Pitch field) {
 		// Needs to be changed to use constants for top, bottom, left, right
 		// from
 		// the pitch object, I can't find them.
