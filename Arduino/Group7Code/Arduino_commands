@@ -1,0 +1,77 @@
+This is a list of commands that can be sent to the serial
+port of the Arduino.
+*Subject to lots of change*
+
+/////////////////////////////////////////////////////////
+Set Commands
+/////////////////////////////////////////////////////////
+
+1. "A_SET_ENGINE (int left_speed) (int right_speed)"
+
+Sets the current speed of both the left and right motors.
+If the given values are not in the range of MIN_SPEED to
+MAX_SPEED, the speed will be set to the closest limit.
+
+
+2. "A_SET_CATCH (int catch_position)"
+Sets the angle of the catch position for the kicker and
+saves it to memory.
+*Probably will change as our kicker is slightly 
+different*
+
+3. "A_SET_KICK (int kick_position)"
+Sets the angle of the kick position for the kicker and
+saves it to memory.
+*Probably will change as our kicker is slightly 
+different*
+
+4. "A_SET_FKICK (int fkick_steps)"
+Sets the number of teps the motors will move in the FKICK
+run function.
+
+5. "A_SET_GRAB (int grab_angle)"
+Sets the angle of the grab position for the kicker and
+saves it to memory.
+*Probably will change as our kicker is slightly 
+different*
+
+6. "A_SET_SHOOT (int shoot_value)"
+Sets the step size of how much the robot will rotate with
+the run_shoot function
+
+7. "A_SET_TSHOOT (int tshoot_value)"
+Currently only saves a value to memory that isn't used.
+Probably will be removed
+
+/////////////////////////////////////////////////////////
+Run Commands
+/////////////////////////////////////////////////////////
+
+8. "A_RUN_ENGINE (int left_step) (int_right_set)"
+Will move both engines a set number of steps as specified
+by the arguments. The step values can be negative to run
+in the opposite direction. This is the main movement
+function
+
+9. "A_RUN_CATCH"
+Sets kicker to catch position. This angle is specified in
+memory or by the corresponding SET function.
+
+10. "A_RUN_KICK"
+Sets kicker to kick position. This angle is specified in
+memory or by the corresponding SET function.
+
+11. "A_RUN_FKICK"
+Moves the robot forward by the number of steps in the
+FKICK memory. For extra force on a kick.
+
+12. "A_RUN_GRAB"
+Sets kicker to grab position. This angle is specified in
+memory or by the corresponding SET function.
+
+13 "A_RUN_SHOOT (int turn_direction)
+Will rotate the robot in the turn direction for the number
+of steps specified in memory by the SHOOT_STEP. Direction
+currently specified is Right: 1 and Left: 1, although
+this may be different if our motors are round the other
+way
