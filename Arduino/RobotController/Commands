@@ -1,0 +1,67 @@
+This is a list of commands that can be sent to the serial
+port of the Arduino for group 13.
+*Subject to lots of change*
+
+Commands that can be read by the arduino are strings with
+the command first followed by arguments after spaces, and
+terminated with a newline/carridge return character.
+e.g.
+"FORWARD 300 100\n"
+
+/////////////////////////////////////////////////////////
+Test Commands
+/////////////////////////////////////////////////////////
+
+1. "ON"
+Turns the LED on the board on.
+
+2. "OFF"
+Turns the LED off.
+
+3. "HELLO <name>"
+Prints to the serial port a hello message.
+
+/////////////////////////////////////////////////////////
+Movement Commands
+/////////////////////////////////////////////////////////
+
+1. "FORWARD <time> <power>"
+Runs both motors forward for <time> milliseconds at 
+<power>%.
+
+2. "BACKWARD <time> <power>"
+Runs both motors backwards for <time> milliseconds at 
+<power>%.
+
+3. "ROTATE <direction> <time> <power>"
+Rotates the robot in <direction> (1==left, 2==right) for
+<time> milliseconds at <power>%. One motor forwards, one
+motor backwards.
+
+4. "STOP"
+Stops all motors.
+
+5. "KICK <time> <power>"
+Runs the kicker motor forward for <time> milliseconds at 
+<power>%.
+
+/////////////////////////////////////////////////////////
+Remote Control Commands (for robot wars)
+/////////////////////////////////////////////////////////
+
+1. "RCFORWARD"
+Will run both motors forward at 100% power until the
+stop command is sent.
+
+2. "RCBACKWARD"
+Will run both motors backwards at 100% power until the
+stop command is sent.
+
+3. "RCROTATL" (No command size > 8)
+Rotates the robot left at 100% power until a stop
+command is sent.
+
+4. "RCROTATR" (No command size > 8)
+Rotates the robot right at 100% power until a stop
+command is sent.
+

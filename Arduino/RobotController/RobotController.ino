@@ -1,6 +1,6 @@
-// Demo Code for SerialCommand Library
-// Steven Cogswell
-// May 2011
+//Robot Controller for SDP 13
+//Authours: Vanya Petkova and Scott Postlethwaite
+//January 2015
 
 #include "SerialCommand.h"
 #include "SDPArduino.h"
@@ -31,6 +31,7 @@ void setup() {
   sCmd.addCommand("ROTATE", move_rotate);
   sCmd.addCommand("STOP", move_stop);
   sCmd.addCommand("KICK", move_kick);
+  sCmd.addCommand("CATCH", move_catch);
   
   //Remote Control Commands
   sCmd.addCommand("RCFORWARD", rc_forward);
@@ -192,6 +193,42 @@ void move_kick() {
   delay(time);
   
   motorAllStop(); 
+}
+
+void move_catch() {
+  
+  char *arg1;
+  char *arg2;
+  int time;
+  int power;
+  
+  arg1 = sCmd.next();
+  time = atoi(arg1);
+  
+  arg2 = sCmd.next();
+  power = atoi(arg2);
+  
+  
+  
+  if (time==NULL) {
+    time = 1000;
+  }
+  
+  if (power==NULL) {
+    power = 50;
+  }
+  
+  Serial.println("Catching");
+  //lift
+  motorBackward(3, power);
+  motorForward(4, 50);
+  motorForward(5, 50);
+  delay(250);
+  motorAllStop(); 
+
+  motorForward(3, power);  
+  delay(250);
+  mototAllStop();
 }
 
 void move_stop(){
