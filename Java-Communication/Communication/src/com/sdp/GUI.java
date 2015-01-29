@@ -54,13 +54,9 @@ public class GUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String action = e.getActionCommand();
 				if (serialPortInitialized) {
-					switch (action) {
-					case "Kick":
+					if(action.equals("Kick")){
 						RobotCommunication.getInstance().sendKick(300);
 						System.out.println("KICK");
-						break;
-					default:
-						break;
 					}
 					focusToButtonPanel();
 				} else {
