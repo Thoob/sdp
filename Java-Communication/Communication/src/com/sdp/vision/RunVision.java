@@ -19,7 +19,6 @@ import com.sdp.vision.gui.tools.StrategySelectorTool;
 import com.sdp.vision.recognisers.BallRecogniser;
 import com.sdp.vision.recognisers.RobotRecogniser;
 import com.sdp.world.DynamicWorldState;
-import com.sdp.world.MovingObject;
 import com.sdp.world.Pitch;
 import com.sdp.world.oldmodel.WorldState;
 
@@ -54,7 +53,7 @@ public class RunVision {
 		// 0 = default to main pitch
 		final PitchConstants pitchConstants = new PitchConstants(0);
 		final Pitch pitch = new Pitch(yamlConfig, pitchConstants);
-		WorldState worldState = new WorldState(pitch);		
+		WorldState worldState = new WorldState(pitch);
 
 		DynamicWorldState dynamicWorldState = new DynamicWorldState();
 
@@ -134,6 +133,20 @@ public class RunVision {
 			gui.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+
+		// Code for milestone 2
+		if (args.length != 0) {
+			String action = args[0];
+			if (action.equals("attack")) {
+
+			} else if (action.equals("defend")) {
+
+			} else {
+				System.out.println("Action not recognized");
+			}
+		} else {
+			System.out.println("No action specified");
 		}
 	}
 }
