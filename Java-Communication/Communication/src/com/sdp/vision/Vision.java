@@ -6,6 +6,7 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import com.sdp.strategy.SimpleAttackerStrategy;
 import com.sdp.vision.interfaces.ObjectRecogniser;
 import com.sdp.vision.interfaces.VideoReceiver;
 import com.sdp.vision.interfaces.VisionDebugReceiver;
@@ -29,6 +30,8 @@ public class Vision implements VideoReceiver {
 	private ArrayList<VisionDebugReceiver> visionDebugReceivers = new ArrayList<VisionDebugReceiver>();
 	private static ArrayList<WorldStateReceiver> worldStateReceivers = new ArrayList<WorldStateReceiver>();
 	private ArrayList<ObjectRecogniser> recognisers = new ArrayList<ObjectRecogniser>();
+	
+	private SimpleAttackerStrategy attackerStrategy = new SimpleAttackerStrategy();
 
 	public Vision(WorldState worldState, PitchConstants pitchConstants,
 			DynamicWorldState dynamicWorldState) {
@@ -116,6 +119,9 @@ public class Vision implements VideoReceiver {
 		for (WorldStateReceiver receiver : Vision.worldStateReceivers) {
 			receiver.sendWorldState(this.worldState);
 		}
+		
+		// For milestone 2
+		attackerStrategy.sendDynamicWorldState(dynamicWorldState);
 	}
 
 	/**

@@ -9,6 +9,7 @@ import org.apache.commons.cli.Options;
 
 import au.edu.jcu.v4l4j.V4L4JConstants;
 
+import com.sdp.Constants;
 import com.sdp.strategy.StrategyController;
 import com.sdp.vision.gui.VisionGUI;
 import com.sdp.vision.gui.tools.AlignmentTool;
@@ -139,14 +140,17 @@ public class RunVision {
 		if (args.length != 0) {
 			String action = args[0];
 			if (action.equals("attack")) {
-
+				// find the ball, move to this point and catch it
+				Constants.currentStrategy = Constants.Strategy.ATTACK;
+				System.out.println("Attack strategy was chosen");
 			} else if (action.equals("defend")) {
-
+				Constants.currentStrategy = Constants.Strategy.DEFEND;
+				System.out.println("Defence strategy was chosen");
 			} else {
-				System.out.println("Action not recognized");
+				System.out.println("Strategy not recognized");
 			}
 		} else {
-			System.out.println("No action specified");
+			System.out.println("No strategy specified");
 		}
 	}
 }
