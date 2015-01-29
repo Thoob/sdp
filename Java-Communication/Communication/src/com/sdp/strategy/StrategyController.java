@@ -84,7 +84,7 @@ public class StrategyController implements WorldStateReceiver {
 	 * @param type
 	 *            - The strategy type to run
 	 */
-	public void changeToStrategy(StrategyType type) {/*
+	public void changeToStrategy(StrategyType type) {
 		// Stop old threads
 		for (Strategy s : StrategyController.currentStrategies) {
 			s.stopControlThread();
@@ -95,6 +95,8 @@ public class StrategyController implements WorldStateReceiver {
 		switch (type) {
 		case DO_NOTHING:
 			break;
+		/*
+		 TODO 
 		case PASSING:
 			Strategy ps = new PassingStrategy(this.bcsAttacker,
 					this.bcsDefender);
@@ -102,7 +104,7 @@ public class StrategyController implements WorldStateReceiver {
 			ps.startControlThread();
 			break;
 		case ATTACKING:
-			Strategy as = new AttackerStrategy(this.bcsAttacker);
+			Strategy as = new AttackerStrategy();
 			Strategy ic = new InterceptorStrategy(this.bcsDefender);
 			StrategyController.currentStrategies.add(as);
 			StrategyController.currentStrategies.add(ic);
@@ -131,16 +133,18 @@ public class StrategyController implements WorldStateReceiver {
 			newMar.startControlThread();
 			ics.startControlThread();
 			break;
+			*/
 		default:
 			break;
 		}
 		StrategyType oldType = currentStrategy;
 		currentStrategy = type;
-		pcs.firePropertyChange("currentStrategy", oldType, currentStrategy);*/
+		pcs.firePropertyChange("currentStrategy", oldType, currentStrategy);
 	}
 
 	@Override
 	public void sendWorldState(WorldState worldState) {
+		System.out.println("sendWorldState ");
 		if (pauseStrategyController)
 			return;
 		// Check where the ball is, and make a decision on which strategies to

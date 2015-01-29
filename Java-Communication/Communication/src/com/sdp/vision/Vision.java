@@ -65,7 +65,7 @@ public class Vision implements VideoReceiver {
 		worldStateReceivers.add(receiver);
 	}
 
-	public static void removeWorldStateReciver(WorldStateReceiver reciver) {
+	public static void removeWorldStateReceiver(WorldStateReceiver reciver) {
 		worldStateReceivers.remove(reciver);
 	}
 

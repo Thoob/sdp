@@ -93,7 +93,7 @@ public class VideoStream {
 				ArrayList<Strategy> removedStrategies = StrategyController
 						.getRemovedStrategies();
 				for (Strategy s : removedStrategies) {
-					Vision.removeWorldStateReciver(s);
+					Vision.removeWorldStateReceiver(s);
 				}
 				removedStrategies = new ArrayList<Strategy>();
 				StrategyController.setRemovedStrategies(removedStrategies);
