@@ -19,13 +19,13 @@ public class RobotCommunication implements ArduinoCommunication {
 	}
 
 	public void sendMoveForward10() {
-		String command = "FORWARD 410 100\n";
+		String command = "FORWARD 300 100\n";
 		System.out.println(command);
 		Communication.getInstance().sendCommandViaPort(command);
 	}	
 	
 	public void sendMoveForward50() {
-		String command = "FORWARD 1850 100\n";
+		String command = "FORWARD 1500 100\n";
 		System.out.println(command);
 		Communication.getInstance().sendCommandViaPort(command);
 	}
@@ -37,13 +37,13 @@ public class RobotCommunication implements ArduinoCommunication {
 	}
 	
 	public void sendMoveBackward20() {
-		String command = String.format("BACKWARD 770 100\n");
+		String command = String.format("BACKWARD 600 100\n");
 		System.out.println(command);
 		Communication.getInstance().sendCommandViaPort(command);
 	}
 	
 	public void passKick() {
-		String command = String.format("KICK 400 75\n");
+		String command = String.format("KICK 400 60\n");
 		System.out.println(command);
 		Communication.getInstance().sendCommandViaPort(command);
 	}
@@ -51,6 +51,12 @@ public class RobotCommunication implements ArduinoCommunication {
 	@Override
 	public void sendKick(int time) {
 		String command = String.format("KICK %d 100\n", time);
+		System.out.println(command);
+		Communication.getInstance().sendCommandViaPort(command);
+	}
+	
+	public void sendCatch(){
+		String command = "CATCH\n";
 		System.out.println(command);
 		Communication.getInstance().sendCommandViaPort(command);
 	}
