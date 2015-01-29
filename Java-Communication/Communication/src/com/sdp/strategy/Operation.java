@@ -9,5 +9,4 @@ public class Operation {
 	public Type op = Type.DO_NOTHING;
 	public double radius;
 	public int travelDistance, travelSpeed, rotateBy, rotateSpeed;
-	
 }

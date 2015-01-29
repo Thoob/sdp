@@ -1,11 +1,13 @@
 package com.sdp.vision.gui.tools;
 
+import java.awt.Container;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
@@ -41,22 +43,20 @@ public class StrategySelectorTool implements GUITool {
 			}
 		});
 		infoLabel.setAlignmentX(JLabel.RIGHT_ALIGNMENT);
-/*
+
 		Container contentPane = subWindow.getContentPane();
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
-		contentPane.add(new ConnectionControl("Attacker", sc.bcsAttacker,
-				BtInfo.group10));
-		contentPane.add(new ConnectionControl("Defender", sc.bcsDefender,
-				BtInfo.MEOW));
-		contentPane.add(new ConnectionControl("Attacker", sc.bcsAttacker,
-				BtInfo.DemoD));
-		contentPane.add(new ConnectionControl("Defender", sc.bcsDefender,
-				BtInfo.DemoA));
+		//contentPane.add(new ConnectionControl("Attacker"));
+		/*
+		 * contentPane.add(new ConnectionControl("Defender", sc.bcsDefender,
+		 * BtInfo.MEOW)); contentPane.add(new ConnectionControl("Attacker",
+		 * sc.bcsAttacker, BtInfo.DemoD)); contentPane.add(new
+		 * ConnectionControl("Defender", sc.bcsDefender, BtInfo.DemoA));
+		 */
 		contentPane.add(infoLabel);
 		contentPane.add(new StrategyPicker());
 		contentPane.add(new AdvancedStrategyEnabler());
 		updateInfoLabel();
-		*/
 
 	}
 
@@ -146,15 +146,17 @@ public class StrategySelectorTool implements GUITool {
 
 			// stateChanged();
 		}
-
-		/*
-		 * @Override public void stateChanged() { String status =
-		 * bcs.isConnected() ? "connected to " + target.name : "not connected";
-		 * statusLabel.setText(role + ": " + status);
-		 * connectBtn.setVisible(!bcs.isConnected());
-		 * disconnectBtn.setVisible(bcs.isConnected());
-		 * resetCatcherBtn.setVisible(bcs.isConnected()); }
-		 */
+/*
+		@Override
+		public void stateChanged() {
+			String status = bcs.isConnected() ? "connected to " + target.name
+					: "not connected";
+			statusLabel.setText(role + ": " + status);
+			connectBtn.setVisible(!bcs.isConnected());
+			disconnectBtn.setVisible(bcs.isConnected());
+			resetCatcherBtn.setVisible(bcs.isConnected());
+		}
+*/
 	}
 
 	@SuppressWarnings("serial")

@@ -73,12 +73,9 @@ public class GUI extends JFrame {
 
 			@Override
 			public void keyReleased(KeyEvent e) {
-//				int code = e.getKeyCode();
 				if (serialPortInitialized) {
 					RobotCommunication.getInstance().stop();
-//					switch (code) {
-//					
-//					}
+
 				} else {
 					System.out.println("Serial port not initialized");
 				}

@@ -23,7 +23,6 @@ public class StrategyController implements WorldStateReceiver {
 		DEFENDER, ATTACKER, ENEMY_DEFENDER, ENEMY_ATTACKER
 	}
 	private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
-	//public BrickCommServer bcsAttacker, bcsDefender;
 	private BallLocation ballLocation;
 	private StrategyType currentStrategy = StrategyType.DO_NOTHING;
 	private boolean pauseStrategyController = true;
@@ -144,7 +143,6 @@ public class StrategyController implements WorldStateReceiver {
 
 	@Override
 	public void sendWorldState(WorldState worldState) {
-		System.out.println("sendWorldState ");
 		if (pauseStrategyController)
 			return;
 		// Check where the ball is, and make a decision on which strategies to
