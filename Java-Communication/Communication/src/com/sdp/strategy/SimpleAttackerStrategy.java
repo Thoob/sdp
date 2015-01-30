@@ -11,25 +11,23 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 	
 	private boolean ballInEnemyAttackerArea;
 	private boolean fromSide;
-	
 	public boolean BallLeftQ;
 	public boolean BallCentreLQ;
 	public boolean BallCentreRQ;
 	public boolean BallRightQ;
 	public boolean isBallCatchable;
 
-	public void goToPosition(float x, float y) {
-		
-	}
-
 	public void sendDynamicWorldState(DynamicWorldState dynWorldState) {
 		Point ballPos = (Point) dynWorldState.getBall().getPoint();
 		Point robotPos = (Point) dynWorldState.getAttacker().getCenter();
-		double BallX = ballPos.getX();
-		
+ 
+	}
+	
+	public void determineBallLocation(Point ballPos){
 		/*  Rough code to determine sections based on an object location
 		 *  TODO: extend to robot location
 		 */
+		double BallX = ballPos.getX();
 		
 		if (BallX < -315){
 		//	System.out.println("Ball in left 1/4 ");
@@ -97,12 +95,9 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 			}
 			//toExecute.rotateSpeed = (int) Math.abs(angToBall);
 		}
- 
 	}
 	
-	public void sendWorldState(WorldState worldState) {
-		super.sendWorldState(worldState);
-
+	public void determineBallArea(WorldState worldState){
 		if (worldState.weAreShootingRight && ballX > defenderCheck
 				&& ballX < leftCheck || !worldState.weAreShootingRight
 				&& ballX < defenderCheck && ballX > rightCheck) {
@@ -110,7 +105,10 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 		} else {
 			this.ballInEnemyAttackerArea = false;
 		}
-		
+	}
+	
+	public void sendWorldState(WorldState worldState) {
+		super.sendWorldState(worldState);
 
 	}
 }

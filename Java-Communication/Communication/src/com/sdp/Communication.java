@@ -4,9 +4,7 @@ import jssc.SerialPort;
 import jssc.SerialPortException;
 import jssc.SerialPortList;
 
-// From http://www.codeproject.com/Tips/801262/Sending-and-receiving-strings-from-COM-port-via-jS 
-
-class Communication {
+public class Communication {
 
 	private Communication() {
 
@@ -29,7 +27,7 @@ class Communication {
 		return portNames;
 	}
 
-	void initializeSerialPort(String portName) {
+	public void initializeSerialPort(String portName) {
 		serialPort = new SerialPort(portName);
 	}
 

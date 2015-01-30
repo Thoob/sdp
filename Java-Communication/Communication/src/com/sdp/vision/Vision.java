@@ -119,7 +119,6 @@ public class Vision implements VideoReceiver {
 		for (WorldStateReceiver receiver : Vision.worldStateReceivers) {
 			receiver.sendWorldState(this.worldState);
 		}
-		
 		// For milestone 2
 		attackerStrategy.sendDynamicWorldState(dynamicWorldState);
 	}
