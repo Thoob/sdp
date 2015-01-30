@@ -21,10 +21,10 @@ import com.sdp.vision.interfaces.ObjectRecogniser;
 import com.sdp.vision.interfaces.PitchViewProvider;
 import com.sdp.world.DirectedPoint;
 import com.sdp.world.DynamicWorldState;
+import com.sdp.world.MovingObject;
 import com.sdp.world.Pitch;
 import com.sdp.world.RobotModel;
 import com.sdp.world.StaticWorldState;
-import com.sdp.world.oldmodel.MovingObject;
 import com.sdp.world.oldmodel.WorldState;
 
 public class RobotRecogniser implements ObjectRecogniser {
@@ -202,12 +202,12 @@ public class RobotRecogniser implements ObjectRecogniser {
 			worldState.enemyAttackerNotOnPitch = blueAtkNotOnPitch;
 			worldState.enemyDefenderNotOnPitch = blueDefNotOnPitch;
 		}
-		/*
-		 * worldState.setAttackerRobot(attackerRobot);
-		 * worldState.setDefenderRobot(defenderRobot);
-		 * worldState.setEnemyAttackerRobot(enemyAttackerRobot);
-		 * worldState.setEnemyDefenderRobot(enemyDefenderRobot);
-		 */
+
+		worldState.setAttackerRobot(attackerRobot);
+		worldState.setDefenderRobot(defenderRobot);
+		worldState.setEnemyAttackerRobot(enemyAttackerRobot);
+		worldState.setEnemyDefenderRobot(enemyDefenderRobot);
+
 		result.setAttacker(movingObjectToPoint(attackerRobot));
 		result.setDefender(movingObjectToPoint(defenderRobot));
 		result.setEnemyAttacker(movingObjectToPoint(enemyAttackerRobot));
