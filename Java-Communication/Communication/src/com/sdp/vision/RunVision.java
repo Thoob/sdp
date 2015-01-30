@@ -143,6 +143,7 @@ public class RunVision {
 				// find the ball, move to this point and catch it
 				Constants.currentStrategy = Constants.Strategy.ATTACK;
 				System.out.println("Attack strategy was chosen");
+				
 			} else if (action.equals("defend")) {
 				Constants.currentStrategy = Constants.Strategy.DEFEND;
 				System.out.println("Defence strategy was chosen");

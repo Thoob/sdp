@@ -220,15 +220,16 @@ void move_catch() {
   
   Serial.println("Catching");
   //lift
-  motorBackward(3, power);
-  motorForward(4, 50);
-  motorForward(5, 50);
+  motorBackward(3, 60);
+  motorForward(4, 40);
+  motorForward(5, 40);
+  delay(450);
+  motorStop(3);
   delay(250);
-  motorAllStop(); 
-
-  motorForward(3, power);  
+  
+  motorForward(3, 100);  
   delay(250);
-  mototAllStop();
+  motorAllStop();
 }
 
 void move_stop(){
