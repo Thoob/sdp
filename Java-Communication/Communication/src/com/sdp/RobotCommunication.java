@@ -90,4 +90,16 @@ public class RobotCommunication implements ArduinoCommunication {
 		System.out.println(command);
 		Communication.getInstance().sendCommandViaPort(command);
 	}
+	
+	public void ATKRotate(int time){
+		String command = String.format("ATKROTATE %d 100\n", time);
+		System.out.println(command);
+		Communication.getInstance().sendCommandViaPort(command);
+	}
+	
+	public void ATKTravel(int time){
+		String command = String.format("ATKTravel %d 100\n", time);
+		System.out.println(command);
+		Communication.getInstance().sendCommandViaPort(command);
+	}
 }
