@@ -227,7 +227,7 @@ void move_catch() {
   motorStop(3);
   delay(250);
   
-  motorForward(3, 75);  
+  motorForward(3, 100);  
   delay(250);
   motorAllStop();
 }

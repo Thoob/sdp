@@ -106,6 +106,7 @@ public class GUI extends JFrame {
 						System.out.println("KICK");
 						RobotCommunication.getInstance().sendKick(
 								Constants.KICK_TIME);
+						break;
 					case KeyEvent.VK_E:
 						System.out.println("CATCH");
 						RobotCommunication.getInstance().sendCatch();
