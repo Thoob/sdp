@@ -1,21 +1,21 @@
-package com.sdp.commands;
+package com.sdp.planner;
 
 import java.awt.geom.Point2D;
 
 import com.sdp.world.DynamicWorldState.Ball;
 import com.sdp.world.DynamicWorldState.Robot;
 
-public class RobotCommands {
+public class RobotPlanner {
 
-	private RobotCommands() {
+	private RobotPlanner() {
 
 	}
 
-	static RobotCommands instance = null;
+	static RobotPlanner instance = null;
 
-	public static RobotCommands getInstance() {
+	public static RobotPlanner getInstance() {
 		if (instance == null) {
-			instance = new RobotCommands();
+			instance = new RobotPlanner();
 		}
 		return instance;
 	}
@@ -40,9 +40,7 @@ public class RobotCommands {
 		// TODO Deciding whether it is better to turn left or right
 		double difference = Math.abs(currentRobotHeading - desiredRobotHeading);
 
-		System.out.println("Current robot heading " + currentRobotHeading);
-		System.out.println("Desired robot heading " + desiredRobotHeading);
-		System.out.println("Difference:" + desiredRobotHeading);
+		System.out.println("Difference in headings:" + desiredRobotHeading);
 
 		if (difference < 0.01) { // TODO test and discuss precision needed
 			return true;
