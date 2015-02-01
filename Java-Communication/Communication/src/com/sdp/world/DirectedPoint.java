@@ -4,7 +4,7 @@ import java.awt.Point;
 
 public class DirectedPoint extends Point {
 	private static final long serialVersionUID = -4732543264234985413L;
-
+	// in radians
 	private double direction;
 	
 	public DirectedPoint() {

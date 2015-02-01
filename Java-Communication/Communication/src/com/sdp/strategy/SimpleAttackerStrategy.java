@@ -3,8 +3,11 @@ package com.sdp.strategy;
 import java.awt.Point;
 
 import com.sdp.RobotCommunication;
+import com.sdp.commands.RobotCommands;
 import com.sdp.vision.PitchConstants;
 import com.sdp.world.DynamicWorldState;
+import com.sdp.world.DynamicWorldState.Ball;
+import com.sdp.world.DynamicWorldState.Robot;
 import com.sdp.world.oldmodel.WorldState;
 
 public class SimpleAttackerStrategy extends GeneralStrategy {
@@ -17,10 +20,29 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 	public boolean BallRightQ;
 	public boolean isBallCatchable;
 
-	public void sendDynamicWorldState(DynamicWorldState dynWorldState) {
-		Point ballPos = (Point) dynWorldState.getBall().getPoint();
-		Point robotPos = (Point) dynWorldState.getAttacker().getCenter();
- 
+	public void sendWorldState(DynamicWorldState dynWorldState) {
+		Robot robot = dynWorldState.getAttacker();
+		Ball ball = dynWorldState.getBall();
+		// 1. change direction so that robot looks towards the ball
+		boolean isHeadingTowardsBall = RobotCommands.getInstance().isRobotHeadingTowardsBall(robot, ball);
+		if(!isHeadingTowardsBall){
+			RobotCommunication.getInstance().holdLeft();
+			return;
+		}else{
+			RobotCommunication.getInstance().stop();
+		}
+		// 2. go straight until you can catch the ball
+		boolean canCatchBall = RobotCommands.getInstance().canCatchBall(robot, ball);
+		if(!canCatchBall){
+			RobotCommunication.getInstance().holdForward();
+			return;
+		}else{
+			// 3. catch the ball
+			RobotCommunication.getInstance().sendCatch();
+		}
+
+		// 4. go to a position from which robot can score
+		// 5. score 
 	}
 	
 	public void determineBallLocation(Point ballPos){
@@ -105,10 +127,5 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 		} else {
 			this.ballInEnemyAttackerArea = false;
 		}
-	}
-	
-	public void sendWorldState(WorldState worldState) {
-		super.sendWorldState(worldState);
-
 	}
 }

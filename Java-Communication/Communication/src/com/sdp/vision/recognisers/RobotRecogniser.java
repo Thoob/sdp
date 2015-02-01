@@ -4,7 +4,6 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
-import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.Point2D;
@@ -23,7 +22,6 @@ import com.sdp.world.DirectedPoint;
 import com.sdp.world.DynamicWorldState;
 import com.sdp.world.MovingObject;
 import com.sdp.world.Pitch;
-import com.sdp.world.RobotModel;
 import com.sdp.world.StaticWorldState;
 import com.sdp.world.oldmodel.WorldState;
 
