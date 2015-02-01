@@ -64,4 +64,9 @@ public class RobotPlanner {
 			return false;
 		}		
 	}
+
+	public boolean doesOurRobotHaveBall(Robot robot, Ball ball) {
+		// TODO implement
+		return false;
+	}
 }
