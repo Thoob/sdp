@@ -25,13 +25,15 @@ void setup() {
   sCmd.addCommand("OFF",   LED_off);         // Turns LED off
   sCmd.addCommand("HELLO", sayHello);        // Echos the string argument back
   
-  //Argument commands
+  //Movement commands
   sCmd.addCommand("FORWARD", move_forward);
   sCmd.addCommand("BACKWARD", move_backward);
   sCmd.addCommand("ROTATE", move_rotate);
   sCmd.addCommand("STOP", move_stop);
   sCmd.addCommand("KICK", move_kick);
   sCmd.addCommand("CATCH", move_catch);
+  sCmd.addCommand("ROTATEH", move_rotateh);
+
   
   //Remote Control Commands
   sCmd.addCommand("RCFORWARD", rc_forward);
@@ -240,6 +242,29 @@ void move_stop(){
 }
 
 
+void move_rotateh() {
+  char *arg1;
+  double heading;
+  
+  arg1 = sCmd.next();
+  heading = atof(arg1);
+  
+  int motor_power;
+  
+  motor_power = map(heading, 0.00, 3.30, 0, 100);
+  
+  Serial.print("Motor power is: ");
+  Serial.println(motor_power);
+  
+  if (motor_power < 30) {
+    motor_power = 30;
+  }
+  
+  motorForward(4, motor_power);
+  motorBackward(5, motor_power);
+  
+  
+}
 
 //Remote Control Commands
 
