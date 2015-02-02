@@ -33,7 +33,7 @@ void setup() {
   sCmd.addCommand("KICK", move_kick);
   sCmd.addCommand("CATCH", move_catch);
   sCmd.addCommand("ROTATEH", move_rotateh);
-
+  sCmd.addCommand("ROTATEP", move_rotatep);
   
   //Remote Control Commands
   sCmd.addCommand("RCFORWARD", rc_forward);
@@ -128,17 +128,12 @@ void move_backward() {
 
 void move_rotate() {
   char *arg1;
-  char *arg2;
   char *arg3;
   int dir;
-  int time;
   int power;
   
   arg1 = sCmd.next();
   dir = atoi(arg1);
-  
-  arg2 = sCmd.next();
-  time = atoi(arg2);
   
   arg3 = sCmd.next();
   power = atoi(arg3);
@@ -150,18 +145,11 @@ void move_rotate() {
   motorForward(4, power);
   motorBackward(5, power);
   
-    delay(time);
-  
-  motorAllStop();
-  
   }
   else if (dir==2) {
   motorForward(5, power);
   motorBackward(4, power);
   
-  delay(time);
-  
-  motorAllStop();
   
   }
 }
@@ -251,19 +239,27 @@ void move_rotateh() {
   
   int motor_power;
   
-  motor_power = map(heading, 0.00, 3.30, 0, 100);
+  motor_power = map(heading, 0.00, 6.50, 40, 70);
   
   Serial.print("Motor power is: ");
   Serial.println(motor_power);
-  
-  if (motor_power < 30) {
-    motor_power = 30;
-  }
   
   motorForward(4, motor_power);
   motorBackward(5, motor_power);
   
   
+}
+
+void move_rotatep() {
+  char *arg1;
+  int power;
+  
+  arg1 = sCmd.next();
+  power = atof(arg1);
+ 
+  
+  motorForward(4, power);
+  motorBackward(5, power);
 }
 
 //Remote Control Commands
