@@ -49,7 +49,7 @@ Runs the kicker motor forward for <time> milliseconds at
 Uses the catcher to catch a ball by moving forwards and
 lifting the catcher.
 
-7. "ROTATEL <heading>"
+7. "ROTATEH <heading>"
 Taking a <heading> in radians, will turn the robot at a
 speed comparable to how much the robot needs to turn.
 This should mean te robot slows down as turns to point
