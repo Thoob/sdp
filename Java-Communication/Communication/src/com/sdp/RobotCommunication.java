@@ -73,14 +73,20 @@ public class RobotCommunication implements ArduinoCommunication {
 		Communication.getInstance().sendCommandViaPort(command); 
 	}
 	
-	public void holdLeft(){
-		String command = String.format("RCROTATL\n");
+	public void holdLeft(double diffInHeadings){
+		String command = String.format("RCROTATL %f\n", diffInHeadings);
 		System.out.println(command);
 		Communication.getInstance().sendCommandViaPort(command); 
 	}
 	
-	public void holdRight(){
-		String command = String.format("RCROTATR\n");
+	public void holdRight(double diffInHeadings){
+		String command = String.format("RCROTATR %f\n", diffInHeadings);
+		System.out.println(command);
+		Communication.getInstance().sendCommandViaPort(command); 
+	}
+	
+	public void sendRotateH(double diffInHeadings){
+		String command = String.format("ROTATEH %f\n", diffInHeadings);
 		System.out.println(command);
 		Communication.getInstance().sendCommandViaPort(command); 
 	}

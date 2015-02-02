@@ -8,8 +8,7 @@ public class Main {
 			gui.setVisible(true);
 		} else {
 			String action = args[0].toLowerCase();
-			String portName = "COM3";
-			Communication.getInstance().initializeSerialPort(portName);
+			Communication.getInstance().initializeSerialPort(Constants.PORT_NAME);
 
 			int time = Integer.parseInt(args[1]);
 			if (action.equals("kick")) {

@@ -2,6 +2,7 @@ package com.sdp.strategy;
 
 import java.awt.Point;
 
+import com.sdp.Communication;
 import com.sdp.RobotCommunication;
 import com.sdp.planner.RobotPlanner;
 import com.sdp.strategy.StrategyController.BallLocation;
@@ -15,6 +16,7 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 
 	private boolean ballInEnemyAttackerArea;
 	private boolean fromSide;
+	private boolean tmp = false;
 
 	public enum BallLocation {
 		DEFENDER, ATTACKER, ENEMY_DEFENDER, ENEMY_ATTACKER
@@ -26,28 +28,37 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 	public void sendWorldState(DynamicWorldState dynWorldState) {
 		Robot robot = dynWorldState.getAttacker();
 		Ball ball = dynWorldState.getBall();
-		// 1. change direction so that robot looks towards the ball
-		boolean isHeadingTowardsBall = RobotPlanner.getInstance()
-				.isRobotHeadingTowardsBall(robot, ball);
-		if (!isHeadingTowardsBall) {
-			RobotCommunication.getInstance().holdLeft();
+
+		if (!Communication.getInstance().isPortInitialized()) {
+			System.out.println("Port not initialized");
 			return;
-		} else {
+		}
+
+		// 1. change direction so that robot looks towards the ball
+		double diffInHeadings = RobotPlanner.getInstance()
+				.differenceInHeadings(robot, ball);
+		
+		if (diffInHeadings > 0.2) { //TODO discuss this number
+			RobotCommunication.getInstance().sendRotateH(diffInHeadings);
+			return;
+		}else{
+			// assume we are heading towards the ball 
 			RobotCommunication.getInstance().stop();
 		}
+
 		// 2. go straight until you can catch the ball
 		boolean canCatchBall = RobotPlanner.getInstance().canCatchBall(robot,
 				ball);
 		boolean doesOurRobotHaveBall = RobotPlanner.getInstance()
 				.doesOurRobotHaveBall(robot, ball);
-		if (!canCatchBall&&!doesOurRobotHaveBall) {
+		if (!canCatchBall && !doesOurRobotHaveBall) {
 			RobotCommunication.getInstance().holdForward();
 			return;
-		} else if(!doesOurRobotHaveBall){
+		} else if (!doesOurRobotHaveBall) {
 			RobotCommunication.getInstance().stop(); // stop moving forward
 			// 3. catch the ball if we don't have it
 			RobotCommunication.getInstance().sendCatch();
-		}else{
+		} else {
 			System.out.println("We should have catched the ball");
 		}
 
