@@ -45,6 +45,16 @@ Stops all motors.
 Runs the kicker motor forward for <time> milliseconds at 
 <power>%.
 
+6. "CATCH <time> <power>
+Uses the catcher to catch a ball by moving forwards and
+lifting the catcher.
+
+7. "ROTATEL <heading>"
+Taking a <heading> in radians, will turn the robot at a
+speed comparable to how much the robot needs to turn.
+This should mean te robot slows down as turns to point
+towards the ball.
+
 /////////////////////////////////////////////////////////
 Remote Control Commands (for robot wars)
 /////////////////////////////////////////////////////////
