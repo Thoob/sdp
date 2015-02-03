@@ -61,6 +61,8 @@ void LED_off() {
   digitalWrite(arduinoLED, LOW);
 }
 
+
+
 // Movement with argument commands
 void run_engine() {
   
@@ -82,7 +84,7 @@ void run_engine() {
   }
   
   // Updates speed of left wheel motor
-  if(!(new_leftspeed == leftspeed)){
+  if(new_leftspeed != leftspeed){
     leftspeed = new_leftspeed;
     if(leftspeed < 0){
       motorBackward(left, abs(leftspeed));
@@ -92,7 +94,7 @@ void run_engine() {
   }
   
   // Updates speed of right wheel motor
-  if(!(new_rightspeed == rightspeed)){
+  if(new_rightspeed != rightspeed){
     rightspeed = new_rightspeed;
     if(rightspeed < 0){
       motorBackward(right, abs(rightspeed));
@@ -121,7 +123,7 @@ void move_kick() {
   
   delay(time);
   
-  motorAllStop(); 
+  motorStop(kicker); 
 }
 
 // Catch script
@@ -158,7 +160,7 @@ void force_stop(){
   Serial.println("Stopping");
   
   motorAllStop();  
-}fired
+}
 
 //Remote Control Commands
 
