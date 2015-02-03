@@ -61,6 +61,8 @@ void LED_off() {
   digitalWrite(arduinoLED, LOW);
 }
 
+
+
 // Movement with argument commands
 void run_engine() {
   
@@ -92,7 +94,7 @@ void run_engine() {
   }
   
   // Updates speed of right wheel motor
-  if(!(new_rightspeed == rightspeed)){
+  if(new_rightspeed != rightspeed){
     rightspeed = new_rightspeed;
     if(rightspeed < 0){
       motorBackward(right, abs(rightspeed));
@@ -121,7 +123,7 @@ void move_kick() {
   
   delay(time);
   
-  motorAllStop(); 
+  motorStop(kicker); 
 }
 
 // Catch script
