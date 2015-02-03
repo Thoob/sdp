@@ -6,14 +6,19 @@
 #include "SDPArduino.h"
 #include <Wire.h>
 
-#define arduinoLED 13   // Arduino LED on board
+#define arduinoLED 13                        // Arduino LED on board
+#define left 5                               // Left wheel motor
+#define right 4                              // Right wheel motor
+#define kicker 3                             // Kicker/catcher motor
 
-SerialCommand sCmd;     // The demo SerialCommand object
+SerialCommand sCmd;                          // The demo SerialCommand object
+int leftspeed = 0;                           // Speed of left wheel
+int rightspeed = 0;                          // Speed of right wheel
 
 
 void setup() {
-  pinMode(arduinoLED, OUTPUT);      // Configure the onboard LED for output
-  digitalWrite(arduinoLED, LOW);    // default to LED off
+  pinMode(arduinoLED, OUTPUT);               // Configure the onboard LED for output
+  digitalWrite(arduinoLED, LOW);             // default to LED off
   
   SDPsetup();
   
@@ -23,16 +28,12 @@ void setup() {
   //Test commands
   sCmd.addCommand("ON",    LED_on);          // Turns LED on
   sCmd.addCommand("OFF",   LED_off);         // Turns LED off
-  sCmd.addCommand("HELLO", sayHello);        // Echos the string argument back
   
   //Movement commands
-  sCmd.addCommand("FORWARD", move_forward);
-  sCmd.addCommand("BACKWARD", move_backward);
-  sCmd.addCommand("ROTATE", move_rotate);
-  sCmd.addCommand("STOP", move_stop);
-  sCmd.addCommand("KICK", move_kick);
-  sCmd.addCommand("CATCH", move_catch);
-  sCmd.addCommand("ROTATEP", move_rotatep);
+  sCmd.addCommand("MOVE", run_engine);       // Runs wheel motors
+  sCmd.addCommand("FSTOP", force_stop);      // Force stops all motors
+  sCmd.addCommand("KICK", move_kick);        // Runs kick script
+  sCmd.addCommand("CATCH", move_catch);      // Runs catch script
   
   //Remote Control Commands
   sCmd.addCommand("RCFORWARD", rc_forward);
@@ -40,20 +41,16 @@ void setup() {
   sCmd.addCommand("RCROTATL", rc_rotateL);
   sCmd.addCommand("RCROTATR", rc_rotateR);
 
-
-  sCmd.setDefaultHandler(unrecognized);      // Handler for command that isn't matched  (says "What?")
-
-
+  sCmd.setDefaultHandler(unrecognized);      // Handler for command that isn't matched
 
   Serial.println("I am completely operational, and all my circuits are functioning perfectly.");
 }
 
 void loop() {
-  sCmd.readSerial();     // We don't do much, just process serial commands
+  sCmd.readSerial();                         // We don't do much, just process serial commands
 }
 
-//Test Commands
-
+// Test Commands
 void LED_on() {
   Serial.println("LED on");
   digitalWrite(arduinoLED, HIGH);
@@ -64,95 +61,48 @@ void LED_off() {
   digitalWrite(arduinoLED, LOW);
 }
 
-void sayHello() {
-  char *arg;
-  arg = sCmd.next();    // Get the next argument from the SerialCommand object buffer
-  if (arg != NULL) {    // As long as it existed, take it
-    Serial.print("Hello ");
-    Serial.println(arg);
-  }
-  else {
-    Serial.println("Hello, whoever you are");
-  }
-}
-
-
-//Movement with argument commands
-
-void move_forward() {
+// Movement with argument commands
+void run_engine() {
   
   char *arg1;
   char *arg2;
-  
-  int time;
-  int power;
-  
+    
   arg1 = sCmd.next();
-  time = atoi(arg1);
+  int new_leftspeed = atoi(arg1);
   
   arg2 = sCmd.next();
-  power = atoi(arg2);
+  int new_rightspeed = atoi(arg2);
   
-  if (time==NULL) {
-    time = 1000;
+  // TODO find minimum speed and replace 0 in these, saves power when motors will be stalled
+  if(new_leftspeed == 0){
+    motorStop(left);
   }
-  Serial.println("Moving forward");
-  motorForward(4, power);
-  motorForward(5, power);
-  
-  delay(time);
-  
-  motorAllStop(); 
-}
-
-void move_backward() {
-  
-  char *arg;
-  int time;
-  
-  arg = sCmd.next();
-  time = atoi(arg);
-  
-  if (time==NULL) {
-    time = 1000;
+  if(new_rightspeed == 0){
+    motorStop(right);
   }
-  Serial.println("Moving backward");
-  motorBackward(4, 100);
-  motorBackward(5, 100);
   
-  delay(time);
-  
-  motorAllStop(); 
-}
-
-void move_rotate() {
-  char *arg1;
-  char *arg3;
-  int dir;
-  int power;
-  
-  arg1 = sCmd.next();
-  dir = atoi(arg1);
-  
-  arg3 = sCmd.next();
-  power = atoi(arg3);
-  
-  
-  
-  Serial.println("Rotating");
-  if (dir == 1) {
-  motorForward(4, power);
-  motorBackward(5, power);
-  
+  // Updates speed of left wheel motor
+  if(!(new_leftspeed == leftspeed)){
+    leftspeed = new_leftspeed;
+    if(leftspeed < 0){
+      motorBackward(left, abs(leftspeed));
+    } else {
+      motorForward(left, leftspeed);
+    }
   }
-  else if (dir==2) {
-  motorForward(5, power);
-  motorBackward(4, power);
   
-  
+  // Updates speed of right wheel motor
+  if(!(new_rightspeed == rightspeed)){
+    rightspeed = new_rightspeed;
+    if(rightspeed < 0){
+      motorBackward(right, abs(rightspeed));
+    } else {
+      motorForward(right, rightspeed);
+    }
   }
 }
 
+// Kick script
 void move_kick() {
   
   char *arg1;
@@ -166,24 +116,15 @@ void move_kick() {
   arg2 = sCmd.next();
   power = atoi(arg2);
   
-  
-  
-  if (time==NULL) {
-    time = 1000;
-  }
-  
-  if (power==NULL) {
-    power = 50;
-  }
-  
   Serial.println("Kicking");
-  motorBackward(3, power);
+  motorBackward(kicker, power);
   
   delay(time);
   
   motorAllStop(); 
 }
 
+// Catch script
 void move_catch() {
   
   char *arg1;
@@ -196,70 +137,28 @@ void move_catch() {
   
   arg2 = sCmd.next();
   power = atoi(arg2);
-  
-  
-  
-  if (time==NULL) {
-    time = 1000;
-  }
-  
-  if (power==NULL) {
-    power = 50;
-  }
+
   
   Serial.println("Catching");
-  //lift
+  //lift and move forward
   motorBackward(3, 60);
   motorForward(4, 40);
   motorForward(5, 40);
   delay(450);
-  motorStop(3);
+  motorStop(kicker);
   delay(250);
-  
+  //catch
   motorForward(3, 100);  
   delay(250);
-  motorAllStop();
+  motorStop(kicker);
 }
 
-void move_stop(){
+// Force stops all motors
+void force_stop(){
   Serial.println("Stopping");
   
-  motorAllStop();
-  
-}
-
-
-void move_rotateh() {
-  char *arg1;
-  double heading;
-  
-  arg1 = sCmd.next();
-  heading = atof(arg1);
-  
-  int motor_power;
-  
-  motor_power = map(heading, 0.00, 6.50, 40, 70);
-  
-  Serial.print("Motor power is: ");
-  Serial.println(motor_power);
-  
-  motorForward(4, motor_power);
-  motorBackward(5, motor_power);
-  
-  
-}
-
-void move_rotatep() {
-  char *arg1;
-  int power;
-  
-  arg1 = sCmd.next();
-  power = atof(arg1);
- 
-  
-  motorForward(4, power);
-  motorBackward(5, power);
-}
+  motorAllStop();  
+}fired
 
 //Remote Control Commands
 
