@@ -38,19 +38,23 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 		double diffInHeadings = RobotPlanner.getInstance()
 				.differenceInHeadings(robot, ball);
 		
-		if (diffInHeadings > 0.4) { //TODO discuss this number
-			RobotCommunication.getInstance().sendRotateH(diffInHeadings);
+		if (diffInHeadings > 0.8) { //TODO discuss this number
+			RobotCommunication.getInstance().sendRotateP(70);
 			return;
+		}else if(diffInHeadings > 0.4){
+			RobotCommunication.getInstance().sendRotateP(40);
+			return;
+		}else{
+			System.out.println("Heading towards the ball");
 		}
-
-
+		
 		// 2. go straight until you can catch the ball
 		boolean canCatchBall = RobotPlanner.getInstance().canCatchBall(robot,
 				ball);
 		boolean doesOurRobotHaveBall = RobotPlanner.getInstance()
 				.doesOurRobotHaveBall(robot, ball);
 		if (!canCatchBall && !doesOurRobotHaveBall) {
-			RobotCommunication.getInstance().sendMoveForward(300); //TODO fix this command, buffer inputs on arduino?
+			RobotCommunication.getInstance().holdForward(); //TODO fix this command, buffer inputs on arduino?
 			return;
 		} else if (!doesOurRobotHaveBall) {
 			RobotCommunication.getInstance().stop(); // stop moving forward

@@ -56,8 +56,9 @@ public class RobotPlanner {
 		double deltaY = robotPos.getY() - ballPos.getY();
 
 		double deltaTotal = Math.abs(deltaX) + Math.abs(deltaY);
+		System.out.println("Distance from ball: " + deltaTotal);
 
-		if (deltaTotal < 3) {// TODO test and discuss precision needed
+		if (deltaTotal < 75) {// TODO test and discuss precision needed
 			return true;
 		}else{
 			return false;

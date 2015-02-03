@@ -91,6 +91,12 @@ public class RobotCommunication implements ArduinoCommunication {
 		Communication.getInstance().sendCommandViaPort(command); 
 	}
 	
+	public void sendRotateP(int rotatePower){
+		String command = String.format("ROTATEP %d\n", rotatePower);
+		System.out.println(command);
+		Communication.getInstance().sendCommandViaPort(command); 
+	}
+	
 	public void stop(){
 		String command = "STOP\n";
 		System.out.println(command);
