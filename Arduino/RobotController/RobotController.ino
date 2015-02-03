@@ -15,6 +15,8 @@ SerialCommand sCmd;                          // The demo SerialCommand object
 int leftspeed = 0;                           // Speed of left wheel
 int rightspeed = 0;                          // Speed of right wheel
 
+int KICKING = 0;                             // flag for kicking
+
 
 void setup() {
   pinMode(arduinoLED, OUTPUT);               // Configure the onboard LED for output
@@ -47,7 +49,15 @@ void setup() {
 }
 
 void loop() {
-  sCmd.readSerial();                         // We don't do much, just process serial commands
+  
+  if( KICKING == 1 )
+  {
+    while(Serial.available())
+      Serial.read();
+  }else
+  {
+    sCmd.readSerial();                         // We don't do much, just process serial commands
+  }
 }
 
 // Test Commands
@@ -120,10 +130,13 @@ void move_kick() {
   
   Serial.println("Kicking");
   motorBackward(kicker, power);
+  KICKING = 1; 
   
   delay(time);
   
   motorStop(kicker); 
+  
+  KICKING = 0;
 }
 
 // Catch script
