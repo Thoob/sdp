@@ -11,33 +11,16 @@ public class RobotCommunication implements ArduinoCommunication {
 		return instance;
 	}
 
+	
+	public void move(int leftspeed, int rightspeed){
+		String command = String.format("MOVE %d %d\n", leftspeed, rightspeed);
+		System.out.println(command);
+		Communication.getInstance().sendCommandViaPort(command);
+	}
+	
 	@Override
 	public void sendMoveForward(int time) {
 		String command = String.format("FORWARD %d 100\n", time);
-		System.out.println(command);
-		Communication.getInstance().sendCommandViaPort(command);
-	}
-
-	public void sendMoveForward10() {
-		String command = "FORWARD 300 100\n";
-		System.out.println(command);
-		Communication.getInstance().sendCommandViaPort(command);
-	}	
-	
-	public void sendMoveForward50() {
-		String command = "FORWARD 1500 100\n";
-		System.out.println(command);
-		Communication.getInstance().sendCommandViaPort(command);
-	}
-
-	public void sendMoveBackward(int time) {
-		String command = String.format("BACKWARD %d 100\n", time);
-		System.out.println(command);
-		Communication.getInstance().sendCommandViaPort(command);
-	}
-	
-	public void sendMoveBackward20() {
-		String command = String.format("BACKWARD 600 100\n");
 		System.out.println(command);
 		Communication.getInstance().sendCommandViaPort(command);
 	}
@@ -85,18 +68,6 @@ public class RobotCommunication implements ArduinoCommunication {
 		Communication.getInstance().sendCommandViaPort(command); 
 	}
 	
-	public void sendRotateH(double diffInHeadings){
-		String command = String.format("ROTATEH %f\n", diffInHeadings);
-		System.out.println(command);
-		Communication.getInstance().sendCommandViaPort(command); 
-	}
-	
-	public void sendRotateP(int rotatePower){
-		String command = String.format("ROTATEP %d\n", rotatePower);
-		System.out.println(command);
-		Communication.getInstance().sendCommandViaPort(command); 
-	}
-	
 	public void stop(){
 		String command = "STOP\n";
 		System.out.println(command);
@@ -113,5 +84,12 @@ public class RobotCommunication implements ArduinoCommunication {
 		String command = String.format("ATKTravel %d 100\n", time);
 		System.out.println(command);
 		Communication.getInstance().sendCommandViaPort(command);
+	}
+
+
+	@Override
+	public void sendMoveBackward(int timeInMillis) {
+		// TODO Auto-generated method stub
+		
 	}
 }
