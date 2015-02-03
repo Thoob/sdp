@@ -82,7 +82,7 @@ void run_engine() {
   }
   
   // Updates speed of left wheel motor
-  if(!(new_leftspeed == leftspeed)){
+  if(new_leftspeed != leftspeed){
     leftspeed = new_leftspeed;
     if(leftspeed < 0){
       motorBackward(left, abs(leftspeed));
@@ -158,7 +158,7 @@ void force_stop(){
   Serial.println("Stopping");
   
   motorAllStop();  
-}fired
+}
 
 //Remote Control Commands
 
