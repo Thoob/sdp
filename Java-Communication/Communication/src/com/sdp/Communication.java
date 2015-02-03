@@ -5,12 +5,16 @@ import jssc.SerialPortException;
 import jssc.SerialPortList;
 
 public class Communication {
+	private boolean isPortInitialized = false;
+	static Communication instance;
 
 	private Communication() {
 
 	}
 
-	static Communication instance;
+	public boolean isPortInitialized(){
+		return isPortInitialized;
+	}
 
 	public static Communication getInstance() {
 		if (instance == null) {
@@ -29,6 +33,7 @@ public class Communication {
 
 	public void initializeSerialPort(String portName) {
 		serialPort = new SerialPort(portName);
+		isPortInitialized  = true;
 	}
 
 	void sendCommandViaPort(String command) {

@@ -33,10 +33,9 @@ Runs both motors forward for <time> milliseconds at
 Runs both motors backwards for <time> milliseconds at 
 <power>%.
 
-3. "ROTATE <direction> <time> <power>"
-Rotates the robot in <direction> (1==left, 2==right) for
-<time> milliseconds at <power>%. One motor forwards, one
-motor backwards.
+3. "ROTATE <direction> <power>"
+Rotates the robot in <direction> (1==left, 2==right)
+at <power>%. One motor forwards, one motor backwards.
 
 4. "STOP"
 Stops all motors.
@@ -44,6 +43,16 @@ Stops all motors.
 5. "KICK <time> <power>"
 Runs the kicker motor forward for <time> milliseconds at 
 <power>%.
+
+6. "CATCH <time> <power>
+Uses the catcher to catch a ball by moving forwards and
+lifting the catcher.
+
+7. "ROTATEH <heading>"
+Taking a <heading> in radians, will turn the robot at a
+speed comparable to how much the robot needs to turn.
+This should mean the robot slows down as turns to point
+towards the ball.
 
 /////////////////////////////////////////////////////////
 Remote Control Commands (for robot wars)

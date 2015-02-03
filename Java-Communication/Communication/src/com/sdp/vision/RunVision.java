@@ -9,6 +9,7 @@ import org.apache.commons.cli.Options;
 
 import au.edu.jcu.v4l4j.V4L4JConstants;
 
+import com.sdp.Communication;
 import com.sdp.Constants;
 import com.sdp.strategy.StrategyController;
 import com.sdp.vision.gui.VisionGUI;
@@ -44,6 +45,8 @@ public class RunVision {
 	 *            Program arguments.
 	 */
 	public static void main(String[] args) {
+		Communication.getInstance().initializeSerialPort(Constants.PORT_NAME);
+		
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception e) {

@@ -92,7 +92,7 @@ public class GUI extends JFrame {
 						break;
 					case KeyEvent.VK_A:
 						System.out.println("A");
-						RobotCommunication.getInstance().holdLeft();
+						RobotCommunication.getInstance().holdLeft(3);
 						break;
 					case KeyEvent.VK_S:
 						System.out.println("S");
@@ -100,7 +100,7 @@ public class GUI extends JFrame {
 						break;
 					case KeyEvent.VK_D:
 						System.out.println("D");
-						RobotCommunication.getInstance().holdRight();
+						RobotCommunication.getInstance().holdRight(3);
 						break;
 					case KeyEvent.VK_SPACE:
 						System.out.println("KICK");
