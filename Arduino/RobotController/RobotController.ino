@@ -32,7 +32,6 @@ void setup() {
   sCmd.addCommand("STOP", move_stop);
   sCmd.addCommand("KICK", move_kick);
   sCmd.addCommand("CATCH", move_catch);
-  sCmd.addCommand("ROTATEH", move_rotateh);
   sCmd.addCommand("ROTATEP", move_rotatep);
   
   //Remote Control Commands
