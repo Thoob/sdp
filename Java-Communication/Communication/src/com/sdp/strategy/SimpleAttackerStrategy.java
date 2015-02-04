@@ -3,6 +3,10 @@ package com.sdp.strategy;
 import com.sdp.Communication;
 import com.sdp.RobotCommunication;
 import com.sdp.planner.RobotPlanner;
+import com.sdp.prediction.Calculations;
+import com.sdp.strategy.GeneralStrategy.RobotType;
+import com.sdp.strategy.Operation.Type;
+import com.sdp.vision.PitchConstants;
 import com.sdp.world.DynamicWorldState;
 import com.sdp.world.DynamicWorldState.Ball;
 import com.sdp.world.DynamicWorldState.Robot;
@@ -45,10 +49,8 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 		boolean doesOurRobotHaveBall = RobotPlanner.getInstance()
 				.doesOurRobotHaveBall(robot, ball);
 		if (!canCatchBall && !doesOurRobotHaveBall && facingBall) {
-			RobotCommunication.getInstance().move(60, 60); // TODO fix this
-															// command, buffer
-															// inputs on
-															// arduino?
+			// TODO fix this command, buffer inputs on arduino?
+			RobotCommunication.getInstance().move(60, 60);
 			return;
 		}
 
@@ -57,11 +59,20 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 		// RobotCommunication.getInstance().sendCatch();
 		// }
 
-		// 4. go to a position from which robot can score
+		// 4. go to a position from which robot can score and kick
+		scoreGoal(dynWorldState);
+	}
 
-		// 5. score
-		// if(canScore){
-		// RobotCommunication.getInstance().sendKick(300);
-		// }
+	/**
+	 * goes to a position from which it can score and scores
+	 * 
+	 * @param dynWorldState
+	 */
+	private void scoreGoal(DynamicWorldState dynWorldState) {
+		// go to the center before scoring
+		
+		// turn towards the goal
+
+		// kick
 	}
 }

@@ -6,7 +6,6 @@ import com.sdp.prediction.Oracle;
 
 public class WorldState {
 
-	// XXX: Temporary for testing.
 	public int[] dividers;
 	public float[] leftGoal;
 	public float[] rightGoal;
