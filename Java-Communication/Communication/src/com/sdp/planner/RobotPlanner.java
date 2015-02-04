@@ -39,9 +39,9 @@ public class RobotPlanner {
 		Point2D robotPos = robot.getCenter();
 		Point2D ballPos = ball.getPoint();
 
-		double currentRobotHeading = robot.getHeading();
+		double currentRobotHeading = robot.getHeading() - robot.getHeading();
 		double desiredRobotHeading = calculateDesiredRobotHeading(robotPos,
-				ballPos);
+				ballPos) - robot.getHeading();
 
 		// TODO Deciding whether it is better to turn left or right
 		double difference = Math.abs(currentRobotHeading - desiredRobotHeading);
@@ -64,7 +64,7 @@ public class RobotPlanner {
 		double deltaTotal = Math.abs(deltaX) + Math.abs(deltaY);
 		System.out.println("Distance from ball: " + deltaTotal);
 
-		if (deltaTotal < 75) {// TODO test and discuss precision needed
+		if (deltaTotal < 160) {// TODO test and discuss precision needed
 			return true;
 		}else{
 			return false;
@@ -72,8 +72,20 @@ public class RobotPlanner {
 	}
 
 	public boolean doesOurRobotHaveBall(Robot robot, Ball ball) {
-		// TODO implement
-		return false;
+		Point2D robotPos = robot.getCenter();
+		Point2D ballPos = ball.getPoint();
+
+		double deltaX = robotPos.getX() - ballPos.getX();
+		double deltaY = robotPos.getY() - ballPos.getY();
+
+		double deltaTotal = Math.abs(deltaX) + Math.abs(deltaY);
+		System.out.println("Distance from ball: " + deltaTotal);
+
+		if (deltaTotal < 120) {// TODO test and discuss precision needed
+			return true;
+		}else{
+			return false;
+		}		
 	}
 	
 
