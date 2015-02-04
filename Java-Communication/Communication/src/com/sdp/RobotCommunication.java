@@ -17,12 +17,6 @@ public class RobotCommunication {
 		Communication.getInstance().sendCommandViaPort(command);
 	}
 	
-	public void sendMoveForward(int time) {
-		String command = String.format("FORWARD %d 100\n", time);
-		System.out.println(command);
-		Communication.getInstance().sendCommandViaPort(command);
-	}
-	
 	public void passKick() {
 		String command = String.format("KICK 400 60\n");
 		System.out.println(command);
@@ -73,19 +67,5 @@ public class RobotCommunication {
 		System.out.println(command);
 		Communication.getInstance().sendCommandViaPort(command); 
 	}
-	
-	/*
-	 * ATK Commands
-	 */
-	public void ATKRotate(int time){
-		String command = String.format("ATKROTATE %d 100\n", time);
-		System.out.println(command);
-		Communication.getInstance().sendCommandViaPort(command);
-	}
-	
-	public void ATKTravel(int time){
-		String command = String.format("ATKTravel %d 100\n", time);
-		System.out.println(command);
-		Communication.getInstance().sendCommandViaPort(command);
-	}
+
 }
