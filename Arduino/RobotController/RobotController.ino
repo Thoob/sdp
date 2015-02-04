@@ -14,6 +14,7 @@
 SerialCommand sCmd;                          // The demo SerialCommand object
 int leftspeed = 0;                           // Speed of left wheel
 int rightspeed = 0;                          // Speed of right wheel
+int minspeed = 25;                           // Minimum speed at which wheels will move
 
 int KICKING = 0;                             // flag for kicking
 
@@ -50,6 +51,22 @@ void setup() {
 
 void loop() {
   
+  if(abs(leftspeed) < minspeed){
+    motorStop(left);
+  } else if(leftspeed < 0){
+    motorBackward(left, abs(leftspeed));
+  } else {
+    motorForward(left, leftspeed);
+  }
+  
+  if(abs(rightspeed) < minspeed){
+    motorStop(right);
+  } else if(rightspeed < 0){
+    motorBackward(right, abs(rightspeed));
+  } else {
+    motorForward(right, rightspeed);
+  }
+  
   if( KICKING == 1 )
   {
     while(Serial.available())
@@ -58,6 +75,8 @@ void loop() {
   {
     sCmd.readSerial();                         // We don't do much, just process serial commands
   }
+  
+  
 }
 
 // Test Commands
@@ -73,45 +92,17 @@ void LED_off() {
 
 
 
-// Movement with argument commands
+// Updates motor movement speeds
 void run_engine() {
   
   char *arg1;
   char *arg2;
     
   arg1 = sCmd.next();
-  int new_leftspeed = atoi(arg1);
+  leftspeed = atoi(arg1);
   
   arg2 = sCmd.next();
-  int new_rightspeed = atoi(arg2);
-  
-  // TODO find minimum speed and replace 0 in these, saves power when motors will be stalled
-  if(new_leftspeed == 0){
-    motorStop(left);
-  }
-  if(new_rightspeed == 0){
-    motorStop(right);
-  }
-  
-  // Updates speed of left wheel motor
-  if(new_leftspeed != leftspeed){
-    leftspeed = new_leftspeed;
-    if(leftspeed < 0){
-      motorBackward(left, abs(leftspeed));
-    } else {
-      motorForward(left, leftspeed);
-    }
-  }
-  
-  // Updates speed of right wheel motor
-  if(new_rightspeed != rightspeed){
-    rightspeed = new_rightspeed;
-    if(rightspeed < 0){
-      motorBackward(right, abs(rightspeed));
-    } else {
-      motorForward(right, rightspeed);
-    }
-  }
+  rightspeed = atoi(arg2);
 }
 
 // Kick script
