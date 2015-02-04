@@ -46,7 +46,6 @@ public class Oracle {
 				boolean boundaryCheck = false;
 				
 				if(boundaryCheck){
-					//correct
 					
 					//TOP violation
 					if(prediction.getY() > boundaryTop)
@@ -70,7 +69,7 @@ public class Oracle {
 		}
 	}
 		
-		public void SetBoundaries(int top, int bottom, int left, int right){
+		public void setBoundaries(int top, int bottom, int left, int right){
 			this.boundaryBottom = bottom;
 			this.boundaryLeft = left;
 			this.boundaryRight = right;

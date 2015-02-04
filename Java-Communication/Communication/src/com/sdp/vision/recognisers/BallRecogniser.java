@@ -29,7 +29,6 @@ public class BallRecogniser implements ObjectRecogniser {
 	private PitchConstants pitchConstants;
 	private DistortionFix distortionFix;
 	private Vector2f previousBallPosition = new Vector2f(0, 0);
-//	private pc.logging.Logging logger;
 
 	public BallRecogniser(Vision vision, WorldState worldState,
 			PitchConstants pitchConstants, DistortionFix distortionFix,
