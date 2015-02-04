@@ -111,7 +111,7 @@ public class GUI extends JFrame {
 						System.out.println("CATCH");
 						RobotCommunication.getInstance().sendCatch();
 						break;	
-					//movement test 1 (10cm forward)
+				/*	//movement test 1 (10cm forward)
 					case KeyEvent.VK_1:
 						RobotCommunication.getInstance().sendMoveForward10();
 						break;
@@ -123,6 +123,7 @@ public class GUI extends JFrame {
 					case KeyEvent.VK_3:
 						RobotCommunication.getInstance().sendMoveBackward20();
 						break;
+					*/
 					//kick test (defence to attack zone)
 					case KeyEvent.VK_4:
 						RobotCommunication.getInstance().passKick();

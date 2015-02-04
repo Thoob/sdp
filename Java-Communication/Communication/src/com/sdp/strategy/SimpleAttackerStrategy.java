@@ -38,7 +38,7 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 		double diffInHeadings = RobotPlanner.getInstance()
 				.differenceInHeadings(robot, ball);
 		
-		if (diffInHeadings > 0.8) { //TODO discuss this number
+		/*if (diffInHeadings > 0.8) { //TODO discuss this number
 			RobotCommunication.getInstance().sendRotateP(70);
 			return;
 		}else if(diffInHeadings > 0.4){
@@ -47,7 +47,7 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 		}else{
 			System.out.println("Heading towards the ball");
 		}
-		
+		*/
 		// 2. go straight until you can catch the ball
 		boolean canCatchBall = RobotPlanner.getInstance().canCatchBall(robot,
 				ball);
