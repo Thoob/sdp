@@ -10,6 +10,7 @@
 #define left 5                               // Left wheel motor
 #define right 4                              // Right wheel motor
 #define kicker 3                             // Kicker/catcher motor
+#define minspeed 30                          // Minimum Speed of the motors in power%
 
 SerialCommand sCmd;                          // The demo SerialCommand object
 int leftspeed = 0;                           // Speed of left wheel
@@ -79,7 +80,7 @@ void run_engine() {
   Serial.print("LSpeed is: ");
   Serial.println(new_leftspeed);
   
-   Serial.print("RSpeed is: ");
+  Serial.print("RSpeed is: ");
   Serial.println(new_rightspeed);
   
   
@@ -91,11 +92,22 @@ void run_engine() {
     motorStop(right);
   }
   
+  
+  //Checks if the given speed is less than the minimum speed. If it is, it sets the given speed
+  //to the minimum speed.
+  if ((new_leftspeed != 0) && (abs(new_leftspeed) < minspeed)) {
+    new_leftspeed = minspeed * (new_leftspeed/abs(new_leftspeed));
+  }
+  
+    if ((new_rightspeed != 0) && (abs(new_rightspeed) < minspeed)) {
+    new_rightspeed = minspeed * (new_rightspeed/abs(new_rightspeed));
+  }
+  
+  
   // Updates speed of left wheel motor
   if(new_leftspeed != leftspeed){
     leftspeed = new_leftspeed;
     if(leftspeed < 0){
-      Serial.print("Setting left motor to ");
       Serial.println(leftspeed);
       motorBackward(left, abs(leftspeed));
     } else {
