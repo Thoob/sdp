@@ -88,6 +88,21 @@ public class RobotPlanner {
 		}		
 	}
 	
+	public boolean catchReset(Robot robot, Ball ball) {
+		Point2D robotPos = robot.getCenter();
+		Point2D ballPos = ball.getPoint();
+
+		double deltaX = robotPos.getX() - ballPos.getX();
+		double deltaY = robotPos.getY() - ballPos.getY();
+
+		double deltaTotal = Math.abs(deltaX) + Math.abs(deltaY);
+
+		if (deltaTotal > 220) {// TODO test and discuss precision needed
+			return true;
+		}else{
+			return false;
+		}		
+	}
 
 	// Not important for milestone 2
 	// public void determineBallLocation(Point ballPos) {

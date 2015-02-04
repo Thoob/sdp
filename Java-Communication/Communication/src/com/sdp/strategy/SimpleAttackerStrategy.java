@@ -49,8 +49,14 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 				} 
 		
 		// 3. catch the ball if we don't have it
-				if(canCatchBall && !doesOurRobotHaveBall){
-					RobotCommunication.getInstance().sendCatch();
+				if(!doesOurRobotHaveBall){
+					if(canCatchBall){
+						RobotCommunication.getInstance().sendCatch();									
+					}
+				}
+				boolean catchResetFlag = RobotPlanner.getInstance().catchReset(robot, ball);
+				if(catchResetFlag){
+					RobotCommunication.getInstance().catchReset();										
 				}
 
 		// 4. go to a position from which robot can score

@@ -71,4 +71,10 @@ public class RobotCommunication {
 		Communication.getInstance().sendCommandViaPort(command); 
 	}
 
+	public void catchReset() {
+		String command = String.format("CFRESET\n");
+		System.out.println(command);
+		Communication.getInstance().sendCommandViaPort(command); 
+	}
+
 }
