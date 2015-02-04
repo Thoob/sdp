@@ -1,5 +1,8 @@
 package com.sdp;
 
+/**
+ *	Low-level robot commands
+ */
 public class RobotCommunication {
 
 	static RobotCommunication instance;
