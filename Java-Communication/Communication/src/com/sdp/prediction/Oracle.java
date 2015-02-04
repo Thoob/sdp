@@ -14,16 +14,16 @@ import com.sdp.world.Pitch;
 import java.util.ArrayList;
 
 public class Oracle {
-	private int _boundaryTop;
-	private int _boundaryBottom;
-	private int _boundaryLeft;
-	private int _boundaryRight;
+	private int boundaryTop;
+	private int boundaryBottom;
+	private int boundaryLeft;
+	private int boundaryRight;
 	
 	public Oracle(int top_b, int bottom_b, int left_b, int right_b){
-		this._boundaryBottom = bottom_b;
-		this._boundaryLeft = left_b;
-		this._boundaryRight = right_b;
-		this._boundaryTop = top_b;		
+		this.boundaryBottom = bottom_b;
+		this.boundaryLeft = left_b;
+		this.boundaryRight = right_b;
+		this.boundaryTop = top_b;		
 	}
 	
 	/**
@@ -41,7 +41,7 @@ public class Oracle {
 			while(frames_forward > 0){
 				frames_forward--;
 				//get future point
-				prediction = Calculations.PredictNextPoint(history);
+				prediction = Calculations.predictNextPoint(history);
 				//check for boundary violation
 				boolean boundaryCheck = false;
 				
@@ -49,17 +49,17 @@ public class Oracle {
 					//correct
 					
 					//TOP violation
-					if(prediction.getY() > _boundaryTop)
-						prediction = Calculations.CalculateBounceCoordinate(prediction, CorrectionType.TOP_OR_BOTTOM, _boundaryTop);
+					if(prediction.getY() > boundaryTop)
+						prediction = Calculations.calculateBounceCoordinate(prediction, CorrectionType.TOP_OR_BOTTOM, boundaryTop);
 					//Bottom violation
-					else if(prediction.getY() < _boundaryBottom)
-						prediction = Calculations.CalculateBounceCoordinate(prediction, CorrectionType.TOP_OR_BOTTOM, _boundaryBottom);
+					else if(prediction.getY() < boundaryBottom)
+						prediction = Calculations.calculateBounceCoordinate(prediction, CorrectionType.TOP_OR_BOTTOM, boundaryBottom);
 					//LEFT violation
-					else if(prediction.getX() < _boundaryLeft)
-						prediction = Calculations.CalculateBounceCoordinate(prediction, CorrectionType.LEFT_OR_RIGHT, _boundaryLeft);
+					else if(prediction.getX() < boundaryLeft)
+						prediction = Calculations.calculateBounceCoordinate(prediction, CorrectionType.LEFT_OR_RIGHT, boundaryLeft);
 					//Right violation
-					else if(prediction.getY() > _boundaryRight)
-						prediction = Calculations.CalculateBounceCoordinate(prediction, CorrectionType.LEFT_OR_RIGHT, _boundaryRight);
+					else if(prediction.getY() > boundaryRight)
+						prediction = Calculations.calculateBounceCoordinate(prediction, CorrectionType.LEFT_OR_RIGHT, boundaryRight);
 					
 				}
 				//add to history
@@ -71,12 +71,11 @@ public class Oracle {
 	}
 		
 		public void SetBoundaries(int top, int bottom, int left, int right){
-			this._boundaryBottom = bottom;
-			this._boundaryLeft = left;
-			this._boundaryRight = right;
-			this._boundaryTop = top;		
-		}
-		
+			this.boundaryBottom = bottom;
+			this.boundaryLeft = left;
+			this.boundaryRight = right;
+			this.boundaryTop = top;		
+		}	
 	}
 	
 

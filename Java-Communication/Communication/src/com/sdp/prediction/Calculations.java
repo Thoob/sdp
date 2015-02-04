@@ -8,10 +8,9 @@ import java.util.ArrayList;
 public final class Calculations {
 	
 	/**
-	 * 
 	 * @return returns the distance between 2 points in a 2D plane
 	 * */
-	public static float GetDistance(Point2 a, Point2 b){
+	public static float getDistance(Point2 a, Point2 b){
 		double x1,x2,y1,y2;
 		x1 = (double) a.getX();
 		x2 = (double) b.getX();
@@ -25,7 +24,7 @@ public final class Calculations {
 	/**
 	 * returns the slope of a line determined by two points
 	 * */
-	public static float GetSlopeOfLine(Point2 a, Point2 b){
+	public static float getSlopeOfLine(Point2 a, Point2 b){
 		return (a.getX()-b.getY())/(a.getY()-b.getY());		
 	}
 	/**
@@ -33,7 +32,7 @@ public final class Calculations {
 	 * [1] is the distance in moment t-1 (current time - 2)
 	 * [2] is the distance in moment t-2 (current time - 3)
 	 * */
-	public static float LinearPrediction(float[] data){
+	public static float linearPrediction(float[] data){
 		float v1,v2,v3,a1_2,a2_3, acc_decay;
 		v1 = data[data.length-1];
 		v2 = data[data.length-2];
@@ -41,9 +40,6 @@ public final class Calculations {
 	    a1_2 = Math.abs(v2-v1);
 	    a2_3 = Math.abs(v3-v2);
 	    acc_decay = a2_3 - a1_2;
-	   // System.out.println(a1_2);
-	    //System.out.println(a2_3);
-	    //System.out.println(acc_decay);
 		if(v1 - (a1_2 - acc_decay) > 0)
 			return v1 - (a1_2 - acc_decay);
 		else
@@ -59,7 +55,7 @@ public final class Calculations {
 	 * bounce off a wall
 	 * TODO: implement support for the corners
 	 * */
-	public static Point2 CalculateBounceCoordinate(Point2 prediction, CorrectionType type, float boundary){
+	public static Point2 calculateBounceCoordinate(Point2 prediction, CorrectionType type, float boundary){
 		float c = prediction.getX(), d = prediction.getY();
 		if(type == CorrectionType.TOP_OR_BOTTOM){
 			float t = Math.abs(d - boundary);
@@ -76,12 +72,12 @@ public final class Calculations {
 		return null;
 	}
 	
-	public static Point2 GetPointViaDistance(float distance, Point2 a, Point2 b){
+	public static Point2 getPointViaDistance(float distance, Point2 a, Point2 b){
 		//odd case where a == b
 		if(a.getX() == b.getX() && a.getY() == b.getY())
 			return a;
 		
-		float dist = GetDistance(a,b);
+		float dist = getDistance(a,b);
 		float sinA = Math.abs(a.getY()-b.getY())/dist;
 		float cosA = Math.abs(a.getX()-b.getX())/dist;
 		
@@ -93,7 +89,7 @@ public final class Calculations {
 	}
 	
 	
-	public static Point2 PredictNextPoint(ArrayList<Point2> history){
+	public static Point2 predictNextPoint(ArrayList<Point2> history){
 		if(history.size() == 0)
 			return new Point2(0,0);
 		if(history.size() < 4){
@@ -123,14 +119,14 @@ public final class Calculations {
 			int size = history.size();
 			//compute distance travelled for the last 4 points
 			float[] distances = new float[4];
-			distances[0] = GetDistance(history.get(size - 4), history.get(size-3));
-			distances[1] = GetDistance(history.get(size - 3), history.get(size-2));
-			distances[2] = GetDistance(history.get(size - 2), history.get(size-1));
+			distances[0] = getDistance(history.get(size - 4), history.get(size-3));
+			distances[1] = getDistance(history.get(size - 3), history.get(size-2));
+			distances[2] = getDistance(history.get(size - 2), history.get(size-1));
 			//System.out.println(String.format("%f %f %f",distances[0], distances[1], distances[2]));
 			//Get predicted distance
-			float prediction = LinearPrediction(distances);
+			float prediction = linearPrediction(distances);
 			//System.out.println(prediction);
-			Point2 pred = GetPointViaDistance(prediction, history.get(size-2), history.get(size-1));
+			Point2 pred = getPointViaDistance(prediction, history.get(size-2), history.get(size-1));
 			
 			
 			return pred;
@@ -142,7 +138,7 @@ public final class Calculations {
 	 * supplied
 	 * @param bounce_direction 0 for automatic, 1 for top, -1 for bottom bounce
 	 * */
-	public static float GetBounceAngle(float robotX, float robotY,
+	public static float getBounceAngle(float robotX, float robotY,
 			float robotOrientation, float targetX, float targetY, int bounce_direction, float pitchMid){
 		
 		int bottom_boundary = PitchConstants.getPitchOutlineBottom();
@@ -199,45 +195,7 @@ public final class Calculations {
 		double choice_angle = right_angle;
 		//REWORK IN PROGRESS
 		choice_angle = GeneralStrategy.calculateAngle(robotX, robotY, robotOrientation, (float) x3, (float) y3);
-		
-		/*
-		//if(left_angle > right_angle)
-		//	choice_angle = right_angle + (left_angle - right_angle)*0.5;
-		//else if(left_angle < right_angle)
-		//	choice_angle = right_angle - (right_angle - left_angle)*0.5;
-		
-		//convert choice angle to the type the orientation is using
-		double choice_angle_deg = Math.toDegrees(choice_angle);
-		double adjusted_choice_angle = choice_angle_deg;
-		if(choice_angle_deg < 90)
-			adjusted_choice_angle = 
-		
-		
-		float fl_choice_angle = (float) (Math.PI/2 - choice_angle);
-		float angle_to_turn = (float) (fl_choice_angle - (robotRad));
-		angle_to_turn = (float) Math.toDegrees(angle_to_turn);
-		System.out.println("left angle: " + Math.toDegrees(left_angle) + " right angle: " + Math.toDegrees(right_angle) + " choice angle: " + Math.toDegrees(choice_angle) + " fl_choice_angle: " + Math.toDegrees(fl_choice_angle) + " angle to turn: " + angle_to_turn);
-		//the angle the robot needs to turn
-//		if(y3 == bottom_boundary)
-//			//System.out.println("Bouncing off bottom boundary |Angle to turn = "+angle_to_turn);
-//		if(y3 == top_boundary)
-			//System.out.println("Bouncing off top boundary |Angle to turn = "+angle_to_turn);
-		*/
+
 		return (float)choice_angle;
-	}
-	
-	private float CheckAngle(double x_position, double y_position, double x_velocity, double y_velocity, float[] goalCoordinates, float[] boundaries, int simulation_time){
-		float top_boundary = boundaries[0];
-		float bottom_boundary = boundaries[1];
-		float left_boundary = boundaries[2];
-		float right_boundary = boundaries[3];
-		float goal_top_threshold = goalCoordinates[0];
-		float goal_bottom_threshold = goalCoordinates[1];
-		PitchConstants.getPitchOutlineBottom();
-		for(int i=0; i< simulation_time; i++){
-			//inc
-		}
-		
-		return 0;
 	}
 }

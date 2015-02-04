@@ -251,7 +251,7 @@ public class GeneralStrategy implements Strategy {
 					}
 
 					if (doBounce) {
-						ang1 = Calculations.GetBounceAngle(attackerRobotX,
+						ang1 = Calculations.getBounceAngle(attackerRobotX,
 								attackerRobotY, attackerOrientation, goalX,
 								goalTarget, 0, goalY[1]);
 						toExecute.op = Operation.Type.ATKMOVEKICK;
@@ -440,12 +440,12 @@ public class GeneralStrategy implements Strategy {
 			double angleToPass = 0;
 			if (StrategyController.bouncePassEnabled) {
 				if (leftCheck > defenderCheck) {
-					angleToPass = Calculations.GetBounceAngle(defenderRobotX,
+					angleToPass = Calculations.getBounceAngle(defenderRobotX,
 							defenderRobotY, defenderOrientation,
 							attackerRobotX - 20, attackerRobotY,
 							bounceDirection, goalY[1]);
 				} else {
-					angleToPass = Calculations.GetBounceAngle(defenderRobotX,
+					angleToPass = Calculations.getBounceAngle(defenderRobotX,
 							defenderRobotY, defenderOrientation,
 							attackerRobotX + 20, attackerRobotY,
 							bounceDirection, goalY[1]);
