@@ -1,6 +1,6 @@
 package com.sdp;
 
-public class RobotCommunication implements ArduinoCommunication {
+public class RobotCommunication {
 
 	static RobotCommunication instance;
 
@@ -10,7 +10,6 @@ public class RobotCommunication implements ArduinoCommunication {
 		}
 		return instance;
 	}
-
 	
 	public void move(int leftspeed, int rightspeed){
 		String command = String.format("MOVE %d %d\n", leftspeed, rightspeed);
@@ -18,7 +17,6 @@ public class RobotCommunication implements ArduinoCommunication {
 		Communication.getInstance().sendCommandViaPort(command);
 	}
 	
-	@Override
 	public void sendMoveForward(int time) {
 		String command = String.format("FORWARD %d 100\n", time);
 		System.out.println(command);
@@ -31,7 +29,6 @@ public class RobotCommunication implements ArduinoCommunication {
 		Communication.getInstance().sendCommandViaPort(command);
 	}
 
-	@Override
 	public void sendKick(int time) {
 		String command = String.format("KICK %d 100\n", time);
 		System.out.println(command);
@@ -44,6 +41,15 @@ public class RobotCommunication implements ArduinoCommunication {
 		Communication.getInstance().sendCommandViaPort(command);
 	}
 	
+	public void stop(){
+		String command = "STOP\n";
+		System.out.println(command);
+		Communication.getInstance().sendCommandViaPort(command);
+	}
+	
+	/*
+	 * RC Commands
+	 */
 	public void holdForward(){
 		String command = String.format("RCFORWARD\n");
 		System.out.println(command);
@@ -68,12 +74,9 @@ public class RobotCommunication implements ArduinoCommunication {
 		Communication.getInstance().sendCommandViaPort(command); 
 	}
 	
-	public void stop(){
-		String command = "STOP\n";
-		System.out.println(command);
-		Communication.getInstance().sendCommandViaPort(command);
-	}
-	
+	/*
+	 * ATK Commands
+	 */
 	public void ATKRotate(int time){
 		String command = String.format("ATKROTATE %d 100\n", time);
 		System.out.println(command);
@@ -84,12 +87,5 @@ public class RobotCommunication implements ArduinoCommunication {
 		String command = String.format("ATKTravel %d 100\n", time);
 		System.out.println(command);
 		Communication.getInstance().sendCommandViaPort(command);
-	}
-
-
-	@Override
-	public void sendMoveBackward(int timeInMillis) {
-		// TODO Auto-generated method stub
-		
 	}
 }
