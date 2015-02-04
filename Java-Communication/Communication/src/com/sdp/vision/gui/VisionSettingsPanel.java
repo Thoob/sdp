@@ -22,7 +22,7 @@ import com.sdp.vision.DistortionFix;
 import com.sdp.vision.PitchConstants;
 import com.sdp.vision.VideoStream;
 import com.sdp.vision.YAMLConfig;
-import com.sdp.world.oldmodel.WorldState;
+import com.sdp.world.WorldState;
 
 /**
  * Creates and maintains the swing-based Control GUI, which provides both

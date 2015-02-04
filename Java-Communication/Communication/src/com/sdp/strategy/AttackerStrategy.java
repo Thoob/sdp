@@ -2,7 +2,7 @@ package com.sdp.strategy;
 
 import com.sdp.strategy.Operation;
 import com.sdp.vision.PitchConstants;
-import com.sdp.world.oldmodel.WorldState;
+import com.sdp.world.WorldState;
 
 public class AttackerStrategy extends GeneralStrategy {
 

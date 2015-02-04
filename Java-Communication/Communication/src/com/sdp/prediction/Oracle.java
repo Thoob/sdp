@@ -8,10 +8,10 @@
 
 package com.sdp.prediction;
 
-import com.sdp.prediction.Calculations.CorrectionType;
-import com.sdp.world.oldmodel.*;
-import com.sdp.world.Pitch;
 import java.util.ArrayList;
+
+import com.sdp.prediction.Calculations.CorrectionType;
+import com.sdp.world.Point2;
 
 public class Oracle {
 	private int boundaryTop;

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import com.sdp.strategy.interfaces.Strategy;
 import com.sdp.vision.interfaces.WorldStateReceiver;
-import com.sdp.world.oldmodel.WorldState;
+import com.sdp.world.WorldState;
 
 // TODO Resolve commented out code
 

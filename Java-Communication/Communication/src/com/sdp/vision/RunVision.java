@@ -22,7 +22,7 @@ import com.sdp.vision.recognisers.BallRecogniser;
 import com.sdp.vision.recognisers.RobotRecogniser;
 import com.sdp.world.DynamicWorldState;
 import com.sdp.world.Pitch;
-import com.sdp.world.oldmodel.WorldState;
+import com.sdp.world.WorldState;
 
 /**
  * The main class used to run the vision system. Creates the control GUI, and

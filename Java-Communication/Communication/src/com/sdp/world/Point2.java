@@ -1,4 +1,4 @@
-package com.sdp.world.oldmodel;
+package com.sdp.world;
 
 public class Point2 {
 	private float x, y;

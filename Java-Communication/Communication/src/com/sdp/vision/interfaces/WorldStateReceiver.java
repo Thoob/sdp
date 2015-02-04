@@ -1,6 +1,6 @@
 package com.sdp.vision.interfaces;
 
-import com.sdp.world.oldmodel.WorldState;
+import com.sdp.world.WorldState;
 
 //import world.state.WorldState;
 

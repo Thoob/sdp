@@ -24,7 +24,7 @@ import com.sdp.vision.gui.VisionGUI;
 import com.sdp.vision.gui.VisionSettingsPanel;
 import com.sdp.vision.interfaces.ObjectRecogniser;
 import com.sdp.world.StaticWorldState;
-import com.sdp.world.oldmodel.WorldState;
+import com.sdp.world.WorldState;
 
 public class ColourThresholdConfigTool implements GUITool {
 	private VisionGUI gui;

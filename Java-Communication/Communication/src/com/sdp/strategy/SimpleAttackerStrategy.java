@@ -8,9 +8,9 @@ import com.sdp.planner.RobotPlanner;
 import com.sdp.strategy.StrategyController.BallLocation;
 import com.sdp.vision.PitchConstants;
 import com.sdp.world.DynamicWorldState;
+import com.sdp.world.WorldState;
 import com.sdp.world.DynamicWorldState.Ball;
 import com.sdp.world.DynamicWorldState.Robot;
-import com.sdp.world.oldmodel.WorldState;
 
 public class SimpleAttackerStrategy extends GeneralStrategy {
 

@@ -13,7 +13,7 @@ import com.sdp.vision.interfaces.VisionDebugReceiver;
 import com.sdp.vision.interfaces.WorldStateReceiver;
 import com.sdp.world.DynamicWorldState;
 import com.sdp.world.StaticWorldState;
-import com.sdp.world.oldmodel.WorldState;
+import com.sdp.world.WorldState;
 
 /**
  * The main class for showing the video feed and processing the video data.

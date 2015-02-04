@@ -1,10 +1,8 @@
-package com.sdp.world.oldmodel;
+package com.sdp.world;
 
 import java.util.ArrayList;
 
 import com.sdp.prediction.Oracle;
-import com.sdp.world.MovingObject;
-import com.sdp.world.Pitch;
 
 public class WorldState {
 

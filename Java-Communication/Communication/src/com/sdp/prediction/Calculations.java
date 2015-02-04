@@ -1,7 +1,8 @@
 package com.sdp.prediction;
 import com.sdp.strategy.GeneralStrategy;
 import com.sdp.vision.PitchConstants;
-import com.sdp.world.oldmodel.Point2;
+import com.sdp.world.Point2;
+
 import java.math.*;
 import java.util.ArrayList;
 

@@ -4,7 +4,7 @@ import com.sdp.prediction.Calculations;
 import com.sdp.strategy.Operation.Type;
 import com.sdp.strategy.interfaces.Strategy;
 import com.sdp.vision.PitchConstants;
-import com.sdp.world.oldmodel.WorldState;
+import com.sdp.world.WorldState;
 
 public class GeneralStrategy implements Strategy {
 

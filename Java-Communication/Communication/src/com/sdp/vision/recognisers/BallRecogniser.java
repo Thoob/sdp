@@ -17,10 +17,10 @@ import com.sdp.vision.Vision;
 import com.sdp.vision.interfaces.ObjectRecogniser;
 import com.sdp.vision.interfaces.PitchViewProvider;
 import com.sdp.world.DynamicWorldState;
+import com.sdp.world.MovingObject;
 import com.sdp.world.Pitch;
 import com.sdp.world.StaticWorldState;
-import com.sdp.world.oldmodel.MovingObject;
-import com.sdp.world.oldmodel.WorldState;
+import com.sdp.world.WorldState;
 
 public class BallRecogniser implements ObjectRecogniser {
 	private Pitch pitch;
