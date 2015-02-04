@@ -6,7 +6,10 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import com.sdp.Constants;
+import com.sdp.Constants.Strategy;
 import com.sdp.strategy.SimpleAttackerStrategy;
+import com.sdp.strategy.SimpleDefenderStrategy;
 import com.sdp.vision.interfaces.ObjectRecogniser;
 import com.sdp.vision.interfaces.VideoReceiver;
 import com.sdp.vision.interfaces.VisionDebugReceiver;
@@ -30,8 +33,9 @@ public class Vision implements VideoReceiver {
 	private ArrayList<VisionDebugReceiver> visionDebugReceivers = new ArrayList<VisionDebugReceiver>();
 	private static ArrayList<WorldStateReceiver> worldStateReceivers = new ArrayList<WorldStateReceiver>();
 	private ArrayList<ObjectRecogniser> recognisers = new ArrayList<ObjectRecogniser>();
-	
+
 	private SimpleAttackerStrategy attackerStrategy = new SimpleAttackerStrategy();
+	private SimpleDefenderStrategy defenderStrategy = new SimpleDefenderStrategy();
 
 	public Vision(WorldState worldState, PitchConstants pitchConstants,
 			DynamicWorldState dynamicWorldState) {
@@ -120,7 +124,10 @@ public class Vision implements VideoReceiver {
 			receiver.sendWorldState(this.worldState);
 		}
 		// For milestone 2
-		attackerStrategy.sendWorldState(this.dynamicWorldState);
+		if (Constants.currentStrategy == Strategy.ATTACK)
+			attackerStrategy.sendWorldState(this.dynamicWorldState);
+		else if (Constants.currentStrategy == Strategy.DEFEND)
+			defenderStrategy.sendWorldState(this.dynamicWorldState);
 	}
 
 	/**

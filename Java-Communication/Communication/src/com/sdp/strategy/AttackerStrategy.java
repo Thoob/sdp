@@ -17,7 +17,6 @@ public class AttackerStrategy extends GeneralStrategy {
 	private long kickTimer = 0;
 
 	public AttackerStrategy() {
-		//this.brick = brick;
 		controlThread = new ControlThread();
 	}
 
@@ -105,7 +104,6 @@ public class AttackerStrategy extends GeneralStrategy {
 		@Override
 		public void run() {
 			try {
-//				Operation.Type prevOp = null;
 				while (!stopControlThread) {
 					int travelDist, rotateBy, rotateSpeed, travelSpeed;
 					Operation.Type op;
@@ -119,77 +117,41 @@ public class AttackerStrategy extends GeneralStrategy {
 						radius = this.operation.radius;
 					}
 
-//					if (prevOp != null) {
-//						if (!op.equals(prevOp)){
-//							System.out.println("justCaught: " + justCaught + " op: " + op.toString() + " rotateBy: "
-//								+ rotateBy + " travelDist: " + travelDist
-//								+ "radius: " + radius);
-//						}
-//					}
-//					prevOp = op;
 
 					switch (op) {
 					case DO_NOTHING:
 						break;
 					case ATKCATCH:
 						if (System.currentTimeMillis() - lastKickerEventTime > 1000) {
-							// brick.execute(new RobotCommand.Catch());
 							ballCaughtAttacker = true;
 							lastKickerEventTime = System.currentTimeMillis();
 						}
 						break;
 					case ATKMOVEKICK:
 						if (System.currentTimeMillis() - lastKickerEventTime > 1000) {
-							//brick.execute(new RobotCommand.Travel(100, 10000));
-							//brick.execute(new RobotCommand.Kick(100));
 							ballCaughtAttacker = false;
 							lastKickerEventTime = System.currentTimeMillis();
 						}
 						break;
 					case ATKKICK:
 						if (System.currentTimeMillis() - lastKickerEventTime > 1000) {
-							// brick.execute(new RobotCommand.Kick(100));
 							ballCaughtAttacker = false;
 							lastKickerEventTime = System.currentTimeMillis();
 						}
 						break;
 					case ATKCONFUSEKICKRIGHT:
 						if (System.currentTimeMillis() - lastKickerEventTime > 1000) {
-							// brick.execute(new RobotCommand.Rotate(75, 100, false));
-							// brick.execute(new RobotCommand.Rotate(-100, 1000, false));
-							// brick.execute(new RobotCommand.Travel(100, 10000));
-							// brick.execute(new RobotCommand.Kick(100));
 							ballCaughtAttacker = false;
 							lastKickerEventTime = System.currentTimeMillis();
 						}
 						break;
 					case ATKCONFUSEKICKLEFT:
 						if (System.currentTimeMillis() - lastKickerEventTime > 1000) {
-							// brick.execute(new RobotCommand.Rotate(-75, 100, false));
-							// brick.execute(new RobotCommand.Rotate(100, 1000, false));
-							// brick.execute(new RobotCommand.Travel(100, 10000));
-							// brick.execute(new RobotCommand.Kick(100));
 							ballCaughtAttacker = false;
 							lastKickerEventTime = System.currentTimeMillis();
 						}
 						break;
-					case ATKROTATE:
-						/*brick.execute(new RobotCommand.Rotate(-rotateBy,
-								rotateSpeed));
-						break;
-					case ATKTRAVEL:
-						brick.execute(new RobotCommand.Travel(travelDist,
-								travelSpeed));
-						break;
-					case ATKARC_LEFT:
-						brick.execute(new RobotCommand.TravelArc(radius,
-								travelDist, travelSpeed));
-						break;
-					case ATKARC_RIGHT:
-						brick.execute(new RobotCommand.TravelArc(-radius,
-								travelDist, travelSpeed));
-						break;
-					*/	
+
 					default:
 						break;
 					}

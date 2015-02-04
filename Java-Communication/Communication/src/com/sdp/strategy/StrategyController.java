@@ -8,7 +8,6 @@ import com.sdp.strategy.interfaces.Strategy;
 import com.sdp.vision.interfaces.WorldStateReceiver;
 import com.sdp.world.WorldState;
 
-// TODO Resolve commented out code
 
 public class StrategyController implements WorldStateReceiver {
 
@@ -37,8 +36,7 @@ public class StrategyController implements WorldStateReceiver {
 	private static ArrayList<Strategy> removedStrategies = new ArrayList<Strategy>();
 
 	public StrategyController() {
-		//this.bcsAttacker = new BrickCommServer();
-		//this.bcsDefender = new BrickCommServer();
+
 	}
 
 	public StrategyType getCurrentStrategy() {

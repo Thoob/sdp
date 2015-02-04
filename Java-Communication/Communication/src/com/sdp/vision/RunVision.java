@@ -46,7 +46,7 @@ public class RunVision {
 	 */
 	public static void main(String[] args) {
 		Communication.getInstance().initializeSerialPort(Constants.PORT_NAME);
-		
+
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception e) {
@@ -146,15 +146,18 @@ public class RunVision {
 				// find the ball, move to this point and catch it
 				Constants.currentStrategy = Constants.Strategy.ATTACK;
 				System.out.println("Attack strategy was chosen");
-				
+
 			} else if (action.equals("defend")) {
 				Constants.currentStrategy = Constants.Strategy.DEFEND;
 				System.out.println("Defence strategy was chosen");
 			} else {
-				System.out.println("Strategy not recognized");
+
+				System.out.println("Strategy not recognized.");
 			}
 		} else {
 			System.out.println("No strategy specified");
 		}
+		System.out.println("Attack strategy by default");
+		Constants.currentStrategy = Constants.Strategy.ATTACK;
 	}
 }
