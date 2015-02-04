@@ -10,6 +10,7 @@ import com.sdp.Constants;
 import com.sdp.Constants.Strategy;
 import com.sdp.strategy.SimpleAttackerStrategy;
 import com.sdp.strategy.SimpleDefenderStrategy;
+import com.sdp.strategy.SimpleGeneralStrategy;
 import com.sdp.vision.interfaces.ObjectRecogniser;
 import com.sdp.vision.interfaces.VideoReceiver;
 import com.sdp.vision.interfaces.VisionDebugReceiver;
@@ -36,6 +37,7 @@ public class Vision implements VideoReceiver {
 
 	private SimpleAttackerStrategy attackerStrategy = new SimpleAttackerStrategy();
 	private SimpleDefenderStrategy defenderStrategy = new SimpleDefenderStrategy();
+	private SimpleGeneralStrategy generalStrategy = new SimpleGeneralStrategy();
 
 	public Vision(WorldState worldState, PitchConstants pitchConstants,
 			DynamicWorldState dynamicWorldState) {
@@ -124,6 +126,7 @@ public class Vision implements VideoReceiver {
 			receiver.sendWorldState(this.worldState);
 		}
 		// For milestone 2
+		generalStrategy.sendWorldState(this.worldState);
 		if (Constants.currentStrategy == Strategy.ATTACK)
 			attackerStrategy.sendWorldState(this.dynamicWorldState);
 		else if (Constants.currentStrategy == Strategy.DEFEND)

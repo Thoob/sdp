@@ -63,6 +63,7 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 //				}
 	}
 
+
 	/**
 	 * goes to a position from which it can score and scores
 	 * 
@@ -70,7 +71,7 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 	 */
 	private void scoreGoal(DynamicWorldState dynWorldState) {
 		// go to the center before scoring
-		
+
 		// turn towards the goal
 
 		// kick
