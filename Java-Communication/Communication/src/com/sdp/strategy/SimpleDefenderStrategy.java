@@ -31,7 +31,10 @@ public class SimpleDefenderStrategy extends GeneralStrategy {
 		Point2 prediction = this.predictor.predictState(ballPositionHistory,
 				framesForward);
 
-		System.out.println("Prediction " + prediction.getX());
+		System.out.println("Current " + ballPos.getX() + " "
+				+ ballPos.getY());
+		System.out.println("Prediction " + prediction.getX() + " "
+				+ prediction.getY());
 
 		// 2. Go to this position
 

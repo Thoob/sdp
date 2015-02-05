@@ -18,6 +18,7 @@ import com.sdp.vision.interfaces.WorldStateReceiver;
 import com.sdp.world.DynamicWorldState;
 import com.sdp.world.StaticWorldState;
 import com.sdp.world.WorldState;
+import com.sdp.world.DynamicWorldState.Ball;
 
 /**
  * The main class for showing the video feed and processing the video data.
@@ -132,6 +133,11 @@ public class Vision implements VideoReceiver {
 		else if (Constants.currentStrategy == Strategy.DEFEND)
 			defenderStrategy.sendWorldState(this.dynamicWorldState,
 					this.worldState);
+		
+		//update ball position history
+		Ball ball = dynamicWorldState.getBall();
+		worldState.updateBallPositionHistory(ball.getPoint());
+
 	}
 
 	/**

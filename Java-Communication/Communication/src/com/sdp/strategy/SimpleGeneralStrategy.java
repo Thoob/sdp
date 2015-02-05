@@ -2,6 +2,9 @@ package com.sdp.strategy;
 
 import com.sdp.Constants;
 import com.sdp.vision.PitchConstants;
+import com.sdp.world.DynamicWorldState;
+import com.sdp.world.DynamicWorldState.Ball;
+import com.sdp.world.MovingObject;
 import com.sdp.world.WorldState;
 
 public class SimpleGeneralStrategy {
@@ -10,9 +13,10 @@ public class SimpleGeneralStrategy {
 	protected float ourGoalX;
 	protected float[] ourGoalY;
 	protected float[] ourGoalEdges = new float[3];
-	
+
 	public void sendWorldState(WorldState worldState) {
-		if(Constants.areWeShootingRight){
+
+		if (Constants.areWeShootingRight) {
 			goalX = 640;
 			ourGoalX = PitchConstants.getPitchOutline()[7].getX();
 			goalY = worldState.rightGoal;
@@ -20,7 +24,7 @@ public class SimpleGeneralStrategy {
 			ourGoalEdges[1] = worldState.leftGoal[1];
 			ourGoalEdges[2] = PitchConstants.getPitchOutline()[6].getY();
 			ourGoalY = worldState.leftGoal;
-		}else{
+		} else {
 			goalX = 0;
 			ourGoalX = PitchConstants.getPitchOutline()[2].getX();
 			goalY = worldState.leftGoal;

@@ -1,5 +1,6 @@
 package com.sdp.world;
 
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 import com.sdp.prediction.Oracle;
@@ -56,14 +57,15 @@ public class WorldState {
 		this.playingField = field;
 		initialiseOracle(field);
 	}
-	
+
 	/**
-	 * Constructor, use it for milestone 2 once the playing field data has been assembled
+	 * Constructor, use it for milestone 2 once the playing field data has been
+	 * assembled
 	 */
-	public WorldState(Pitch field, MovingObject ball){
+	public WorldState(Pitch field, MovingObject ball) {
 		this.playingField = field;
 		this.ball = ball;
-		//initialiseOracle(field);
+		// initialiseOracle(field);
 	}
 
 	/**
@@ -194,8 +196,9 @@ public class WorldState {
 		this.ballPositionHistory = ballPositionHistory;
 	}
 
-	public void updateBallPositionHistory(MovingObject ballPosition) {
-		Point2 ballToPoint = new Point2(ballPosition.x, ballPosition.y);
+	public void updateBallPositionHistory(Point2D ballPosition) {
+		Point2 ballToPoint = new Point2((float) ballPosition.getX(),
+				(float) ballPosition.getY());
 		this.ballPositionHistory.add(ballToPoint);
 		if (this.ballPositionHistory.size() > 5)
 			this.ballPositionHistory.remove(0);
