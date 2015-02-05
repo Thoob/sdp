@@ -19,9 +19,6 @@ Turns the LED on the board on.
 2. "OFF"
 Turns the LED off.
 
-3. "HELLO <name>"
-Prints to the serial port a hello message.
-
 /////////////////////////////////////////////////////////
 Movement Commands
 /////////////////////////////////////////////////////////
@@ -29,7 +26,6 @@ Movement Commands
 Sets the left and right motors to move at powers 
 <leftpower> and <rightpower>. If either of these is 0,
 the corresponding motor will stop.
-
 This function only changes the values on the motor if 
 the new motor power is different from the motor power
 currently running on the motor.
@@ -40,10 +36,22 @@ Stops all motors.
 3. "KICK <time> <power>"
 Runs the kicker motor forward for <time> milliseconds at 
 <power>%.
+Also resets the catch flag.
 
-4. "CATCH <time> <power>
+4. "CATCH"
 Uses the catcher to catch a ball by moving forwards and
 lifting the catcher.
+When this is called a flag is set so that it can't catch
+over and over and over. This flag can be reset with the
+CFRESET command.
+
+5. "CFRESET"
+Resets the catch flag (for the case where the robot
+misses the catch).
+
+5. "FSTOP"
+Force stop. Stops all motors from moving.
+
 
 /////////////////////////////////////////////////////////
 Remote Control Commands (for robot wars)

@@ -2,6 +2,8 @@
 //Authours: Vanya Petkova and Scott Postlethwaite
 //January 2015
 
+//Extra comments version!
+
 #include "SerialCommand.h"
 #include "SDPArduino.h"
 #include <Wire.h>
@@ -10,11 +12,11 @@
 #define left 5                               // Left wheel motor
 #define right 4                              // Right wheel motor
 #define kicker 3                             // Kicker/catcher motor
-#define minspeed 30                          // Minimum Speed of the motors in power%
+#define minpower 30                          // Minimum Speed of the motors in power%
 
 SerialCommand sCmd;                          // The demo SerialCommand object
-int leftspeed = 0;                           // Speed of left wheel
-int rightspeed = 0;                          // Speed of right wheel
+int leftpower = 0;                           // Speed of left wheel
+int rightpower = 0;                          // Speed of right wheel
 int catchflag = 0;                           // If 1, the ball is caught and ready to be kicked, otherwise it is not in grabber
 
 void setup() {
@@ -36,7 +38,7 @@ void setup() {
   sCmd.addCommand("KICK", move_kick);        // Runs kick script
   sCmd.addCommand("CATCH", move_catch);      // Runs catch script
   sCmd.addCommand("CFRESET", rst_catchflag); // Resets the catch flag (if we didn't catch the ball)
-  
+
   //Remote Control Commands
   sCmd.addCommand("RCFORWARD", rc_forward);
   sCmd.addCommand("RCBACKWARD", rc_backward);
@@ -68,63 +70,66 @@ void LED_off() {
 // Movement with argument commands
 void run_engine() {
 
+  //This is how arguments are tokenised with SerialCommand. Extra can be added
+  //by repeating this.
   char *arg1;
   char *arg2;
 
   arg1 = sCmd.next();
-  int new_leftspeed = atoi(arg1);
+  int new_leftpower = atoi(arg1);
 
   arg2 = sCmd.next();
-  int new_rightspeed = atoi(arg2);
+  int new_rightpower = atoi(arg2);
+
 
 
   Serial.print("LSpeed is: ");
-  Serial.println(new_leftspeed);
+  Serial.println(new_leftpower);
 
   Serial.print("RSpeed is: ");
-  Serial.println(new_rightspeed);
+  Serial.println(new_rightpower);
 
 
-  // TODO find minimum speed and replace 0 in these, saves power when motors will be stalled
-  if(new_leftspeed == 0){
+  //Stops the motors when the signal given is 0
+  if(new_leftpower == 0){
     motorStop(left);
   }
-  if(new_rightspeed == 0){
+  if(new_rightpower == 0){
     motorStop(right);
   }
 
 
-  //Checks if the given speed is less than the minimum speed. If it is, it sets the given speed
-  //to the minimum speed.
-  if ((new_leftspeed != 0) && (abs(new_leftspeed) < minspeed)) {
-    new_leftspeed = minspeed * (new_leftspeed/abs(new_leftspeed));
+  //Checks if the given speed is less than the minimum speed. If it is, 
+  //it sets the given power to the minimum power. Left motor.
+  if ((new_leftpower != 0) && (abs(new_leftpower) < minpower)) {
+    new_leftpower = minpower * (new_leftpower/abs(new_leftpower));
   }
 
-  if ((new_rightspeed != 0) && (abs(new_rightspeed) < minspeed)) {
-    new_rightspeed = minspeed * (new_rightspeed/abs(new_rightspeed));
+  if ((new_rightpower != 0) && (abs(new_rightpower) < minpower)) {
+    new_rightpower = minpower  * (new_rightpower/abs(new_rightpower));
   }
 
 
-  // Updates speed of left wheel motor
-  if(new_leftspeed != leftspeed){
-    leftspeed = new_leftspeed;
-    if(leftspeed < 0){
-      Serial.println(leftspeed);
-      motorBackward(left, abs(leftspeed));
+  // Updates speed of left wheel motor only if a different power is given.
+  if(new_leftpower != leftpower){
+    leftpower = new_leftpower;
+    if(leftpower < 0){
+      Serial.println(leftpower);
+      motorBackward(left, abs(leftpower));
     } 
     else {
-      motorForward(left, leftspeed);
+      motorForward(left, leftpower);
     }
   }
 
-  // Updates speed of right wheel motor
-  if(new_rightspeed != rightspeed){
-    rightspeed = new_rightspeed;
-    if(rightspeed < 0){
-      motorBackward(right, abs(rightspeed));
+  // Updates speed of right wheel motor only if a different power is given.
+  if(new_rightpower != rightpower){
+    rightpower = new_rightpower;
+    if(rightpower < 0){
+      motorBackward(right, abs(rightpower));
     } 
     else {
-      motorForward(right, rightspeed);
+      motorForward(right, rightpower);
     }
   }
 }
@@ -132,34 +137,28 @@ void run_engine() {
 // Kick script
 void move_kick() {
 
-  if (catchflag == 1) {
+  char *arg1;
+  char *arg2;
+  int time;
+  int power;
 
-    char *arg1;
-    char *arg2;
-    int time;
-    int power;
+  arg1 = sCmd.next();
+  time = atoi(arg1);
 
-    arg1 = sCmd.next();
-    time = atoi(arg1);
+  arg2 = sCmd.next();
+  power = atoi(arg2);
 
-    arg2 = sCmd.next();
-    power = atoi(arg2);
+  Serial.println("Kicking");
+  motorBackward(kicker, power);
 
-    Serial.println("Kicking");
-    motorBackward(kicker, power);
+  delay(time);
 
-    delay(time);
+  motorStop(kicker); 
 
-    motorStop(kicker); 
-    
-     delay(1000);
+  delay(1000);
 
-    catchflag = 0;
-  }
-  else
-  {
-    Serial.println("I don't have the ball");
-  }
+  catchflag = 0;
+
 }
 
 // Catch script
@@ -239,5 +238,6 @@ void rc_rotateR() {
 void unrecognized(const char *command) {
   Serial.println("I'm sorry, Dave. I'm afraid I can't do that.");
 }
+
 
 
