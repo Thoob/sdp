@@ -26,6 +26,10 @@ public class RobotPlanner {
 		return instance;
 	}
 
+	/* TODO: Make more general functions, ones compatible with an abstract
+	 * 		 objects we may need to rotate toward / move to
+	 */
+	
 	private double calculateDesiredRobotHeading(Point2D robotPos,
 			Point2D ballPos) {
 		double deltaX = Math.abs(robotPos.getX() - ballPos.getX());
@@ -46,10 +50,22 @@ public class RobotPlanner {
 		// TODO Deciding whether it is better to turn left or right
 		double difference = Math.abs(currentRobotHeading - desiredRobotHeading);
 		
-		
 		System.out.println("Current robot heading:" + currentRobotHeading);
 		System.out.println("Desired robot heading:" + desiredRobotHeading);
 		System.out.println("Difference in headings:" + difference);
+		
+		return difference;
+	} 
+	
+	public double differenceInHeadingsCentre(Robot robot, Point2D pitchCentre) {
+		Point2D robotPos = robot.getCenter();
+		
+		double currentRobotHeading = robot.getHeading() - robot.getHeading();
+		double desiredRobotHeading = calculateDesiredRobotHeading(robotPos,
+				pitchCentre) - robot.getHeading();
+
+		// TODO Deciding whether it is better to turn left or right
+		double difference = Math.abs(currentRobotHeading - desiredRobotHeading);
 		
 		return difference;
 	} 
@@ -63,6 +79,22 @@ public class RobotPlanner {
 
 		double deltaTotal = Math.abs(deltaX) + Math.abs(deltaY);
 		System.out.println("Distance from ball: " + deltaTotal);
+
+		if (deltaTotal < 160) {// TODO test and discuss precision needed
+			return true;
+		}else{
+			return false;
+		}		
+	}
+	
+	public boolean inCentreRange(Robot robot, Point2D centre) {
+		Point2D robotPos = robot.getCenter();
+
+		double deltaX = robotPos.getX() - centre.getX();
+		double deltaY = robotPos.getY() - centre.getY();
+
+		double deltaTotal = Math.abs(deltaX) + Math.abs(deltaY);
+		System.out.println("Distance from Centre: " + deltaTotal);
 
 		if (deltaTotal < 160) {// TODO test and discuss precision needed
 			return true;

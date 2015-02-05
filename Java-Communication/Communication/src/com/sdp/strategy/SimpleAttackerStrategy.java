@@ -1,5 +1,7 @@
 package com.sdp.strategy;
 
+import java.awt.geom.Point2D;
+
 import com.sdp.Communication;
 import com.sdp.RobotCommunication;
 import com.sdp.planner.RobotPlanner;
@@ -61,9 +63,47 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 
 		// 4. go to a position from which robot can score
 				if(doesOurRobotHaveBall){
-					//TODO
+					
+					/* Establish the centre of the field */
+					Point2D centre = new Point2D.Double(0,0);
+					
+					/* Determine if Robot is facing the centre */
+					double diffInHeadingsCentre = RobotPlanner.getInstance()
+							.differenceInHeadingsCentre(robot, centre);
+					boolean facingCentre;
+					
+					/* If facing (within a certain threshold */
+					if(diffInHeadingsCentre<0.6){
+						facingCentre = true;
+					} else {
+						facingCentre = false;
+					}
+					
+					// Decide which direction to rotate
+					if(!facingCentre){
+						// rotate right
+						RobotCommunication.getInstance().move(0, 40);
+					} 
+					
+					/* DETERMINE WHEN WE ARE AT THE CENTRE, IF NOT MOVE */
+					
+					boolean inCentre = RobotPlanner.getInstance().inCentreRange(robot,
+							centre);
+					
+					// move to the centre
+					if (!inCentre && facingCentre) {
+						RobotCommunication.getInstance().move(40, 30); //TODO fix by replacing motors!
+						return;
+					} 
+					
+				//	if (inCentre && facingGoal){
+				//		boolean canScore = true;
+				//	}
+					
 				}
-		// 5. score
+				
+				
+//			 5. score
 //				if(canScore){
 //					RobotCommunication.getInstance().sendKick(300);
 //				}
