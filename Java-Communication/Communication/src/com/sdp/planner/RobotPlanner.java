@@ -43,7 +43,7 @@ public class RobotPlanner {
 		Point2D robotPos = robot.getCenter();
 		Point2D ballPos = ball.getPoint();
 
-		double currentRobotHeading = robot.getHeading() - robot.getHeading();
+		double currentRobotHeading = robot.getHeading();
 		double desiredRobotHeading = calculateDesiredRobotHeading(robotPos,
 				ballPos) - robot.getHeading();
 
@@ -70,7 +70,7 @@ public class RobotPlanner {
 		return difference;
 	} 
 
-	public boolean canCatchBall(Robot robot, Ball ball) {
+	public  static boolean canCatchBall(Robot robot, Ball ball) {
 		Point2D robotPos = robot.getCenter();
 		Point2D ballPos = ball.getPoint();
 

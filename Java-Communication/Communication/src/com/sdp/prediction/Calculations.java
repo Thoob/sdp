@@ -1,11 +1,10 @@
 package com.sdp.prediction;
 
+import java.util.ArrayList;
+
 import com.sdp.strategy.GeneralStrategy;
 import com.sdp.vision.PitchConstants;
 import com.sdp.world.Point2;
-
-import java.math.*;
-import java.util.ArrayList;
 
 public final class Calculations {
 
