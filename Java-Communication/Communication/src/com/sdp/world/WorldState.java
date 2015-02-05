@@ -205,11 +205,11 @@ public class WorldState {
 
 	// methods for implementation of the prediction system with the world state
 	public MovingObject predictNextState(int framesForward) {
-		Point2 prediction = this.predictor.PredictState(ballPositionHistory,
+		Point2 prediction = this.predictor.predictState(ballPositionHistory,
 				framesForward);
-		MovingObject next_state = new MovingObject(prediction.getX(),
+		MovingObject nextState = new MovingObject(prediction.getX(),
 				prediction.getY());
-		return next_state;
+		return nextState;
 	}
 
 	private void initialiseOracle(Pitch field) {

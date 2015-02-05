@@ -7,7 +7,7 @@ public class Constants {
 		ATTACK, DEFEND
 	}
 
-	public static Strategy currentStrategy;
+	public static Strategy currentStrategy = Strategy.ATTACK;
 
 	public static int KICK_TIME = 300;
 

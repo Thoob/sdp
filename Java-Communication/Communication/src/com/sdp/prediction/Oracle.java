@@ -33,7 +33,7 @@ public class Oracle {
 	 * TODO: Implement boundary calculations and detections for the corners
 	 * TODO: Implement a check to see if a point is within the Pitch (use pitch.getBoundPolygon somehow?)
 	 * */
-	public Point2 PredictState(ArrayList<Point2> history, int frames_forward){
+	public Point2 predictState(ArrayList<Point2> history, int frames_forward){
 		if(frames_forward < 0)
 			throw new IllegalArgumentException("frames_forward cannot be a negative value: "+frames_forward);
 		else{

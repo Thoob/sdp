@@ -157,7 +157,5 @@ public class RunVision {
 		} else {
 			System.out.println("No strategy specified");
 		}
-		System.out.println("Attack strategy by default");
-		Constants.currentStrategy = Constants.Strategy.ATTACK;
 	}
 }

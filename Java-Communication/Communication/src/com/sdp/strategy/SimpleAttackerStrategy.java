@@ -18,8 +18,7 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 		Ball ball = dynWorldState.getBall();
 
 		// 1. change direction so that robot looks towards the ball
-		double diffInHeadings = RobotPlanner.getInstance()
-				.differenceInHeadings(robot, ball);
+		double diffInHeadings = RobotPlanner.differenceInHeadings(robot, ball);
 
 		if (diffInHeadings < DIFFERENCE_IN_HEADINGS) {
 			isRobotFacingBall = true;
@@ -34,8 +33,8 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 
 		// 2. go straight until you can catch the ball
 		boolean canCatchBall = RobotPlanner.canCatchBall(robot, ball);
-		boolean doesOurRobotHaveBall = RobotPlanner.getInstance()
-				.doesOurRobotHaveBall(robot, ball);
+		boolean doesOurRobotHaveBall = RobotPlanner.doesOurRobotHaveBall(robot,
+				ball);
 		if (!canCatchBall && !doesOurRobotHaveBall && isRobotFacingBall) {
 			RobotCommands.goStraight();
 
@@ -49,8 +48,7 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 			}
 		}
 
-		boolean catchResetFlag = RobotPlanner.getInstance().catchReset(robot,
-				ball);
+		boolean catchResetFlag = RobotPlanner.catchReset(robot, ball);
 		if (catchResetFlag) {
 			RobotCommunication.getInstance().catchReset();
 		}
@@ -73,8 +71,8 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 		Point2D centre = new Point2D.Double(0, 0);
 
 		/* Determine if Robot is facing the centre */
-		double diffInHeadingsCentre = RobotPlanner.getInstance()
-				.differenceInHeadingsCentre(robot, centre);
+		double diffInHeadingsCentre = RobotPlanner.differenceInHeadingsCentre(
+				robot, centre);
 		boolean facingCentre;
 
 		/* If facing (within a certain threshold */
@@ -92,8 +90,7 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 
 		/* DETERMINE WHEN WE ARE AT THE CENTRE, IF NOT MOVE */
 
-		boolean inCentre = RobotPlanner.getInstance().inCentreRange(robot,
-				centre);
+		boolean inCentre = RobotPlanner.inCentreRange(robot, centre);
 
 		// move to the centre
 		if (!inCentre && facingCentre) {

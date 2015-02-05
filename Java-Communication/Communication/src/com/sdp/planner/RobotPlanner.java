@@ -17,20 +17,11 @@ public class RobotPlanner {
 
 	}
 
-	static RobotPlanner instance = null;
-
-	public static RobotPlanner getInstance() {
-		if (instance == null) {
-			instance = new RobotPlanner();
-		}
-		return instance;
-	}
-
 	/* TODO: Make more general functions, ones compatible with an abstract
 	 * 		 objects we may need to rotate toward / move to
 	 */
 	
-	private double calculateDesiredRobotHeading(Point2D robotPos,
+	private static double calculateDesiredRobotHeading(Point2D robotPos,
 			Point2D ballPos) {
 		double deltaX = Math.abs(robotPos.getX() - ballPos.getX());
 		double deltaY = Math.abs(robotPos.getY() - ballPos.getY());
@@ -39,7 +30,7 @@ public class RobotPlanner {
 		return desiredRobotHeading;
 	}
 
-	public double differenceInHeadings(Robot robot, Ball ball) {
+	public static double differenceInHeadings(Robot robot, Ball ball) {
 		Point2D robotPos = robot.getCenter();
 		Point2D ballPos = ball.getPoint();
 
@@ -57,7 +48,7 @@ public class RobotPlanner {
 		return difference;
 	} 
 	
-	public double differenceInHeadingsCentre(Robot robot, Point2D pitchCentre) {
+	public static double differenceInHeadingsCentre(Robot robot, Point2D pitchCentre) {
 		Point2D robotPos = robot.getCenter();
 		
 		double currentRobotHeading = robot.getHeading() - robot.getHeading();
@@ -70,7 +61,7 @@ public class RobotPlanner {
 		return difference;
 	} 
 
-	public  static boolean canCatchBall(Robot robot, Ball ball) {
+	public static boolean canCatchBall(Robot robot, Ball ball) {
 		Point2D robotPos = robot.getCenter();
 		Point2D ballPos = ball.getPoint();
 
@@ -87,7 +78,7 @@ public class RobotPlanner {
 		}		
 	}
 	
-	public boolean inCentreRange(Robot robot, Point2D centre) {
+	public static boolean inCentreRange(Robot robot, Point2D centre) {
 		Point2D robotPos = robot.getCenter();
 
 		double deltaX = robotPos.getX() - centre.getX();
@@ -103,7 +94,7 @@ public class RobotPlanner {
 		}		
 	}
 
-	public boolean doesOurRobotHaveBall(Robot robot, Ball ball) {
+	public static boolean doesOurRobotHaveBall(Robot robot, Ball ball) {
 		Point2D robotPos = robot.getCenter();
 		Point2D ballPos = ball.getPoint();
 
@@ -111,7 +102,6 @@ public class RobotPlanner {
 		double deltaY = robotPos.getY() - ballPos.getY();
 
 		double deltaTotal = Math.abs(deltaX) + Math.abs(deltaY);
-		System.out.println("Distance from ball: " + deltaTotal);
 
 		if (deltaTotal < 120) {// TODO test and discuss precision needed
 			return true;
@@ -120,7 +110,7 @@ public class RobotPlanner {
 		}		
 	}
 	
-	public boolean catchReset(Robot robot, Ball ball) {
+	public static  boolean catchReset(Robot robot, Ball ball) {
 		Point2D robotPos = robot.getCenter();
 		Point2D ballPos = ball.getPoint();
 
