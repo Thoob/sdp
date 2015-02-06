@@ -48,12 +48,12 @@ public class RobotPlanner {
 		return difference;
 	} 
 	
-	public static double differenceInHeadingsCentre(Robot robot, Point2D pitchCentre) {
+	public static double differenceInHeadingsGeneral(Robot robot, Point2D desiredAngle) {
 		Point2D robotPos = robot.getCenter();
 		
 		double currentRobotHeading = robot.getHeading() - robot.getHeading();
 		double desiredRobotHeading = calculateDesiredRobotHeading(robotPos,
-				pitchCentre) - robot.getHeading();
+				desiredAngle) - robot.getHeading();
 
 		// TODO Deciding whether it is better to turn left or right
 		double difference = Math.abs(currentRobotHeading - desiredRobotHeading);

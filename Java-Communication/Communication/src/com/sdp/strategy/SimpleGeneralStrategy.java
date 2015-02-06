@@ -13,9 +13,13 @@ public class SimpleGeneralStrategy {
 	protected float ourGoalX;
 	protected float[] ourGoalY;
 	protected float[] ourGoalEdges = new float[3];
+	protected int topOfPitch;
+	protected int botOfPitch;
 
 	public void sendWorldState(WorldState worldState) {
 
+		topOfPitch = PitchConstants.getPitchOutlineTop();
+		botOfPitch = PitchConstants.getPitchOutlineBottom();
 		if (Constants.areWeShootingRight) {
 			goalX = 640;
 			ourGoalX = PitchConstants.getPitchOutline()[7].getX();
