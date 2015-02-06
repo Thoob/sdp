@@ -12,7 +12,7 @@ import com.sdp.world.WorldState;
 
 
 public class SimpleAttackerStrategy extends GeneralStrategy {
-	private final double DIFFERENCE_IN_HEADINGS = 0.6;
+	private final double deadZone = 1.0;
 	private boolean isRobotFacingBall = false;
 
 	public void sendWorldState(DynamicWorldState dynWorldState, 
@@ -23,15 +23,18 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 		// 1. change direction so that robot looks towards the ball
 		double diffInHeadings = RobotPlanner.differenceInHeadings(robot, ball);
 
-		if (diffInHeadings < DIFFERENCE_IN_HEADINGS) {
+		if (diffInHeadings < deadZone) {
 			isRobotFacingBall = true;
 		} else {
 			isRobotFacingBall = false;
 		}
 		// Decide which direction to rotate
-		if (!isRobotFacingBall) {
+		if (diffInHeadings < Math.PI && !isRobotFacingBall) {
 			// rotate right
 			RobotCommands.rotateRight();
+		} else if (diffInHeadings > Math.PI && !isRobotFacingBall) {
+			// rotate left
+			RobotCommands.rotateLeft();
 		}
 
 		// 2. go straight until you can catch the ball
@@ -49,7 +52,7 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 				RobotCommunication.getInstance().sendCatch();
 			}
 		}
-
+		// resets catch flag if ball is too far away
 		boolean catchResetFlag = RobotPlanner.catchReset(robot, ball);
 		if (catchResetFlag) {
 			RobotCommunication.getInstance().catchReset();
@@ -78,7 +81,7 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 		boolean facingCentre;
 
 		/* If facing (within a certain threshold */
-		if (diffInHeadingsCentre < DIFFERENCE_IN_HEADINGS) {
+		if (diffInHeadingsCentre < deadZone) {
 			facingCentre = true;
 		} else {
 			facingCentre = false;
@@ -107,7 +110,7 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 					robot, centreGoalR);
 			
 			boolean facingGoal;
-			if (diffInHeadingsGoal < DIFFERENCE_IN_HEADINGS) {
+			if (diffInHeadingsGoal < deadZone) {
 				facingGoal = true;
 			} else {
 				facingGoal = false;
@@ -124,7 +127,7 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 				robot, centreGoalL);
 		
 		boolean facingGoal;
-		if (diffInHeadingsGoal < DIFFERENCE_IN_HEADINGS) {
+		if (diffInHeadingsGoal < deadZone) {
 			facingGoal = true;
 		} else {
 			facingGoal = false;

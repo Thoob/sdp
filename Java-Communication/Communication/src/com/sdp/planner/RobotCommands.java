@@ -17,11 +17,15 @@ public class RobotCommands {
 	}
 	
 	public static void rotateRight(){
-		RobotCommunication.getInstance().move(0, 40);
+		RobotCommunication.getInstance().move(-40, 40);
 	}
 
 	public static void goStraight() {
-		RobotCommunication.getInstance().move(40, 30); 
+		RobotCommunication.getInstance().move(50, 40); 
 		// TODO fix by replacing motors!		
+	}
+
+	public static void rotateLeft() {
+		RobotCommunication.getInstance().move(40, -40);
 	}
 }

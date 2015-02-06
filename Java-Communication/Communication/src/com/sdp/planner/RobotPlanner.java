@@ -35,8 +35,7 @@ public class RobotPlanner {
 		Point2D ballPos = ball.getPoint();
 
 		double currentRobotHeading = robot.getHeading();
-		double desiredRobotHeading = calculateDesiredRobotHeading(robotPos,
-				ballPos) - robot.getHeading();
+		double desiredRobotHeading = calculateDesiredRobotHeading(robotPos, ballPos);
 
 		// TODO Deciding whether it is better to turn left or right
 		double difference = Math.abs(currentRobotHeading - desiredRobotHeading);
