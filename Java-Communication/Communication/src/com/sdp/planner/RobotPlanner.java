@@ -27,6 +27,7 @@ public class RobotPlanner {
 		double deltaY = Math.abs(robotPos.getY() - ballPos.getY());
 		double desiredRobotHeading = Math.atan2(deltaY, deltaX);
 
+		
 		return desiredRobotHeading;
 	}
 
@@ -34,15 +35,19 @@ public class RobotPlanner {
 		Point2D robotPos = robot.getCenter();
 		Point2D ballPos = ball.getPoint();
 
+		
+		// ALT METHOD
+		
+		
 		double currentRobotHeading = robot.getHeading();
 		double desiredRobotHeading = calculateDesiredRobotHeading(robotPos, ballPos);
 
 		// TODO Deciding whether it is better to turn left or right
 		double difference = Math.abs(currentRobotHeading - desiredRobotHeading);
 		
-		System.out.println("Current robot heading:" + currentRobotHeading);
-		System.out.println("Desired robot heading:" + desiredRobotHeading);
-		System.out.println("Difference in headings:" + difference);
+		System.out.println("Current robot heading:" + Math.toDegrees(currentRobotHeading));
+		System.out.println("Desired robot heading:" + Math.toDegrees(desiredRobotHeading));
+		System.out.println("Difference in headings:" + Math.toDegrees(difference));
 		
 		return difference;
 	} 
@@ -123,6 +128,44 @@ public class RobotPlanner {
 		}else{
 			return false;
 		}		
+	}
+	
+	
+	/* TODO: Change back / cast to float */
+	public static double calculateAngle(double robotX, double robotY,
+			double robotOrientation, double targetX, double targetY) {
+		double robotRad = Math.toRadians(robotOrientation);
+		
+		System.out.println("Current robot heading:" + Math.toDegrees(robotOrientation));
+		double targetRad = Math.atan2(targetY - robotY, targetX - robotX);
+
+		if (robotRad > Math.PI)
+			robotRad -= 2 * Math.PI;
+
+		double ang1 = robotRad - targetRad;
+		while (ang1 > Math.PI)
+			ang1 -= 2 * Math.PI;
+		while (ang1 < -Math.PI)
+			ang1 += 2 * Math.PI;
+			
+
+		/* Adjustments for Radians */ 
+		double heading = Math.toDegrees(ang1);
+			if(heading < 0){
+				heading = Math.abs(heading);
+			}
+			if (heading > 0)
+				heading = 360 - heading;
+			
+			/* Debug Info */
+		System.out.println("Angle to face:" + heading);
+		System.out.println("In Rads :" + ang1);
+		System.out.println("In rads to deg: " + Math.toDegrees(ang1));
+		double differenceInDeg = Math.abs(Math.toDegrees(robotOrientation) - heading);
+		System.out.println("Difference is: " + differenceInDeg);
+			
+		return differenceInDeg;
+	
 	}
 
 	// Not important for milestone 2

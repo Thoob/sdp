@@ -20,22 +20,51 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 		Robot robot = dynWorldState.getAttacker();
 		Ball ball = dynWorldState.getBall();
 
+		/* FOR USE WITH CALULATE ANGLE */
+		double robotX = robot.getCenter().getX();
+		double robotY = robot.getCenter().getY();
+		double robotOr = robot.getHeading();
+		double ballX = ball.getPoint().getX();
+		double ballY = ball.getPoint().getY();
+		
 		// 1. change direction so that robot looks towards the ball
-		double diffInHeadings = RobotPlanner.differenceInHeadings(robot, ball);
+		double diffInHeadings = RobotPlanner.calculateAngle(robotX, robotY, robotOr,
+				ballX, ballY);
 
-		if (diffInHeadings < deadZone) {
+		
+		/* case we use calculate angle over Calculate desired heading */
+		if ((diffInHeadings < 20) || (diffInHeadings > 340)) {
 			isRobotFacingBall = true;
-		} else {
+		}
+		 else {
 			isRobotFacingBall = false;
 		}
+	
+		
 		// Decide which direction to rotate
-		if (diffInHeadings < Math.PI && !isRobotFacingBall) {
+		/*if (diffInHeadings < Math.PI && !isRobotFacingBall) {
 			// rotate right
 			RobotCommands.rotateRight();
 		} else if (diffInHeadings > Math.PI && !isRobotFacingBall) {
 			// rotate left
 			RobotCommands.rotateLeft();
+		}*/
+		
+
+		if (!isRobotFacingBall) {
+			// rotate right
+			System.out.println("We must rotate");
+			RobotCommands.rotateRight();
+		
+		} else if (!isRobotFacingBall) {
+			// rotate left
+			RobotCommands.rotateLeft();
 		}
+		else{
+			System.out.println("DESIRED ANGLE");
+			RobotCommunication.getInstance().stop();
+		}
+	
 
 		// 2. go straight until you can catch the ball
 		boolean canCatchBall = RobotPlanner.canCatchBall(robot, ball);
