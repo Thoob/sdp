@@ -151,7 +151,6 @@ public class RunVision {
 				Constants.currentStrategy = Constants.Strategy.DEFEND;
 				System.out.println("Defence strategy was chosen");
 			} else {
-
 				System.out.println("Strategy not recognized.");
 			}
 		} else {

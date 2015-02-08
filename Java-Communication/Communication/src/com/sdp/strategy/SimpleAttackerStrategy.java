@@ -43,6 +43,8 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 		if (!isRobotFacingBall) {
 			boolean shouldRotateRight = RobotPlanner.shouldRotateRight(
 					desiredAngleDeg, robotAngleDeg);
+			// tmp
+			shouldRotateRight = true;
 			if (shouldRotateRight) {
 				RobotCommands.rotateRight();
 				SimpleWorldState.previousOperation = Operation.RIGHT;

@@ -14,6 +14,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.sdp.Constants;
+import com.sdp.planner.RobotCommands;
 import com.sdp.strategy.StrategyController;
 import com.sdp.strategy.StrategyController.StrategyType;
 import com.sdp.vision.gui.GUITool;
@@ -181,12 +183,14 @@ public class StrategySelectorTool implements GUITool {
 			atkStrat.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					Constants.currentStrategy = Constants.Strategy.ATTACK;
 					sc.changeToStrategy(StrategyType.ATTACKING);
 				}
 			});
 			defStrat.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					Constants.currentStrategy = Constants.Strategy.DEFEND;
 					sc.changeToStrategy(StrategyType.DEFENDING);
 				}
 			});
@@ -205,6 +209,8 @@ public class StrategySelectorTool implements GUITool {
 			nullStrat.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					Constants.currentStrategy = Constants.Strategy.NONE;
+					RobotCommands.stop();
 					sc.changeToStrategy(StrategyType.DO_NOTHING);
 				}
 			});
@@ -212,6 +218,8 @@ public class StrategySelectorTool implements GUITool {
 
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
+					Constants.currentStrategy = Constants.Strategy.NONE;
+					RobotCommands.stop();
 					sc.setPaused(true);
 				}
 			});
