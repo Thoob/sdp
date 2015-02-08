@@ -16,31 +16,26 @@ public class RobotCommunication {
 
 	public void move(int leftspeed, int rightspeed) {
 		String command = String.format("MOVE %d %d\n", leftspeed, rightspeed);
-		System.out.println(command);
 		Communication.getInstance().sendCommandViaPort(command);
 	}
 
 	public void passKick() {
 		String command = String.format("KICK 400 60\n");
-		System.out.println(command);
 		Communication.getInstance().sendCommandViaPort(command);
 	}
 
 	public void sendKick(int time) {
-		String command = String.format("KICK %d 100\n", time);
-		System.out.println(command);
+		String command = String.format("KICK %d 100\n", time);;
 		Communication.getInstance().sendCommandViaPort(command);
 	}
 
 	public void sendCatch() {
 		String command = "CATCH\n";
-		System.out.println(command);
 		Communication.getInstance().sendCommandViaPort(command);
 	}
 
 	public void stop() {
-		String command = "STOP\n";
-		System.out.println(command);
+		String command = "FSTOP\n";
 		Communication.getInstance().sendCommandViaPort(command);
 	}
 
@@ -74,6 +69,11 @@ public class RobotCommunication {
 	public void catchReset() {
 		String command = String.format("CFRESET\n");
 		System.out.println(command);
+		Communication.getInstance().sendCommandViaPort(command);
+	}
+
+	public void rotateStop() {
+		String command = "RSTOP\n";
 		Communication.getInstance().sendCommandViaPort(command);
 	}
 

@@ -2,6 +2,7 @@ package com.sdp.strategy;
 
 import java.awt.geom.Point2D;
 
+import com.sdp.RobotCommunication;
 import com.sdp.planner.RobotCommands;
 import com.sdp.planner.RobotPlanner;
 import com.sdp.world.DynamicWorldState;
@@ -14,7 +15,6 @@ import com.sdp.world.WorldState;
 public class SimpleAttackerStrategy extends GeneralStrategy {
 	private final double deadZone = 1.0; // ???
 	private boolean isRobotFacingBall = false;
-	private final int allowedDegreeError = 20;
 
 	public void sendWorldState(DynamicWorldState dynWorldState,
 			WorldState worldState) {
@@ -35,27 +35,29 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 		double diffInHeadings = Math.abs(robotAngleDeg - desiredAngleDeg);
 
 		/* case we use calculate angle over Calculate desired heading */
-		if ((diffInHeadings < allowedDegreeError)
-				|| (diffInHeadings > 360 - allowedDegreeError)) {
-			isRobotFacingBall = true;
-		} else if ((diffInHeadings < allowedDegreeError * 2)
-				|| (diffInHeadings > 360 - allowedDegreeError * 2)) {
-			// add shortRotateRight
+		if ((diffInHeadings < 10) || (diffInHeadings > 350)) {
 			isRobotFacingBall = true;
 		} else {
 			isRobotFacingBall = false;
 		}
 
 		if (!isRobotFacingBall) {
+<<<<<<< HEAD
 			boolean shouldRotateRight = RobotPlanner.shouldRotateRight(
 					desiredAngleDeg, robotAngleDeg);
 			if (shouldRotateRight) {
 				RobotCommands.rotateRight();
 				SimpleWorldState.previousOperation = Operation.RIGHT;
+=======
+			RobotCommands.rotateRight();
+			SimpleWorldState.previousOperation = Operation.RIGHT;
+			/*if (diffInHeadings < 0) {
+	
+>>>>>>> ad6ceef73377a24fabed7a516daefcb55c9ba817
 			} else {
 				RobotCommands.rotateLeft();
 				SimpleWorldState.previousOperation = Operation.LEFT;
-			}
+			}*/
 			return;
 		} else {
 			System.out.println("DESIRED ANGLE");
@@ -77,16 +79,11 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 			return;
 		} else if (!doesOurRobotHaveBall && isRobotFacingBall) {
 			// 3. catch the ball
-			if (SimpleWorldState.previousOperation != Operation.NONE
-					&& SimpleWorldState.previousOperation != Operation.CATCH) {
-				RobotCommands.stop();
-				SimpleWorldState.previousOperation = Operation.NONE;
-			}
+			RobotCommands.stop();
 			// avoid multiple catch
-			if (SimpleWorldState.previousOperation != Operation.CATCH) {
+			if (SimpleWorldState.previousOperation != Operation.CATCH)
 				RobotCommands.catchBall();
-				SimpleWorldState.previousOperation = Operation.CATCH;
-			}
+			SimpleWorldState.previousOperation = Operation.CATCH;
 		} else {
 			// 4. go to a position from which robot can score and score
 			// scoreGoal(dynWorldState, worldState);

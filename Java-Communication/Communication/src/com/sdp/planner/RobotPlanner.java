@@ -6,7 +6,7 @@ import com.sdp.world.DynamicWorldState.Ball;
 import com.sdp.world.DynamicWorldState.Robot;
 
 public class RobotPlanner {
-	
+
 	public enum BallLocation {
 		DEFENDER, ATTACKER, ENEMY_DEFENDER, ENEMY_ATTACKER
 	}
@@ -17,17 +17,17 @@ public class RobotPlanner {
 
 	}
 
-	/* TODO: Make more general functions, ones compatible with an abstract
-	 * 		 objects we may need to rotate toward / move to
+	/*
+	 * TODO: Make more general functions, ones compatible with an abstract
+	 * objects we may need to rotate toward / move to
 	 */
-	
+
 	private static double calculateDesiredRobotHeading(Point2D robotPos,
 			Point2D ballPos) {
 		double deltaX = Math.abs(robotPos.getX() - ballPos.getX());
 		double deltaY = Math.abs(robotPos.getY() - ballPos.getY());
 		double desiredRobotHeading = Math.atan2(deltaY, deltaX);
 
-		
 		return desiredRobotHeading;
 	}
 
@@ -35,35 +35,38 @@ public class RobotPlanner {
 		Point2D robotPos = robot.getCenter();
 		Point2D ballPos = ball.getPoint();
 
-		
 		// ALT METHOD
-		
-		
+
 		double currentRobotHeading = robot.getHeading();
-		double desiredRobotHeading = calculateDesiredRobotHeading(robotPos, ballPos);
+		double desiredRobotHeading = calculateDesiredRobotHeading(robotPos,
+				ballPos);
 
 		// TODO Deciding whether it is better to turn left or right
 		double difference = Math.abs(currentRobotHeading - desiredRobotHeading);
-		
-		System.out.println("Current robot heading:" + Math.toDegrees(currentRobotHeading));
-		System.out.println("Desired robot heading:" + Math.toDegrees(desiredRobotHeading));
-		System.out.println("Difference in headings:" + Math.toDegrees(difference));
-		
+
+		System.out.println("Current robot heading:"
+				+ Math.toDegrees(currentRobotHeading));
+		System.out.println("Desired robot heading:"
+				+ Math.toDegrees(desiredRobotHeading));
+		System.out.println("Difference in headings:"
+				+ Math.toDegrees(difference));
+
 		return difference;
-	} 
-	
-	public static double differenceInHeadingsGeneral(Robot robot, Point2D desiredAngle) {
+	}
+
+	public static double differenceInHeadingsGeneral(Robot robot,
+			Point2D desiredAngle) {
 		Point2D robotPos = robot.getCenter();
-		
+
 		double currentRobotHeading = robot.getHeading() - robot.getHeading();
 		double desiredRobotHeading = calculateDesiredRobotHeading(robotPos,
 				desiredAngle) - robot.getHeading();
 
 		// TODO Deciding whether it is better to turn left or right
 		double difference = Math.abs(currentRobotHeading - desiredRobotHeading);
-		
+
 		return difference;
-	} 
+	}
 
 	public static boolean canCatchBall(Robot robot, Ball ball) {
 		Point2D robotPos = robot.getCenter();
@@ -77,11 +80,11 @@ public class RobotPlanner {
 
 		if (deltaTotal < 160) {// TODO test and discuss precision needed
 			return true;
-		}else{
+		} else {
 			return false;
-		}		
+		}
 	}
-	
+
 	public static boolean inCentreRange(Robot robot, Point2D centre) {
 		Point2D robotPos = robot.getCenter();
 
@@ -93,9 +96,9 @@ public class RobotPlanner {
 
 		if (deltaTotal < 160) {// TODO test and discuss precision needed
 			return true;
-		}else{
+		} else {
 			return false;
-		}		
+		}
 	}
 
 	public static boolean doesOurRobotHaveBall(Robot robot, Ball ball) {
@@ -109,12 +112,12 @@ public class RobotPlanner {
 
 		if (deltaTotal < 120) {// TODO test and discuss precision needed
 			return true;
-		}else{
+		} else {
 			return false;
-		}		
+		}
 	}
-	
-	public static  boolean catchReset(Robot robot, Ball ball) {
+
+	public static boolean catchReset(Robot robot, Ball ball) {
 		Point2D robotPos = robot.getCenter();
 		Point2D ballPos = ball.getPoint();
 
@@ -125,46 +128,64 @@ public class RobotPlanner {
 
 		if (deltaTotal > 220) {// TODO test and discuss precision needed
 			return true;
-		}else{
+		} else {
 			return false;
-		}		
+		}
 	}
-	
-	
-	/* TODO: Change back / cast to float */
-	public static double calculateAngle(double robotX, double robotY,
+
+	public static double desiredAngle(double robotX, double robotY,
 			double robotOrientation, double targetX, double targetY) {
 		double robotRad = Math.toRadians(robotOrientation);
-		
-		System.out.println("Current robot heading:" + Math.toDegrees(robotOrientation));
+
+		System.out.println("Current robot heading:"
+				+ Math.toDegrees(robotOrientation));
 		double targetRad = Math.atan2(targetY - robotY, targetX - robotX);
 
 		if (robotRad > Math.PI)
 			robotRad -= 2 * Math.PI;
 
-		double ang1 = robotRad - targetRad;
-		while (ang1 > Math.PI)
-			ang1 -= 2 * Math.PI;
-		while (ang1 < -Math.PI)
-			ang1 += 2 * Math.PI;
-			
+		double desiredAngleRad = robotRad - targetRad;
+		while (desiredAngleRad > Math.PI)
+			desiredAngleRad -= 2 * Math.PI;
+		while (desiredAngleRad < -Math.PI)
+			desiredAngleRad += 2 * Math.PI;
 
-		/* Adjustments for Radians */ 
-		double heading = Math.toDegrees(ang1);
-			if(heading < 0){
-				heading = Math.abs(heading);
-			}
-			if (heading > 0)
-				heading = 360 - heading;
-			
-			/* Debug Info */
-		System.out.println("Angle to face:" + heading);
-		System.out.println("In Rads :" + ang1);
-		System.out.println("In rads to deg: " + Math.toDegrees(ang1));
-		double differenceInDeg = Math.abs(Math.toDegrees(robotOrientation) - heading);
-		System.out.println("Difference is: " + differenceInDeg);
-			
-		return differenceInDeg;
-	
+		/* Adjustments for Radians */
+		double desiredAngleDeg = Math.toDegrees(desiredAngleRad);
+		if (desiredAngleDeg < 0) {
+			desiredAngleDeg = Math.abs(desiredAngleDeg);
+		}
+		if (desiredAngleDeg > 0)
+			desiredAngleDeg = 360 - desiredAngleDeg;
+
+		System.out.println("Angle to face:" + desiredAngleDeg);
+		System.out.println("In Rads :" + desiredAngleRad);
+
+		return desiredAngleDeg;
+	}
+
+	public static boolean shouldRotateRight(double desiredAngle,
+			double currentAngle) {
+		int qDes = getQuarter((int) desiredAngle);
+		int qCur = getQuarter((int) currentAngle);
+		double angleDiff = Math.abs(currentAngle - desiredAngle);
+		if (qDes - qCur == 3 || qDes - qCur == -1)
+			return true;
+		else if (qDes == qCur && desiredAngle > currentAngle)
+			return true;
+		else if ((qDes - qCur == 2 || qDes - qCur == -2) && angleDiff < 180)
+			return true;
+		else
+			return false;
+	}
+
+	private static int getQuarter(int angle) {
+		if (angle > 270)
+			return 1;
+		if (angle > 180)
+			return 2;
+		if (angle > 90)
+			return 3;
+		return 4;
 	}
 }

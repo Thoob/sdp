@@ -42,7 +42,7 @@ public class Communication {
 			serialPort.writeString(command);
 			serialPort.closePort();
 		} catch (SerialPortException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 }
