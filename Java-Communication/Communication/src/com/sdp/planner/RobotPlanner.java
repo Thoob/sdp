@@ -168,7 +168,7 @@ public class RobotPlanner {
 			double currentAngle) {
 		int qDes = getQuarter((int) desiredAngle);
 		int qCur = getQuarter((int) currentAngle);
-		if (qDes - qCur == 3 || qDes - qCur == 1)
+		if (qDes - qCur == 3 || qDes - qCur == -1)
 			return true;
 		else if (qDes == qCur && desiredAngle > currentAngle)
 			return true;

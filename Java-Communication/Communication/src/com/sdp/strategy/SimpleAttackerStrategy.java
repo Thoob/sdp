@@ -46,8 +46,6 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 			if (shouldRotateRight) {
 				RobotCommands.rotateRight();
 				SimpleWorldState.previousOperation = Operation.RIGHT;
-				RobotCommands.rotateRight();
-				SimpleWorldState.previousOperation = Operation.RIGHT;
 			} else {
 				RobotCommands.rotateLeft();
 				SimpleWorldState.previousOperation = Operation.LEFT;
