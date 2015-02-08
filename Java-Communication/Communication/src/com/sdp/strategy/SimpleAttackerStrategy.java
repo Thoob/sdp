@@ -14,6 +14,7 @@ import com.sdp.world.WorldState;
 public class SimpleAttackerStrategy extends GeneralStrategy {
 	private final double deadZone = 1.0; // ???
 	private boolean isRobotFacingBall = false;
+	private final int allowedDegreeError = 20;
 
 	public void sendWorldState(DynamicWorldState dynWorldState,
 			WorldState worldState) {
@@ -34,7 +35,12 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 		double diffInHeadings = Math.abs(robotAngleDeg - desiredAngleDeg);
 
 		/* case we use calculate angle over Calculate desired heading */
-		if ((diffInHeadings < 10) || (diffInHeadings > 350)) {
+		if ((diffInHeadings < allowedDegreeError)
+				|| (diffInHeadings > 360 - allowedDegreeError)) {
+			isRobotFacingBall = true;
+		} else if ((diffInHeadings < allowedDegreeError * 2)
+				|| (diffInHeadings > 360 - allowedDegreeError * 2)) {
+			// add shortRotateRight
 			isRobotFacingBall = true;
 		} else {
 			isRobotFacingBall = false;
@@ -44,7 +50,7 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 			boolean shouldRotateRight = RobotPlanner.shouldRotateRight(
 					desiredAngleDeg, robotAngleDeg);
 			// tmp
-			shouldRotateRight = true;
+			//shouldRotateRight = true;
 			if (shouldRotateRight) {
 				RobotCommands.rotateRight();
 				SimpleWorldState.previousOperation = Operation.RIGHT;

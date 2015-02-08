@@ -174,11 +174,11 @@ public class StrategySelectorTool implements GUITool {
 		public StrategyPicker() {
 			this.add(atkStrat);
 			this.add(defStrat);
-			this.add(passStrat);
-			this.add(marStrat);
+			//this.add(passStrat);
+			//this.add(marStrat);
 			this.add(nullStrat);
-			this.add(pauseController);
-			this.add(startController);
+			//this.add(pauseController);
+			//this.add(startController);
 
 			atkStrat.addActionListener(new ActionListener() {
 				@Override
