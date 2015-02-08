@@ -40,20 +40,21 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 		}
 
 		if (!isRobotFacingBall) {
-			if (diffInHeadings < 0) {
-				RobotCommands.rotateRight();
-				SimpleWorldState.previousOperation = Operation.RIGHT;
+			RobotCommands.rotateRight();
+			SimpleWorldState.previousOperation = Operation.RIGHT;
+			/*if (diffInHeadings < 0) {
+	
 			} else {
 				RobotCommands.rotateLeft();
 				SimpleWorldState.previousOperation = Operation.LEFT;
-			}
+			}*/
 			return;
 		} else {
 			System.out.println("DESIRED ANGLE");
 			// stopping rotation but not other operations
 			if (SimpleWorldState.previousOperation == Operation.RIGHT
 					|| SimpleWorldState.previousOperation == Operation.LEFT) {
-				RobotCommands.stop();
+				RobotCommands.rotateStop();
 				SimpleWorldState.previousOperation = Operation.NONE;
 			}
 		}

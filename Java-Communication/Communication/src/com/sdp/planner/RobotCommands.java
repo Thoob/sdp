@@ -18,18 +18,18 @@ public class RobotCommands {
 
 	public static void rotateRight() {
 		System.out.println("rotateRight");
-		RobotCommunication.getInstance().move(-40, 40);
+		RobotCommunication.getInstance().move(-60, 60);
 	}
 
 	public static void goStraight() {
 		System.out.println("goStraight");
-		RobotCommunication.getInstance().move(50, 40);
+		RobotCommunication.getInstance().move(70, 60);
 		// TODO fix by replacing motors!
 	}
 
 	public static void rotateLeft() {
 		System.out.println("rotateLeft");
-		RobotCommunication.getInstance().move(40, -40);
+		RobotCommunication.getInstance().move(60, -60);
 	}
 
 	public static void stop() {
@@ -40,5 +40,9 @@ public class RobotCommands {
 	public static void catchBall() {
 		System.out.println("catchBall");
 		RobotCommunication.getInstance().sendCatch();
+	}
+
+	public static void rotateStop() {
+		RobotCommunication.getInstance().rotateStop();
 	}
 }

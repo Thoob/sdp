@@ -72,4 +72,9 @@ public class RobotCommunication {
 		Communication.getInstance().sendCommandViaPort(command);
 	}
 
+	public void rotateStop() {
+		String command = "RSTOP\n";
+		Communication.getInstance().sendCommandViaPort(command);
+	}
+
 }
