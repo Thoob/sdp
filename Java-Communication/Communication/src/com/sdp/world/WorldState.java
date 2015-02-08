@@ -14,11 +14,6 @@ public class WorldState {
 			defenderNotOnPitch, enemyDefenderNotOnPitch;
 	public boolean ballNotOnPitch;
 	private ArrayList<Point2> ballPositionHistory = new ArrayList<Point2>();
-
-	// #region new world model representation
-	// TODO: convert x/y to mm values
-	// TODO: center to be the center of the field
-	// Our team robots
 	// Defender
 	private MovingObject defenderRobot;
 	// Attacker

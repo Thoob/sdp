@@ -28,4 +28,12 @@ public class RobotCommands {
 	public static void rotateLeft() {
 		RobotCommunication.getInstance().move(40, -40);
 	}
+	
+	public static void stop(){
+		RobotCommunication.getInstance().stop();
+	}
+	
+	public static void catchBall(){
+		RobotCommunication.getInstance().sendCatch();
+	}
 }
