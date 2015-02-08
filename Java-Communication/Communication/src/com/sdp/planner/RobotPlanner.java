@@ -167,7 +167,7 @@ public class RobotPlanner {
 	public static boolean shouldRotateRight(double desiredAngle,
 			double currentAngle) {
 		int qDes = getQuarter((int) desiredAngle);
-		int qCur = getQuarter((int) desiredAngle);
+		int qCur = getQuarter((int) currentAngle);
 		if (qDes - qCur == 3 || qDes - qCur == 1)
 			return true;
 		else if (qDes == qCur && desiredAngle > currentAngle)
