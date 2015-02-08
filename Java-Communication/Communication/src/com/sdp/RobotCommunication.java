@@ -1,7 +1,7 @@
 package com.sdp;
 
 /**
- *	Low-level robot commands
+ * Low-level robot commands
  */
 public class RobotCommunication {
 
@@ -13,13 +13,13 @@ public class RobotCommunication {
 		}
 		return instance;
 	}
-	
-	public void move(int leftspeed, int rightspeed){
+
+	public void move(int leftspeed, int rightspeed) {
 		String command = String.format("MOVE %d %d\n", leftspeed, rightspeed);
 		System.out.println(command);
 		Communication.getInstance().sendCommandViaPort(command);
 	}
-	
+
 	public void passKick() {
 		String command = String.format("KICK 400 60\n");
 		System.out.println(command);
@@ -31,50 +31,50 @@ public class RobotCommunication {
 		System.out.println(command);
 		Communication.getInstance().sendCommandViaPort(command);
 	}
-	
-	public void sendCatch(){
+
+	public void sendCatch() {
 		String command = "CATCH\n";
 		System.out.println(command);
 		Communication.getInstance().sendCommandViaPort(command);
 	}
-	
-	public void stop(){
+
+	public void stop() {
 		String command = "STOP\n";
 		System.out.println(command);
 		Communication.getInstance().sendCommandViaPort(command);
 	}
-	
+
 	/*
 	 * RC Commands
 	 */
-	public void holdForward(){
+	public void holdForward() {
 		String command = String.format("RCFORWARD\n");
 		System.out.println(command);
-		Communication.getInstance().sendCommandViaPort(command); 
+		Communication.getInstance().sendCommandViaPort(command);
 	}
-	
-	public void holdBackward(){
+
+	public void holdBackward() {
 		String command = String.format("RCBACKWARD\n");
 		System.out.println(command);
-		Communication.getInstance().sendCommandViaPort(command); 
+		Communication.getInstance().sendCommandViaPort(command);
 	}
-	
-	public void holdLeft(double diffInHeadings){
+
+	public void holdLeft(double diffInHeadings) {
 		String command = String.format("RCROTATL %f\n", diffInHeadings);
 		System.out.println(command);
-		Communication.getInstance().sendCommandViaPort(command); 
+		Communication.getInstance().sendCommandViaPort(command);
 	}
-	
-	public void holdRight(double diffInHeadings){
+
+	public void holdRight(double diffInHeadings) {
 		String command = String.format("RCROTATR %f\n", diffInHeadings);
 		System.out.println(command);
-		Communication.getInstance().sendCommandViaPort(command); 
+		Communication.getInstance().sendCommandViaPort(command);
 	}
 
 	public void catchReset() {
 		String command = String.format("CFRESET\n");
 		System.out.println(command);
-		Communication.getInstance().sendCommandViaPort(command); 
+		Communication.getInstance().sendCommandViaPort(command);
 	}
 
 }

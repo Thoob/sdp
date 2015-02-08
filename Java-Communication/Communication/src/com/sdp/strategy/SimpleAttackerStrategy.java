@@ -10,12 +10,11 @@ import com.sdp.world.DynamicWorldState.Ball;
 import com.sdp.world.DynamicWorldState.Robot;
 import com.sdp.world.WorldState;
 
-
 public class SimpleAttackerStrategy extends GeneralStrategy {
 	private final double deadZone = 1.0;
 	private boolean isRobotFacingBall = false;
 
-	public void sendWorldState(DynamicWorldState dynWorldState, 
+	public void sendWorldState(DynamicWorldState dynWorldState,
 			WorldState worldState) {
 		Robot robot = dynWorldState.getAttacker();
 		Ball ball = dynWorldState.getBall();
@@ -23,48 +22,40 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 		/* FOR USE WITH CALULATE ANGLE */
 		double robotX = robot.getCenter().getX();
 		double robotY = robot.getCenter().getY();
-		double robotOr = robot.getHeading();
+		double robotDir = robot.getHeading();
 		double ballX = ball.getPoint().getX();
 		double ballY = ball.getPoint().getY();
-		
-		// 1. change direction so that robot looks towards the ball
-		double diffInHeadings = RobotPlanner.calculateAngle(robotX, robotY, robotOr,
-				ballX, ballY);
 
-		
+		// 1. change direction so that robot looks towards the ball
+		double diffInHeadings = RobotPlanner.calculateAngle(robotX, robotY,
+				robotDir, ballX, ballY);
+
 		/* case we use calculate angle over Calculate desired heading */
 		if ((diffInHeadings < 20) || (diffInHeadings > 340)) {
 			isRobotFacingBall = true;
-		}
-		 else {
+		} else {
 			isRobotFacingBall = false;
 		}
-	
-		
+
 		// Decide which direction to rotate
-		/*if (diffInHeadings < Math.PI && !isRobotFacingBall) {
-			// rotate right
-			RobotCommands.rotateRight();
-		} else if (diffInHeadings > Math.PI && !isRobotFacingBall) {
-			// rotate left
-			RobotCommands.rotateLeft();
-		}*/
-		
+		/*
+		 * if (diffInHeadings < Math.PI && !isRobotFacingBall) { // rotate right
+		 * RobotCommands.rotateRight(); } else if (diffInHeadings > Math.PI &&
+		 * !isRobotFacingBall) { // rotate left RobotCommands.rotateLeft(); }
+		 */
 
 		if (!isRobotFacingBall) {
 			// rotate right
 			System.out.println("We must rotate");
 			RobotCommands.rotateRight();
-		
+
 		} else if (!isRobotFacingBall) {
 			// rotate left
 			RobotCommands.rotateLeft();
-		}
-		else{
+		} else {
 			System.out.println("DESIRED ANGLE");
 			RobotCommunication.getInstance().stop();
 		}
-	
 
 		// 2. go straight until you can catch the ball
 		boolean canCatchBall = RobotPlanner.canCatchBall(robot, ball);
@@ -98,7 +89,8 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 	 * 
 	 * @param dynWorldState
 	 */
-	private void scoreGoal(DynamicWorldState dynWorldState, WorldState worldState) {
+	private void scoreGoal(DynamicWorldState dynWorldState,
+			WorldState worldState) {
 		Robot robot = dynWorldState.getAttacker();
 
 		/* Establish the centre of the field */
@@ -130,43 +122,45 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 			RobotCommands.goStraight();
 			return;
 		}
-		
+
 		/* Determine correct goal to face */
 		/* We are shooting right */
-		if (worldState.weAreShootingRight){
-			Point2D centreGoalR = new Point2D.Double(640, (double)worldState.rightGoal[1]);
-			double diffInHeadingsGoal = RobotPlanner.differenceInHeadingsGeneral(
-					robot, centreGoalR);
-			
+		if (worldState.weAreShootingRight) {
+			Point2D centreGoalR = new Point2D.Double(640,
+					(double) worldState.rightGoal[1]);
+			double diffInHeadingsGoal = RobotPlanner
+					.differenceInHeadingsGeneral(robot, centreGoalR);
+
 			boolean facingGoal;
 			if (diffInHeadingsGoal < deadZone) {
 				facingGoal = true;
 			} else {
 				facingGoal = false;
 			}
-			
+
 			if (!facingGoal) {
 				// rotate right
 				RobotCommands.rotateRight();
 			}
-		/* We are shooting left */	
-	}else{
-		Point2D centreGoalL = new Point2D.Double(640, (double)worldState.leftGoal[1]);
-		double diffInHeadingsGoal = RobotPlanner.differenceInHeadingsGeneral(
-				robot, centreGoalL);
-		
-		boolean facingGoal;
-		if (diffInHeadingsGoal < deadZone) {
-			facingGoal = true;
+			/* We are shooting left */
 		} else {
-			facingGoal = false;
-		}
-		
-		if (!facingGoal) {
-			// rotate right
-			RobotCommands.rotateRight();
+			Point2D centreGoalL = new Point2D.Double(640,
+					(double) worldState.leftGoal[1]);
+			double diffInHeadingsGoal = RobotPlanner
+					.differenceInHeadingsGeneral(robot, centreGoalL);
+
+			boolean facingGoal;
+			if (diffInHeadingsGoal < deadZone) {
+				facingGoal = true;
+			} else {
+				facingGoal = false;
 			}
-			
+
+			if (!facingGoal) {
+				// rotate right
+				RobotCommands.rotateRight();
+			}
+
 		}
 	}
 }
