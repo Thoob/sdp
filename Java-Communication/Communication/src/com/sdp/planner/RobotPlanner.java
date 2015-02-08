@@ -131,7 +131,7 @@ public class RobotPlanner {
 	}
 	
 	
-	/* TODO: Change back / cast to float */
+	/* TODO: Change back cast to float */
 	public static double calculateAngle(double robotX, double robotY,
 			double robotOrientation, double targetX, double targetY) {
 		double robotRad = Math.toRadians(robotOrientation);
@@ -142,15 +142,14 @@ public class RobotPlanner {
 		if (robotRad > Math.PI)
 			robotRad -= 2 * Math.PI;
 
-		double ang1 = robotRad - targetRad;
-		while (ang1 > Math.PI)
-			ang1 -= 2 * Math.PI;
-		while (ang1 < -Math.PI)
-			ang1 += 2 * Math.PI;
-			
+		double angle = robotRad - targetRad;
+		while (angle > Math.PI)
+			angle -= 2 * Math.PI;
+		while (angle < -Math.PI)
+			angle += 2 * Math.PI;
 
 		/* Adjustments for Radians */ 
-		double heading = Math.toDegrees(ang1);
+		double heading = Math.toDegrees(angle);
 			if(heading < 0){
 				heading = Math.abs(heading);
 			}
@@ -159,9 +158,9 @@ public class RobotPlanner {
 			
 			/* Debug Info */
 		System.out.println("Angle to face:" + heading);
-		System.out.println("In Rads :" + ang1);
-		System.out.println("In rads to deg: " + Math.toDegrees(ang1));
-		double differenceInDeg = Math.abs(Math.toDegrees(robotOrientation) - heading);
+		System.out.println("In Rads :" + angle);
+		System.out.println("In rads to deg: " + Math.toDegrees(angle));
+		double differenceInDeg = Math.toDegrees(robotOrientation) - heading;
 		System.out.println("Difference is: " + differenceInDeg);
 			
 		return differenceInDeg;

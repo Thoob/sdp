@@ -33,16 +33,20 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 				robotDir, ballX, ballY);
 
 		/* case we use calculate angle over Calculate desired heading */
-		if ((diffInHeadings < 10) || (diffInHeadings > 350)) {
+		if ((Math.abs(diffInHeadings) < 10) || (Math.abs(diffInHeadings) > 350)) {
 			isRobotFacingBall = true;
 		} else {
 			isRobotFacingBall = false;
 		}
 
 		if (!isRobotFacingBall) {
-			System.out.println("We must rotate");
-			RobotCommands.rotateRight();
-			SimpleWorldState.previousOperation = Operation.RIGHT;
+			if (diffInHeadings < 0) {
+				RobotCommands.rotateRight();
+				SimpleWorldState.previousOperation = Operation.RIGHT;
+			} else {
+				RobotCommands.rotateLeft();
+				SimpleWorldState.previousOperation = Operation.LEFT;
+			}
 			return;
 		} else {
 			System.out.println("DESIRED ANGLE");
