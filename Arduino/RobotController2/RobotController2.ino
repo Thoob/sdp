@@ -17,6 +17,7 @@
 SerialCommand sCmd;                          // The demo SerialCommand object
 int leftpower = 0;                           // Speed of left wheel
 int rightpower = 0;                          // Speed of right wheel
+boolean rotateStopped = true;                // Rotation stopped flag
 
 void setup() {
   pinMode(arduinoLED, OUTPUT);               // Configure the onboard LED for output
@@ -34,6 +35,7 @@ void setup() {
     //Movement commands
   sCmd.addCommand("MOVE", run_engine);       // Runs wheel motors
   sCmd.addCommand("FSTOP", force_stop);      // Force stops all motors
+  sCmd.addCommand("RSTOP", rotate_stop);     // Stops rotation strongly
   sCmd.addCommand("KICK", move_kick);        // Runs kick script
   sCmd.addCommand("CATCH", move_catch);      // Runs catch script
  
@@ -130,6 +132,7 @@ void run_engine() {
       motorForward(right, rightpower);
     }
   }
+  rotateStopped = true;
 }
 
 // Kick script
@@ -163,9 +166,9 @@ void move_catch() {
 
     Serial.println("Catching");
     //lift and move forward
-    motorBackward(3, 60);
-    motorForward(4, 40);
-    motorForward(5, 40);
+    motorBackward(kicker, 60);
+    motorForward(right, 70);
+    motorForward(left, 60);
     delay(450);
     motorStop(kicker);
     delay(250);
@@ -174,7 +177,7 @@ void move_catch() {
     delay(250);
     motorStop(kicker);
     force_stop();
-    delay(1000);
+    delay(500);
 
 
 }
@@ -183,10 +186,22 @@ void move_catch() {
 
 // Force stops all motors
 void force_stop(){
-  Serial.println("Stopping");
-
-  motorAllStop();  
+  Serial.println("Force stopping");
+  motorAllStop(); 
 }
+
+// Stops rotation by briefly rotating in the opposite direction
+void rotate_stop(){
+  if(leftpower>rightpower && rotateStopped){
+    motorForward(right, 100);
+    motorBackward(left, 100);
+  } else if (rightpower>leftpower && rotateStopped){
+    motorForward(left, 100);
+    motorBackward(right, 100);
+  }
+  rotateStopped = false;
+}
+  
 
 
 
