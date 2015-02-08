@@ -33,7 +33,7 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 				robotDir, ballX, ballY);
 
 		/* case we use calculate angle over Calculate desired heading */
-		if ((diffInHeadings < 20) || (diffInHeadings > 340)) {
+		if ((diffInHeadings < 10) || (diffInHeadings > 350)) {
 			isRobotFacingBall = true;
 		} else {
 			isRobotFacingBall = false;

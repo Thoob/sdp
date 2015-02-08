@@ -39,7 +39,7 @@ public class RobotCommunication {
 	}
 
 	public void stop() {
-		String command = "STOP\n";
+		String command = "FSTOP\n";
 		System.out.println(command);
 		Communication.getInstance().sendCommandViaPort(command);
 	}
