@@ -2,7 +2,6 @@ package com.sdp.strategy;
 
 import java.awt.geom.Point2D;
 
-import com.sdp.RobotCommunication;
 import com.sdp.planner.RobotCommands;
 import com.sdp.planner.RobotPlanner;
 import com.sdp.world.DynamicWorldState;
@@ -42,22 +41,17 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 		}
 
 		if (!isRobotFacingBall) {
-<<<<<<< HEAD
 			boolean shouldRotateRight = RobotPlanner.shouldRotateRight(
 					desiredAngleDeg, robotAngleDeg);
 			if (shouldRotateRight) {
 				RobotCommands.rotateRight();
 				SimpleWorldState.previousOperation = Operation.RIGHT;
-=======
-			RobotCommands.rotateRight();
-			SimpleWorldState.previousOperation = Operation.RIGHT;
-			/*if (diffInHeadings < 0) {
-	
->>>>>>> ad6ceef73377a24fabed7a516daefcb55c9ba817
+				RobotCommands.rotateRight();
+				SimpleWorldState.previousOperation = Operation.RIGHT;
 			} else {
 				RobotCommands.rotateLeft();
 				SimpleWorldState.previousOperation = Operation.LEFT;
-			}*/
+			}
 			return;
 		} else {
 			System.out.println("DESIRED ANGLE");
