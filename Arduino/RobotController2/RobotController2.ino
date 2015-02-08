@@ -17,7 +17,6 @@
 SerialCommand sCmd;                          // The demo SerialCommand object
 int leftpower = 0;                           // Speed of left wheel
 int rightpower = 0;                          // Speed of right wheel
-int catchflag = 0;                           // If 1, the ball is caught and ready to be kicked, otherwise it is not in grabber
 
 void setup() {
   pinMode(arduinoLED, OUTPUT);               // Configure the onboard LED for output
@@ -37,8 +36,7 @@ void setup() {
   sCmd.addCommand("FSTOP", force_stop);      // Force stops all motors
   sCmd.addCommand("KICK", move_kick);        // Runs kick script
   sCmd.addCommand("CATCH", move_catch);      // Runs catch script
-  sCmd.addCommand("CFRESET", rst_catchflag); // Resets the catch flag (if we didn't catch the ball)
-
+ 
   //Remote Control Commands
   sCmd.addCommand("RCFORWARD", rc_forward);
   sCmd.addCommand("RCBACKWARD", rc_backward);
@@ -157,16 +155,11 @@ void move_kick() {
 
   delay(1000);
 
-  catchflag = 0;
-
 }
 
 // Catch script
 void move_catch() {
 
-  if (catchflag == 0) {
-
-    catchflag = 1;
 
     Serial.println("Catching");
     //lift and move forward
@@ -182,16 +175,10 @@ void move_catch() {
     motorStop(kicker);
     force_stop();
     delay(1000);
-  }
-  else {
-    Serial.println("Already catching");
-  }
+
 
 }
 
-void rst_catchflag() {
-  catchflag = 0;
-}
 
 
 // Force stops all motors
