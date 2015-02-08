@@ -29,18 +29,22 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 		double ballY = ball.getPoint().getY();
 
 		// 1. change direction so that robot looks towards the ball
-		double diffInHeadings = RobotPlanner.calculateAngle(robotX, robotY,
+		double desiredAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
 				robotDir, ballX, ballY);
+		double robotAngleDeg = Math.toDegrees(robotDir);
+		double diffInHeadings = Math.abs(robotAngleDeg - desiredAngleDeg);
 
 		/* case we use calculate angle over Calculate desired heading */
-		if ((Math.abs(diffInHeadings) < 10) || (Math.abs(diffInHeadings) > 350)) {
+		if ((diffInHeadings < 10) || (diffInHeadings > 350)) {
 			isRobotFacingBall = true;
 		} else {
 			isRobotFacingBall = false;
 		}
 
 		if (!isRobotFacingBall) {
-			if (diffInHeadings < 0) {
+			boolean shouldRotateRight = RobotPlanner.shouldRotateRight(
+					desiredAngleDeg, robotAngleDeg);
+			if (shouldRotateRight) {
 				RobotCommands.rotateRight();
 				SimpleWorldState.previousOperation = Operation.RIGHT;
 			} else {
