@@ -49,8 +49,6 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 		if (!isRobotFacingBall) {
 			boolean shouldRotateRight = RobotPlanner.shouldRotateRight(
 					desiredAngleDeg, robotAngleDeg);
-			// tmp
-			//shouldRotateRight = true;
 			if (shouldRotateRight) {
 				RobotCommands.rotateRight();
 				SimpleWorldState.previousOperation = Operation.RIGHT;
@@ -79,11 +77,16 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 			return;
 		} else if (!doesOurRobotHaveBall && isRobotFacingBall) {
 			// 3. catch the ball
-			RobotCommands.stop();
+			if (SimpleWorldState.previousOperation != Operation.NONE
+					&& SimpleWorldState.previousOperation != Operation.CATCH) {
+				RobotCommands.stop();
+				SimpleWorldState.previousOperation = Operation.NONE;
+			}
 			// avoid multiple catch
-			if (SimpleWorldState.previousOperation != Operation.CATCH)
+			if (SimpleWorldState.previousOperation != Operation.CATCH) {
 				RobotCommands.catchBall();
-			SimpleWorldState.previousOperation = Operation.CATCH;
+				SimpleWorldState.previousOperation = Operation.CATCH;
+			}
 		} else {
 			// 4. go to a position from which robot can score and score
 			// scoreGoal(dynWorldState, worldState);
