@@ -9,6 +9,14 @@ import com.sdp.world.MovingObject;
 import com.sdp.world.WorldState;
 
 public class SimpleGeneralStrategy {
+
+	// TODO dirty solution for milestone 2
+	// center coordinates
+	protected static float leftGoalX = -572;
+	protected static float leftGoalY = -62;
+	protected static float rightGoalX = 575;
+	protected static float rightGoalY = -52;
+
 	protected static float goalX;
 	protected static float[] goalY;
 	protected static float ourGoalX;
@@ -23,7 +31,7 @@ public class SimpleGeneralStrategy {
 		topOfPitch = PitchConstants.getPitchOutlineTop();
 		botOfPitch = PitchConstants.getPitchOutlineBottom();
 		if (Constants.areWeShootingRight) {
-			goalX = 640;
+			goalX = PitchConstants.getPitchOutline()[3].getX();
 			goalY = worldState.rightGoal;
 
 			ourGoalX = PitchConstants.getPitchOutline()[7].getX();
@@ -33,14 +41,14 @@ public class SimpleGeneralStrategy {
 			ourGoalEdges[1] = worldState.leftGoal[1];
 			ourGoalEdges[2] = PitchConstants.getPitchOutline()[6].getY();
 		} else {
-			goalX = PitchConstants.getPitchOutline()[2].getX();
-			;
+			goalX = PitchConstants.getPitchOutline()[7].getX();
 			goalY = worldState.leftGoal;
 
-			ourGoalX = PitchConstants.getPitchOutline()[2].getX();
+			ourGoalX = PitchConstants.getPitchOutline()[3].getX();
 			ourGoalY = worldState.rightGoal;
 
 			Position[] tmp = PitchConstants.getPitchOutline();
+
 			ourGoalEdges[0] = PitchConstants.getPitchOutline()[2].getY();
 			ourGoalEdges[1] = worldState.rightGoal[1];
 			ourGoalEdges[2] = PitchConstants.getPitchOutline()[3].getY();

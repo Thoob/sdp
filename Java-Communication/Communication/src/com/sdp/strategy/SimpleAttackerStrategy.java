@@ -125,8 +125,8 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 		double robotY = robot.getCenter().getY();
 		double robotDir = robot.getHeading();
 
-		double goalX = SimpleGeneralStrategy.goalX;
-		double goalY = SimpleGeneralStrategy.goalY[1];
+		double goalX = SimpleGeneralStrategy.rightGoalX;
+		double goalY = SimpleGeneralStrategy.rightGoalY;
 
 		System.out.println("goal " + goalX + " " + goalY);
 		System.out.println("robot " + robotX + " " + robotY);
@@ -135,12 +135,12 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 		double desiredAngleDegb = RobotPlanner.desiredAngle(robotX, robotY,
 				robotDir, ballX, ballY);
 		
-		System.out.println("desiredAngle " + desiredAngleDegb);
+		System.out.println("desiredAngleBall " + desiredAngleDegb);
 
 		double desiredAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
 				robotDir, goalX, goalY);
 
-		System.out.println("desiredAngle " + desiredAngleDeg);
+		System.out.println("desiredAngleGoal " + desiredAngleDeg);
 
 	}
 
