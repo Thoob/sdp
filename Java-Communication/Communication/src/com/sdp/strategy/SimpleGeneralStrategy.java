@@ -8,13 +8,13 @@ import com.sdp.world.MovingObject;
 import com.sdp.world.WorldState;
 
 public class SimpleGeneralStrategy {
-	protected float goalX;
-	protected float[] goalY;
-	protected float ourGoalX;
-	protected float[] ourGoalY;
-	protected float[] ourGoalEdges = new float[3];
-	protected int topOfPitch;
-	protected int botOfPitch;
+	protected static float goalX;
+	protected static float[] goalY;
+	protected static float ourGoalX;
+	protected static float[] ourGoalY;
+	protected static float[] ourGoalEdges = new float[3];
+	protected static int topOfPitch;
+	protected static int botOfPitch;
 
 	public void sendWorldState(WorldState worldState) {
 

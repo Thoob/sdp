@@ -11,7 +11,7 @@ public class RobotPlanner {
 		DEFENDER, ATTACKER, ENEMY_DEFENDER, ENEMY_ATTACKER
 	}
 
-	private BallLocation ballLocation;
+	private static final int CAN_CATCH_BALL = 140;
 
 	private RobotPlanner() {
 
@@ -29,29 +29,6 @@ public class RobotPlanner {
 		double desiredRobotHeading = Math.atan2(deltaY, deltaX);
 
 		return desiredRobotHeading;
-	}
-
-	public static double differenceInHeadings(Robot robot, Ball ball) {
-		Point2D robotPos = robot.getCenter();
-		Point2D ballPos = ball.getPoint();
-
-		// ALT METHOD
-
-		double currentRobotHeading = robot.getHeading();
-		double desiredRobotHeading = calculateDesiredRobotHeading(robotPos,
-				ballPos);
-
-		// TODO Deciding whether it is better to turn left or right
-		double difference = Math.abs(currentRobotHeading - desiredRobotHeading);
-
-		System.out.println("Current robot heading:"
-				+ Math.toDegrees(currentRobotHeading));
-		System.out.println("Desired robot heading:"
-				+ Math.toDegrees(desiredRobotHeading));
-		System.out.println("Difference in headings:"
-				+ Math.toDegrees(difference));
-
-		return difference;
 	}
 
 	public static double differenceInHeadingsGeneral(Robot robot,
@@ -78,7 +55,7 @@ public class RobotPlanner {
 		double deltaTotal = Math.abs(deltaX) + Math.abs(deltaY);
 		System.out.println("Distance from ball: " + deltaTotal);
 
-		if (deltaTotal < 160) {// TODO test and discuss precision needed
+		if (deltaTotal < CAN_CATCH_BALL) {// TODO test and discuss precision needed
 			return true;
 		} else {
 			return false;
@@ -117,37 +94,12 @@ public class RobotPlanner {
 		}
 	}
 
-	public static boolean catchReset(Robot robot, Ball ball) {
-		Point2D robotPos = robot.getCenter();
-		Point2D ballPos = ball.getPoint();
-
-		double deltaX = robotPos.getX() - ballPos.getX();
-		double deltaY = robotPos.getY() - ballPos.getY();
-
-		double deltaTotal = Math.abs(deltaX) + Math.abs(deltaY);
-
-		if (deltaTotal > 220) {// TODO test and discuss precision needed
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 	public static double desiredAngle(double robotX, double robotY,
 			double robotOrientation, double targetX, double targetY) {
-		double robotRad = Math.toRadians(robotOrientation);
 
-		System.out.println("Current robot heading:"
-				+ Math.toDegrees(robotOrientation));
 		double targetRad = Math.atan2(targetY - robotY, targetX - robotX);
-
-		if (robotRad > Math.PI)
-			robotRad -= 2 * Math.PI;
-
 		double targetDeg = Math.toDegrees(targetRad);
 		targetDeg = (targetDeg < 0) ? targetDeg + 360 : targetDeg;
-
-		System.out.println("Angle to face:" + targetDeg);
 
 		return targetDeg;
 	}

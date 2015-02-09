@@ -51,6 +51,7 @@ public class RobotCommands {
 	public static void stop() {
 		System.out.println("stop");
 		RobotCommunication.getInstance().stop();
+		
 	}
 
 	public static void catchBall() {
