@@ -20,7 +20,7 @@ public class RobotCommands {
 		System.out.println("shortRotateRight");
 		rotateRight();
 		try {
-			Thread.sleep(10);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -31,7 +31,7 @@ public class RobotCommands {
 		System.out.println("shortRotateLeft");
 		rotateLeft();
 		try {
-			Thread.sleep(10);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
