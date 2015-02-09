@@ -47,7 +47,7 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 			} else {
 				isRobotFacingBall = false;
 			}
-		// if robotY > ballY then needs to face opposite direction to face ball
+		// if robotY > ballY then robot needs to face opposite direction to face ball
 		} else if (robotY>ballY){
 			if ((diffInHeadings < 180 + allowedDegreeError)
 					|| (diffInHeadings > 180 - allowedDegreeError)) {
