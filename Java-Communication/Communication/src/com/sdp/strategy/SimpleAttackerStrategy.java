@@ -36,7 +36,7 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 
 		/* case we use calculate angle over Calculate desired heading */
 		// if robotY < ballY then faces ball normally
-		if(robotY>ballY){
+		if (robotY > ballY) {
 			if ((diffInHeadings < allowedDegreeError)
 					|| (diffInHeadings > 360 - allowedDegreeError)) {
 				isRobotFacingBall = true;
@@ -47,8 +47,9 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 			} else {
 				isRobotFacingBall = false;
 			}
-		// if robotY > ballY then robot needs to face opposite direction to face ball
-		} else if (robotY<ballY){
+			// if robotY > ballY then robot needs to face opposite direction to
+			// face ball
+		} else if (robotY < ballY) {
 			if ((diffInHeadings < 180 + allowedDegreeError)
 					|| (diffInHeadings > 180 - allowedDegreeError)) {
 				isRobotFacingBall = true;
@@ -59,8 +60,8 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 			} else {
 				isRobotFacingBall = false;
 			}
-		}		
-		
+		}
+
 		if (!isRobotFacingBall) {
 			boolean shouldRotateRight = RobotPlanner.shouldRotateRight(
 					desiredAngleDeg, robotAngleDeg);
@@ -86,7 +87,8 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 		boolean canCatchBall = RobotPlanner.canCatchBall(robot, ball);
 		boolean doesOurRobotHaveBall = RobotPlanner.doesOurRobotHaveBall(robot,
 				ball);
-		if (!canCatchBall && !doesOurRobotHaveBall && isRobotFacingBall) {
+		if (!canCatchBall && !doesOurRobotHaveBall && isRobotFacingBall
+				&& SimpleWorldState.previousOperation != Operation.FORWARD) {
 			RobotCommands.goStraight();
 			SimpleWorldState.previousOperation = Operation.FORWARD;
 			return;
@@ -102,7 +104,7 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 				RobotCommands.catchBall();
 				SimpleWorldState.previousOperation = Operation.CATCH;
 			}
-		} else {
+		} else if(doesOurRobotHaveBall){
 			// 4. go to a position from which robot can score and score
 			// scoreGoal(dynWorldState, worldState);
 			RobotCommands.stop();
