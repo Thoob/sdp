@@ -16,26 +16,14 @@ public class RobotCommands {
 
 	}
 
-	public static void shortRotateRight() {
-		System.out.println("shortRotateRight");
-		rotateRight();
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		stop();
-	}
-
 	public static void shortRotateLeft() {
 		System.out.println("shortRotateLeft");
-		rotateLeft();
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		stop();
+		RobotCommunication.getInstance().move(-60, 60);
+	}
+
+	public static void shortRotateRight() {
+		System.out.println("shortRotateRight");
+		RobotCommunication.getInstance().move(60, -60);
 	}
 
 	public static void rotateRight() {
@@ -48,7 +36,7 @@ public class RobotCommands {
 		RobotCommunication.getInstance().move(70, 60);
 		// TODO fix by replacing motors!
 	}
-	
+
 	public static void goStraightBackwards() {
 		System.out.println("goStraightBackwards");
 		RobotCommunication.getInstance().move(-70, -60);
