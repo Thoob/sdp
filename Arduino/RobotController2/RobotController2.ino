@@ -169,11 +169,17 @@ void move_catch() {
   delay(450);
   motorStop(kicker);
   delay(250);
+  
   //catch
-  motorForward(3, 100);  
+  motorForward(kicker, 100);  
   delay(250);
   motorStop(kicker);
-  force_stop();
+  
+  leftpower = 0;
+  motorStop(left);
+  
+  rightpower = 0;
+  motorStop(right);
   delay(500);
 
 
@@ -185,6 +191,8 @@ void move_catch() {
 // Force stops all motors
 void force_stop(){
   Serial.println("Force stopping");
+  leftpower = 0;
+  rightpower = 0;
   motorAllStop(); 
 }
 
@@ -228,7 +236,10 @@ void move_shortrotL() {
 
   delay(time);
 
+  leftpower = 0;
   motorStop(left);
+  
+  rightpower = 0;
   motorStop(right);
 
 }
@@ -259,7 +270,10 @@ void move_shortrotR() {
 
   delay(time);
 
+  leftpower = 0;
   motorStop(left);
+  
+  rightpower = 0;
   motorStop(right);
 
 }
