@@ -144,24 +144,12 @@ public class RobotPlanner {
 		if (robotRad > Math.PI)
 			robotRad -= 2 * Math.PI;
 
-		double desiredAngleRad = robotRad - targetRad;
-		while (desiredAngleRad > Math.PI)
-			desiredAngleRad -= 2 * Math.PI;
-		while (desiredAngleRad < -Math.PI)
-			desiredAngleRad += 2 * Math.PI;
+		double targetDeg = Math.toDegrees(targetRad);
+		targetDeg = (targetDeg < 0) ? targetDeg + 360 : targetDeg;
 
-		/* Adjustments for Radians */
-		double desiredAngleDeg = Math.toDegrees(desiredAngleRad);
-		if (desiredAngleDeg < 0) {
-			desiredAngleDeg = Math.abs(desiredAngleDeg);
-		}
-		if (desiredAngleDeg > 0)
-			desiredAngleDeg = 360 - desiredAngleDeg;
+		System.out.println("Angle to face:" + targetDeg);
 
-		System.out.println("Angle to face:" + desiredAngleDeg);
-		System.out.println("In Rads :" + desiredAngleRad);
-
-		return desiredAngleDeg;
+		return targetDeg;
 	}
 
 	public static boolean shouldRotateRight(double desiredAngle,
