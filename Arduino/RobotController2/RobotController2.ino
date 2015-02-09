@@ -38,7 +38,10 @@ void setup() {
   sCmd.addCommand("RSTOP", rotate_stop);     // Stops rotation strongly
   sCmd.addCommand("KICK", move_kick);        // Runs kick script
   sCmd.addCommand("CATCH", move_catch);      // Runs catch script
- 
+
+  sCmd.addCommand("SROTL", move_shortrotL);
+  sCmd.addCommand("SROTR", move_shortrotR);
+
   //Remote Control Commands
   sCmd.addCommand("RCFORWARD", rc_forward);
   sCmd.addCommand("RCBACKWARD", rc_backward);
@@ -82,12 +85,6 @@ void run_engine() {
   int new_rightpower = atoi(arg2);
 
 
-
-  Serial.print("LSpeed is: ");
-  Serial.println(new_leftpower);
-
-  Serial.print("RSpeed is: ");
-  Serial.println(new_rightpower);
 
 
   //Stops the motors when the signal given is 0
@@ -164,23 +161,24 @@ void move_kick() {
 void move_catch() {
 
 
-    Serial.println("Catching");
-    //lift and move forward
-    motorBackward(kicker, 60);
-    motorForward(right, 70);
-    motorForward(left, 60);
-    delay(450);
-    motorStop(kicker);
-    delay(250);
-    //catch
-    motorForward(3, 100);  
-    delay(250);
-    motorStop(kicker);
-    force_stop();
-    delay(500);
+  Serial.println("Catching");
+  //lift and move forward
+  motorBackward(kicker, 60);
+  motorForward(right, 70);
+  motorForward(left, 60);
+  delay(450);
+  motorStop(kicker);
+  delay(250);
+  //catch
+  motorForward(3, 100);  
+  delay(250);
+  motorStop(kicker);
+  force_stop();
+  delay(500);
 
 
 }
+
 
 
 
@@ -195,14 +193,76 @@ void rotate_stop(){
   if(leftpower>rightpower && rotateStopped){
     motorForward(right, 100);
     motorBackward(left, 100);
-  } else if (rightpower>leftpower && rotateStopped){
+  } 
+  else if (rightpower>leftpower && rotateStopped){
     motorForward(left, 100);
     motorBackward(right, 100);
   }
   rotateStopped = false;
 }
-  
 
+//Script to rotate the robot quickly to the left for a specified time.
+void move_shortrotL() {
+
+  char *arg1;
+  char *arg2;
+  int time;
+  int power;
+
+  arg1 = sCmd.next();
+  time = atoi(arg1);
+
+  arg2 = sCmd.next();
+  power = atoi(arg2);
+
+  if (time == NULL) {
+    time = 250;
+  }
+  if (power == NULL) {
+    power = 100;
+  }
+
+
+  motorForward(right, power);
+  motorBackward(left, power);
+
+  delay(time);
+
+  motorStop(left);
+  motorStop(right);
+
+}
+
+//Script to rotate the robot quickly to the right for a specified time.
+void move_shortrotR() {
+
+  char *arg1;
+  char *arg2;
+  int time;
+  int power;
+
+  arg1 = sCmd.next();
+  time = atoi(arg1);
+
+  arg2 = sCmd.next();
+  power = atoi(arg2);
+
+  if (time == NULL) {
+    time = 250;
+  }
+  if (power == NULL) {
+    power = 100;
+  }
+
+  motorForward(left, power);
+  motorBackward(right, power);
+
+  delay(time);
+
+  motorStop(left);
+  motorStop(right);
+
+}
 
 
 //Remote Control Commands
@@ -240,6 +300,7 @@ void rc_rotateR() {
 void unrecognized(const char *command) {
   Serial.println("I'm sorry, Dave. I'm afraid I can't do that.");
 }
+
 
 
 
