@@ -36,39 +36,45 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 
 		/* case we use calculate angle over Calculate desired heading */
 		// if robotY < ballY then faces ball normally
-		if (robotY > ballY) {
-			if ((diffInHeadings < allowedDegreeError)
-					|| (diffInHeadings > 360 - allowedDegreeError)) {
-				isRobotFacingBall = true;
-			} else if ((diffInHeadings < allowedDegreeError * 2)
-					|| (diffInHeadings > 360 - allowedDegreeError * 2)) {
-				// add shortRotateRight
-				isRobotFacingBall = true;
-			} else {
-				isRobotFacingBall = false;
-			}
-			// if robotY > ballY then robot needs to face opposite direction to
-			// face ball
-		} else if (robotY < ballY) {
-			if ((diffInHeadings < 180 + allowedDegreeError)
-					|| (diffInHeadings > 180 - allowedDegreeError)) {
-				isRobotFacingBall = true;
-			} else if ((diffInHeadings < 180 + allowedDegreeError * 2)
-					|| (diffInHeadings > 180 - allowedDegreeError * 2)) {
-				// add shortRotateRight
-				isRobotFacingBall = true;
-			} else {
-				isRobotFacingBall = false;
-			}
+		if ((diffInHeadings < allowedDegreeError)
+				|| (diffInHeadings > 360 - allowedDegreeError)) {
+			isRobotFacingBall = true;
+		} else {
+			isRobotFacingBall = false;
 		}
+//		if (robotY > ballY) {
+//			if ((diffInHeadings < allowedDegreeError)
+//					|| (diffInHeadings > 360 - allowedDegreeError)) {
+//				isRobotFacingBall = true;
+//			} else if ((diffInHeadings < allowedDegreeError * 2)
+//					|| (diffInHeadings > 360 - allowedDegreeError * 2)) {
+//				// add shortRotateRight
+//				isRobotFacingBall = true;
+//			} else {
+//				isRobotFacingBall = false;
+//			}
+//			// if robotY > ballY then robot needs to face opposite direction to
+//			// face ball
+//		} else if (robotY < ballY) {
+//			if ((diffInHeadings < 180 + allowedDegreeError)
+//					|| (diffInHeadings > 180 - allowedDegreeError)) {
+//				isRobotFacingBall = true;
+//			} else if ((diffInHeadings < 180 + allowedDegreeError * 2)
+//					|| (diffInHeadings > 180 - allowedDegreeError * 2)) {
+//				// add shortRotateRight
+//				isRobotFacingBall = true;
+//			} else {
+//				isRobotFacingBall = false;
+//			}
+//		}
 
 		if (!isRobotFacingBall) {
 			boolean shouldRotateRight = RobotPlanner.shouldRotateRight(
 					desiredAngleDeg, robotAngleDeg);
-			if (shouldRotateRight) {
+			if (shouldRotateRight&&SimpleWorldState.previousOperation != Operation.RIGHT) {
 				RobotCommands.rotateRight();
 				SimpleWorldState.previousOperation = Operation.RIGHT;
-			} else {
+			} else if(!shouldRotateRight&&SimpleWorldState.previousOperation != Operation.LEFT) {
 				RobotCommands.rotateLeft();
 				SimpleWorldState.previousOperation = Operation.LEFT;
 			}
@@ -78,39 +84,39 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 			// stopping rotation but not other operations
 			if (SimpleWorldState.previousOperation == Operation.RIGHT
 					|| SimpleWorldState.previousOperation == Operation.LEFT) {
-				RobotCommands.rotateStop();
+				RobotCommands.stop();
 				SimpleWorldState.previousOperation = Operation.NONE;
 			}
 		}
 
 		// 2. go straight until you can catch the ball
-		boolean canCatchBall = RobotPlanner.canCatchBall(robot, ball);
-		boolean doesOurRobotHaveBall = RobotPlanner.doesOurRobotHaveBall(robot,
-				ball);
-		if (!canCatchBall && !doesOurRobotHaveBall && isRobotFacingBall
-				&& SimpleWorldState.previousOperation != Operation.FORWARD) {
-			RobotCommands.goStraight();
-			SimpleWorldState.previousOperation = Operation.FORWARD;
-			return;
-		} else if (!doesOurRobotHaveBall && isRobotFacingBall) {
-			// 3. catch the ball
-			if (SimpleWorldState.previousOperation != Operation.NONE
-					&& SimpleWorldState.previousOperation != Operation.CATCH) {
-				RobotCommands.stop();
-				SimpleWorldState.previousOperation = Operation.NONE;
-			}
-			// avoid multiple catch
-			if (SimpleWorldState.previousOperation != Operation.CATCH) {
-				RobotCommands.catchBall();
-				SimpleWorldState.previousOperation = Operation.CATCH;
-			}
-		} else if(doesOurRobotHaveBall){
-			// 4. go to a position from which robot can score and score
-			// scoreGoal(dynWorldState, worldState);
-			RobotCommands.stop();
-			SimpleWorldState.previousOperation = Operation.NONE;
-			System.out.println("We should have catched the ball");
-		}
+//		boolean canCatchBall = RobotPlanner.canCatchBall(robot, ball);
+//		boolean doesOurRobotHaveBall = RobotPlanner.doesOurRobotHaveBall(robot,
+//				ball);
+//		if (!canCatchBall && !doesOurRobotHaveBall && isRobotFacingBall
+//				&& SimpleWorldState.previousOperation != Operation.FORWARD) {
+//			RobotCommands.goStraight();
+//			SimpleWorldState.previousOperation = Operation.FORWARD;
+//			return;
+//		} else if (!doesOurRobotHaveBall && isRobotFacingBall) {
+//			// 3. catch the ball
+//			if (SimpleWorldState.previousOperation != Operation.NONE
+//					&& SimpleWorldState.previousOperation != Operation.CATCH) {
+//				RobotCommands.stop();
+//				SimpleWorldState.previousOperation = Operation.NONE;
+//			}
+//			// avoid multiple catch
+//			if (SimpleWorldState.previousOperation != Operation.CATCH) {
+//				RobotCommands.catchBall();
+//				SimpleWorldState.previousOperation = Operation.CATCH;
+//			}
+//		} else if(doesOurRobotHaveBall){
+//			// 4. go to a position from which robot can score and score
+//			// scoreGoal(dynWorldState, worldState);
+//			RobotCommands.stop();
+//			SimpleWorldState.previousOperation = Operation.NONE;
+//			System.out.println("We should have catched the ball");
+//		}
 	}
 
 	/**
