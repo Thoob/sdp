@@ -110,7 +110,7 @@ public class RobotPlanner {
 
 		double deltaTotal = Math.abs(deltaX) + Math.abs(deltaY);
 
-		if (deltaTotal < 120) {// TODO test and discuss precision needed
+		if (deltaTotal < 90) {// TODO test and discuss precision needed
 			return true;
 		} else {
 			return false;
