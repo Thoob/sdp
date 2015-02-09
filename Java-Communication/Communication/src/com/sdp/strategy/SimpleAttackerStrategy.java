@@ -35,17 +35,32 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 		double diffInHeadings = Math.abs(robotAngleDeg - desiredAngleDeg);
 
 		/* case we use calculate angle over Calculate desired heading */
-		if ((diffInHeadings < allowedDegreeError)
-				|| (diffInHeadings > 360 - allowedDegreeError)) {
-			isRobotFacingBall = true;
-		} else if ((diffInHeadings < allowedDegreeError * 2)
-				|| (diffInHeadings > 360 - allowedDegreeError * 2)) {
-			// add shortRotateRight
-			isRobotFacingBall = true;
-		} else {
-			isRobotFacingBall = false;
-		}
-
+		// if robotY < ballY then faces ball normally
+		if(robotY<ballY){
+			if ((diffInHeadings < allowedDegreeError)
+					|| (diffInHeadings > 360 - allowedDegreeError)) {
+				isRobotFacingBall = true;
+			} else if ((diffInHeadings < allowedDegreeError * 2)
+					|| (diffInHeadings > 360 - allowedDegreeError * 2)) {
+				// add shortRotateRight
+				isRobotFacingBall = true;
+			} else {
+				isRobotFacingBall = false;
+			}
+		// if robotY > ballY then needs to face opposite direction to face ball
+		} else if (robotY>ballY){
+			if ((diffInHeadings < 180 + allowedDegreeError)
+					|| (diffInHeadings > 180 - allowedDegreeError)) {
+				isRobotFacingBall = true;
+			} else if ((diffInHeadings < 180 + allowedDegreeError * 2)
+					|| (diffInHeadings > 180 - allowedDegreeError * 2)) {
+				// add shortRotateRight
+				isRobotFacingBall = true;
+			} else {
+				isRobotFacingBall = false;
+			}
+		}		
+		
 		if (!isRobotFacingBall) {
 			boolean shouldRotateRight = RobotPlanner.shouldRotateRight(
 					desiredAngleDeg, robotAngleDeg);
