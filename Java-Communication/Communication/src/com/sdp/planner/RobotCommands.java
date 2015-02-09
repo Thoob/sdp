@@ -16,6 +16,11 @@ public class RobotCommands {
 
 	}
 
+	public static void kick() {
+		System.out.println("kick");
+		RobotCommunication.getInstance().sendKick(400);
+	}
+
 	public static void shortRotateLeft() {
 		System.out.println("shortRotateLeft");
 		RobotCommunication.getInstance().shortRotateLeft();
@@ -51,7 +56,7 @@ public class RobotCommands {
 	public static void stop() {
 		System.out.println("stop");
 		RobotCommunication.getInstance().stop();
-		
+
 	}
 
 	public static void catchBall() {

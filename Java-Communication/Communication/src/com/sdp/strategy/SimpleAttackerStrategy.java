@@ -19,22 +19,44 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 			WorldState worldState) {
 		Robot robot = dynWorldState.getAttacker();
 		Ball ball = dynWorldState.getBall();
+		/*
+		 * // FOR USE WITH CALULATE ANGLE double robotX =
+		 * robot.getCenter().getX(); double robotY = robot.getCenter().getY();
+		 * double robotDir = robot.getHeading(); double ballX =
+		 * ball.getPoint().getX(); double ballY = ball.getPoint().getY();
+		 * 
+		 * // 1. change direction so that robot looks towards the ball double
+		 * desiredAngleDeg = RobotPlanner.desiredAngle(robotX, robotY, robotDir,
+		 * ballX, ballY); double robotAngleDeg = Math.toDegrees(robotDir);
+		 * 
+		 * // case we use calculate angle over Calculate desired heading
+		 * rotate(robotAngleDeg, desiredAngleDeg);
+		 * 
+		 * // 2. go straight until you can catch the ball boolean canCatchBall =
+		 * RobotPlanner.canCatchBall(robot, ball); boolean doesOurRobotHaveBall
+		 * = RobotPlanner.doesOurRobotHaveBall(robot, ball); if (!canCatchBall
+		 * && !doesOurRobotHaveBall && isRobotFacingBall) {
+		 * RobotCommands.goStraight(); SimpleWorldState.previousOperation =
+		 * Operation.FORWARD; return; } else if (canCatchBall &&
+		 * !doesOurRobotHaveBall && isRobotFacingBall) { // 3. catch the ball if
+		 * (SimpleWorldState.previousOperation != Operation.NONE &&
+		 * SimpleWorldState.previousOperation != Operation.CATCH) {
+		 * RobotCommands.stop(); SimpleWorldState.previousOperation =
+		 * Operation.NONE; } // avoid multiple catch if
+		 * (SimpleWorldState.previousOperation != Operation.CATCH) {
+		 * RobotCommands.catchBall(); SimpleWorldState.previousOperation =
+		 * Operation.CATCH; } } else if (doesOurRobotHaveBall) { // 4. go to a
+		 * position from which robot can score and score //
+		 * RobotCommands.stop(); SimpleWorldState.previousOperation =
+		 * Operation.NONE;
+		 * System.out.println("We should have catched the ball"); }
+		 */
+		scoreAGoal(dynWorldState, worldState);
+	}
 
-		// FOR USE WITH CALULATE ANGLE
-		double robotX = robot.getCenter().getX();
-		double robotY = robot.getCenter().getY();
-		double robotDir = robot.getHeading();
-		double ballX = ball.getPoint().getX();
-		double ballY = ball.getPoint().getY();
-
-		// 1. change direction so that robot looks towards the ball
-		double desiredAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
-				robotDir, ballX, ballY);
-		double robotAngleDeg = Math.toDegrees(robotDir);
-
+	private void rotateToDesiredAngle(double robotAngleDeg,
+			double desiredAngleDeg) {
 		double diffInHeadings = Math.abs(robotAngleDeg - desiredAngleDeg);
-
-		// case we use calculate angle over Calculate desired heading
 		if ((diffInHeadings < allowedDegreeError)
 				|| (diffInHeadings > 360 - allowedDegreeError)) {
 			isRobotFacingBall = true;
@@ -65,7 +87,6 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 					SimpleWorldState.previousOperation = Operation.SHORT_LEFT;
 				}
 				return;
-
 			} else {
 				isRobotFacingBall = false;
 
@@ -84,34 +105,6 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 			}
 		}
 
-		// 2. go straight until you can catch the ball
-		boolean canCatchBall = RobotPlanner.canCatchBall(robot, ball);
-		boolean doesOurRobotHaveBall = RobotPlanner.doesOurRobotHaveBall(robot,
-				ball);
-		if (!canCatchBall && !doesOurRobotHaveBall && isRobotFacingBall) {
-			RobotCommands.goStraight();
-			SimpleWorldState.previousOperation = Operation.FORWARD;
-			return;
-		} else if (canCatchBall && !doesOurRobotHaveBall && isRobotFacingBall) {
-			// 3. catch the ball
-			if (SimpleWorldState.previousOperation != Operation.NONE
-					&& SimpleWorldState.previousOperation != Operation.CATCH) {
-				RobotCommands.stop();
-				SimpleWorldState.previousOperation = Operation.NONE;
-			}
-			// avoid multiple catch
-			if (SimpleWorldState.previousOperation != Operation.CATCH) {
-				RobotCommands.catchBall();
-				SimpleWorldState.previousOperation = Operation.CATCH;
-			}
-		} else if (doesOurRobotHaveBall) {
-			// 4. go to a position from which robot can score and score
-			//
-			RobotCommands.stop();
-			SimpleWorldState.previousOperation = Operation.NONE;
-			System.out.println("We should have catched the ball");
-		}
-		scoreAGoal(dynWorldState, worldState);
 	}
 
 	private void scoreAGoal(DynamicWorldState dynWorldState,
@@ -124,17 +117,17 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 		double robotX = robot.getCenter().getX();
 		double robotY = robot.getCenter().getY();
 		double robotDir = robot.getHeading();
-
+		double robotAngleDeg = Math.toDegrees(robotDir);
 		double goalX = SimpleGeneralStrategy.rightGoalX;
 		double goalY = SimpleGeneralStrategy.rightGoalY;
 
 		System.out.println("goal " + goalX + " " + goalY);
 		System.out.println("robot " + robotX + " " + robotY);
 		System.out.println("ball " + ballX + " " + ballY);
-		
+
 		double desiredAngleDegb = RobotPlanner.desiredAngle(robotX, robotY,
 				robotDir, ballX, ballY);
-		
+
 		System.out.println("desiredAngleBall " + desiredAngleDegb);
 
 		double desiredAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
@@ -142,6 +135,13 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 
 		System.out.println("desiredAngleGoal " + desiredAngleDeg);
 
+		rotateToDesiredAngle(robotAngleDeg, desiredAngleDeg);
+
+		if (SimpleWorldState.previousOperation != Operation.KICK
+				&& isRobotFacingBall) {
+			RobotCommands.kick();
+			//SimpleWorldState.previousOperation = Operation.KICK;
+		}
 	}
 
 	/**

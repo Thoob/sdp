@@ -53,7 +53,5 @@ public class SimpleGeneralStrategy {
 			ourGoalEdges[1] = worldState.rightGoal[1];
 			ourGoalEdges[2] = PitchConstants.getPitchOutline()[3].getY();
 		}
-
-		System.out.println("goal " + goalX + " " + goalY[1]);
 	}
 }

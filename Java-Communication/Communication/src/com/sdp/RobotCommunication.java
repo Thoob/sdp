@@ -26,7 +26,6 @@ public class RobotCommunication {
 
 	public void sendKick(int time) {
 		String command = String.format("KICK %d 100\n", time);
-		;
 		Communication.getInstance().sendCommandViaPort(command);
 	}
 
