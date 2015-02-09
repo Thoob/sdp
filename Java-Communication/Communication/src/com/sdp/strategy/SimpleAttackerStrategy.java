@@ -36,7 +36,7 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 
 		/* case we use calculate angle over Calculate desired heading */
 		// if robotY < ballY then faces ball normally
-		if(robotY<ballY){
+		if(robotY>ballY){
 			if ((diffInHeadings < allowedDegreeError)
 					|| (diffInHeadings > 360 - allowedDegreeError)) {
 				isRobotFacingBall = true;
@@ -48,7 +48,7 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 				isRobotFacingBall = false;
 			}
 		// if robotY > ballY then robot needs to face opposite direction to face ball
-		} else if (robotY>ballY){
+		} else if (robotY<ballY){
 			if ((diffInHeadings < 180 + allowedDegreeError)
 					|| (diffInHeadings > 180 - allowedDegreeError)) {
 				isRobotFacingBall = true;
