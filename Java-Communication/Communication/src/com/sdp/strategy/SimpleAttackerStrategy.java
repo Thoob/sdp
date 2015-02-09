@@ -26,7 +26,7 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 		double robotDir = robot.getHeading();
 		double ballX = ball.getPoint().getX();
 		double ballY = ball.getPoint().getY();
-/*
+
 		// 1. change direction so that robot looks towards the ball
 		double desiredAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
 				robotDir, ballX, ballY);
@@ -111,7 +111,6 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 			SimpleWorldState.previousOperation = Operation.NONE;
 			System.out.println("We should have catched the ball");
 		}
-*/
 		scoreAGoal(dynWorldState, worldState);
 	}
 
