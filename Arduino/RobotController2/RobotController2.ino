@@ -99,7 +99,7 @@ void run_engine() {
   //Checks if the given speed is less than the minimum speed. If it is, 
   //it sets the given power to the minimum power. Left motor.
   if ((new_leftpower != 0) && (abs(new_leftpower) < minpower)) {
-    new_leftpower = minpower * (new_leftpower/abs(new_leftpower));
+    new_leftpower = 1.4*minpower * (new_leftpower/abs(new_leftpower));
   }
 
   if ((new_rightpower != 0) && (abs(new_rightpower) < minpower)) {
@@ -112,10 +112,40 @@ void run_engine() {
     leftpower = new_leftpower;
     if(leftpower < 0){
       Serial.println(leftpower);
-      motorBackward(left, abs(leftpower));
+      leftpower = abs(leftpower);
+      
+      if(leftpower >= 30 && leftpower < 70){
+          motorBackward(left, 1.4*leftpower);
+      }
+      else if(leftpower >= 70 && leftpower < 80){
+          motorBackward(left, 1.29*leftpower);
+      }
+      else if(leftpower >= 80 && leftpower < 90){
+          motorBackward(left, 1.19*leftpower);
+      }
+      else if(leftpower >= 90 && leftpower < 100){
+          motorBackward(left, 1.08*leftpower);
+      }
+      else{
+          motorBackward(left, leftpower);
+      }
     } 
     else {
-      motorForward(left, leftpower);
+      if(leftpower >= 30 && leftpower < 70){
+          motorForward(left, 1.4*leftpower);
+      }
+      else if(leftpower >= 70 && leftpower < 80){
+          motorForward(left, 1.29*leftpower);
+      }
+      else if(leftpower >= 80 && leftpower < 90){
+          motorForward(left, 1.19*leftpower);
+      }
+      else if(leftpower >= 90 && leftpower < 100){
+          motorForward(left, 1.08*leftpower);
+      }
+      else{
+          motorForward(left, leftpower);
+      }
     }
   }
 
