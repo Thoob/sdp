@@ -18,12 +18,12 @@ public class RobotCommands {
 
 	public static void shortRotateLeft() {
 		System.out.println("shortRotateLeft");
-		RobotCommunication.getInstance().move(-60, 60);
+		RobotCommunication.getInstance().shortRotateLeft();
 	}
 
 	public static void shortRotateRight() {
 		System.out.println("shortRotateRight");
-		RobotCommunication.getInstance().move(60, -60);
+		RobotCommunication.getInstance().shortRotateRight();
 	}
 
 	public static void rotateRight() {

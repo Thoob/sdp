@@ -25,7 +25,8 @@ public class RobotCommunication {
 	}
 
 	public void sendKick(int time) {
-		String command = String.format("KICK %d 100\n", time);;
+		String command = String.format("KICK %d 100\n", time);
+		;
 		Communication.getInstance().sendCommandViaPort(command);
 	}
 
@@ -77,4 +78,13 @@ public class RobotCommunication {
 		Communication.getInstance().sendCommandViaPort(command);
 	}
 
+	public void shortRotateLeft() {
+		String command = "SROTL\n";
+		Communication.getInstance().sendCommandViaPort(command);
+	}
+
+	public void shortRotateRight() {
+		String command = "SROTR\n";
+		Communication.getInstance().sendCommandViaPort(command);
+	}
 }
