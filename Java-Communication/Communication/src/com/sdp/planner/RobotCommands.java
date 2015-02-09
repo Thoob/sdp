@@ -28,24 +28,24 @@ public class RobotCommands {
 
 	public static void rotateRight() {
 		System.out.println("rotateRight");
-		RobotCommunication.getInstance().move(60, -60);
+		RobotCommunication.getInstance().move(40, -40);
 	}
 
 	public static void goStraight() {
 		System.out.println("goStraight");
-		RobotCommunication.getInstance().move(70, 60);
+		RobotCommunication.getInstance().move(60, 50);
 		// TODO fix by replacing motors!
 	}
 
 	public static void goStraightBackwards() {
 		System.out.println("goStraightBackwards");
-		RobotCommunication.getInstance().move(-70, -60);
+		RobotCommunication.getInstance().move(-60, -50);
 		// TODO fix by replacing motors!
 	}
 
 	public static void rotateLeft() {
 		System.out.println("rotateLeft");
-		RobotCommunication.getInstance().move(-60, 60);
+		RobotCommunication.getInstance().move(-40, 40);
 	}
 
 	public static void stop() {

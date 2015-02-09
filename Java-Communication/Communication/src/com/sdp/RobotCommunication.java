@@ -36,7 +36,7 @@ public class RobotCommunication {
 	}
 
 	public void stop() {
-		String command = "FSTOP\n";
+		String command = "MOVE 0 0\n";
 		Communication.getInstance().sendCommandViaPort(command);
 	}
 
@@ -79,12 +79,12 @@ public class RobotCommunication {
 	}
 
 	public void shortRotateLeft() {
-		String command = "SROTL\n";
+		String command = "SROTL 200 40\n";
 		Communication.getInstance().sendCommandViaPort(command);
 	}
 
 	public void shortRotateRight() {
-		String command = "SROTR\n";
+		String command = "SROTR 200 40\n";
 		Communication.getInstance().sendCommandViaPort(command);
 	}
 }
