@@ -12,8 +12,7 @@ import com.sdp.world.WorldState;
 public class SimpleAttackerStrategy extends GeneralStrategy {
 	private final int allowedDegreeError = 30;
 	private boolean isRobotFacingBall = false;
-	private boolean isRobotFacingGoal = false;
-
+	
 	public void sendWorldState(DynamicWorldState dynWorldState,
 			WorldState worldState) {
 		// Initialise robot and ball objects
@@ -66,7 +65,7 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 
 		// 4 - Face goal and kick ball (hopefully into the goal!)
 		if (RobotPlanner.doesOurRobotHaveBall(robot, ball)) {
-			scoreAGoal(dynWorldState, worldState);
+			scoreGoal(dynWorldState, worldState);
 			System.out.println("Scoring goal!");
 		}
 	}
@@ -122,10 +121,9 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 				return;
 			}
 		}
-
 	}
 
-	private void scoreAGoal(DynamicWorldState dynWorldState,
+	private void scoreGoal(DynamicWorldState dynWorldState,
 			WorldState worldState) {
 		// turn towards the goal
 		Ball ball = dynWorldState.getBall();

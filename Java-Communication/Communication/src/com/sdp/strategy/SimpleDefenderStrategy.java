@@ -45,24 +45,23 @@ public class SimpleDefenderStrategy extends GeneralStrategy {
 		// 2. Predict ball y coordinate at near goal x coordinate
 		float slope = Calculations.getSlopeOfLine(ballPos, predictedPos);
 
-		
-		 // Boolean variable to ensure a prediction exists (as default is (0,0)
-		 // this leads a legitimate yet incorrect result
-		boolean predictionIsGenerated = ballPositionHistory.size() >
-			framesForward;
-			
-		boolean NotShaky = false;
-		
-		if (predictionIsGenerated){
-			double crosshairThreshX =  Math.abs(ballPos.getX() - predictedPos.getX());
-			double crosshairThreshY = Math.abs(ballPos.getY() - predictedPos.getY());
-			if(crosshairThreshX > 2 || crosshairThreshY > 2){
-				NotShaky = true;
+		// Boolean variable to ensure a prediction exists (as default is (0,0)
+		// this leads a legitimate yet incorrect result
+		boolean predictionIsGenerated = ballPositionHistory.size() > framesForward;
+
+		boolean notShaky = false;
+
+		if (predictionIsGenerated) {
+			double crosshairThreshX = Math.abs(ballPos.getX()
+					- predictedPos.getX());
+			double crosshairThreshY = Math.abs(ballPos.getY()
+					- predictedPos.getY());
+			if (crosshairThreshX > 2 || crosshairThreshY > 2) {
+				notShaky = true;
 			}
 		}
-			
 
-		if (!Float.isInfinite(slope) && NotShaky) {
+		if (!Float.isInfinite(slope) && notShaky) {
 			System.out.println("BALL IS MOVING");
 			float collisionX = (float) robot.getCenter().getX();
 			float collisionY = slope * collisionX;
@@ -84,7 +83,7 @@ public class SimpleDefenderStrategy extends GeneralStrategy {
 				RobotCommands.stop();
 			}
 			// 3. Turn (if necessary) and go to this position
-		} else if(SimpleWorldState.previousOperation != Operation.NONE) {
+		} else if (SimpleWorldState.previousOperation != Operation.NONE) {
 			RobotCommands.stop();
 			SimpleWorldState.previousOperation = Operation.NONE;
 		}
@@ -99,7 +98,4 @@ public class SimpleDefenderStrategy extends GeneralStrategy {
 		return collisionY > robotY
 				&& robotY > SimpleGeneralStrategy.leftGoalBotY;
 	}
-
-	
-	
 }
