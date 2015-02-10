@@ -45,8 +45,7 @@ public class Oracle {
 				//check for boundary violation
 				boolean boundaryCheck = false;
 				
-				if(boundaryCheck){
-					
+				if(boundaryCheck){					
 					//TOP violation
 					if(prediction.getY() > boundaryTop)
 						prediction = Calculations.calculateBounceCoordinate(prediction, CorrectionType.TOP_OR_BOTTOM, boundaryTop);

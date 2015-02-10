@@ -43,7 +43,7 @@ public class SimpleDefenderStrategy extends GeneralStrategy {
 		// 2. Predict ball y coordinate at near goal x coordinate
 		float slope = Calculations.getSlopeOfLine(ballPos, predictedPos);
 
-		if (!Float.isInfinite(slope) && Math.abs(slope) < 5) {
+		if (!Float.isInfinite(slope) && isBallMoving(slope)) {
 			float collisionX = (float) robot.getCenter().getX();
 			float collisionY = slope * collisionX;
 
@@ -52,11 +52,11 @@ public class SimpleDefenderStrategy extends GeneralStrategy {
 					+ collisionY);
 			double robotX = robot.getCenter().getX();
 			double robotY = robot.getCenter().getY();
-			System.out.println("Robot coordinates " + robotX + " "
-					+ robotY);
+			System.out.println("Robot coordinates " + robotX + " " + robotY);
 
-			if (Math.abs(collisionY - robotY) > allowedDistError) {
-				RobotCommands.goStraight();
+			if (Math.abs(collisionY - robotY) > allowedDistError
+					&& robotY < SimpleGeneralStrategy.leftGoalBotY) {
+				RobotCommands.goStraightFast();
 			} else {
 				RobotCommands.stop();
 			}
@@ -64,6 +64,11 @@ public class SimpleDefenderStrategy extends GeneralStrategy {
 			// 3. Turn (if necessary) and go to this position
 		} else {
 			// stay in current position
+			RobotCommands.stop();
 		}
+	}
+
+	private boolean isBallMoving(float slope) {
+		return slope < 5;
 	}
 }

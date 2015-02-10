@@ -41,6 +41,19 @@ public class RobotCommands {
 		RobotCommunication.getInstance().move(50, 50);
 		// TODO fix by replacing motors!
 	}
+	
+	public static void goStraightFast() {
+		System.out.println("goStraightFast");
+		RobotCommunication.getInstance().move(100, 100);
+		// TODO fix by replacing motors!
+	}
+	
+	
+	public static void goStraightBackwardsFast() {
+		System.out.println("goStraightFast");
+		RobotCommunication.getInstance().move(-100, -100);
+		// TODO fix by replacing motors!
+	}
 
 	public static void goStraightBackwards() {
 		System.out.println("goStraightBackwards");
