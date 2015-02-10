@@ -19,6 +19,7 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 
 	public void sendWorldState(DynamicWorldState dynWorldState,
 			WorldState worldState) {
+		// Initialise robot and ball objects
 		Robot robot = dynWorldState.getAttacker();
 		Ball ball = dynWorldState.getBall();
 		
@@ -28,13 +29,16 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 		double robotY = robot.getCenter().getY();
 		double robotDir = robot.getHeading();
 		double robotAngleDeg = Math.toDegrees(robotDir);
+		// Ball position (x,y)
+		double ballX = ball.getPoint().getX();
+		double ballY = ball.getPoint().getY();
 		// Desired angle to face ball
 		double ballAngleDeg = RobotPlanner.desiredAngle(robotX, robotY, robotDir, ballX, ballY);
 		double ballDiffInHeadings = Math.abs(robotAngleDeg - ballAngleDeg);
 		// Robot is facing the ball if within this angle in degrees of the ball
 		isRobotFacingBall = ballDiffInHeadings < allowedDegreeError * 2;
 		// Desired angle to face goal (goalX and centre of goalY)
-		//double goalAngleDeg = RobotPlanner.desiredAngle(robotX, robotY, robotDir, goalX, goalY[0]);
+//		double goalAngleDeg = RobotPlanner.desiredAngle(robotX, robotY, robotDir, goalX, goalY[1]);
 		
 		
 		// 1 - Rotate to face ball
@@ -47,12 +51,17 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 		if(!RobotPlanner.doesOurRobotHaveBall(robot, ball) && isRobotFacingBall && !RobotPlanner.canCatchBall(robot, ball)){
 			//TODO needs to only happen when the ball is in our zone
 			RobotCommands.goStraight();
+			SimpleWorldState.previousOperation = Operation.FORWARD;
 			System.out.println("Moving towards ball.");
 		}
 		
 		// 3 - Catch ball
-		if(!RobotPlanner.doesOurRobotHaveBall(robot, ball) && isRobotFacingBall && RobotPlanner.canCatchBall(robot, ball)){
+		if(!RobotPlanner.doesOurRobotHaveBall(robot, ball) 
+				&& isRobotFacingBall 
+				&& RobotPlanner.canCatchBall(robot, ball)
+				&& !(SimpleWorldState.previousOperation == Operation.CATCH)){
 			RobotCommands.catchBall();
+			SimpleWorldState.previousOperation = Operation.CATCH;
 			System.out.println("Catching ball.");
 		}
 		
