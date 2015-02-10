@@ -1,6 +1,7 @@
 package com.sdp.strategy;
 
 import java.awt.geom.Point2D;
+import java.beans.DesignMode;
 
 import com.sdp.planner.RobotCommands;
 import com.sdp.planner.RobotPlanner;
@@ -12,51 +13,66 @@ import com.sdp.world.SimpleWorldState.Operation;
 import com.sdp.world.WorldState;
 
 public class SimpleAttackerStrategy extends GeneralStrategy {
-	private boolean isRobotFacingBall = true;
 	private final int allowedDegreeError = 30;
+	private boolean isRobotFacingBall = false;
+	private boolean isRobotFacingGoal = false;
 
 	public void sendWorldState(DynamicWorldState dynWorldState,
 			WorldState worldState) {
 		Robot robot = dynWorldState.getAttacker();
 		Ball ball = dynWorldState.getBall();
-		/*
-		 * // FOR USE WITH CALULATE ANGLE double robotX =
-		 * robot.getCenter().getX(); double robotY = robot.getCenter().getY();
-		 * double robotDir = robot.getHeading(); double ballX =
-		 * ball.getPoint().getX(); double ballY = ball.getPoint().getY();
-		 * 
-		 * // 1. change direction so that robot looks towards the ball double
-		 * desiredAngleDeg = RobotPlanner.desiredAngle(robotX, robotY, robotDir,
-		 * ballX, ballY); double robotAngleDeg = Math.toDegrees(robotDir);
-		 * 
-		 * // case we use calculate angle over Calculate desired heading
-		 * rotate(robotAngleDeg, desiredAngleDeg);
-		 * 
-		 * // 2. go straight until you can catch the ball boolean canCatchBall =
-		 * RobotPlanner.canCatchBall(robot, ball); boolean doesOurRobotHaveBall
-		 * = RobotPlanner.doesOurRobotHaveBall(robot, ball); if (!canCatchBall
-		 * && !doesOurRobotHaveBall && isRobotFacingBall) {
-		 * RobotCommands.goStraight(); SimpleWorldState.previousOperation =
-		 * Operation.FORWARD; return; } else if (canCatchBall &&
-		 * !doesOurRobotHaveBall && isRobotFacingBall) { // 3. catch the ball if
-		 * (SimpleWorldState.previousOperation != Operation.NONE &&
-		 * SimpleWorldState.previousOperation != Operation.CATCH) {
-		 * RobotCommands.stop(); SimpleWorldState.previousOperation =
-		 * Operation.NONE; } // avoid multiple catch if
-		 * (SimpleWorldState.previousOperation != Operation.CATCH) {
-		 * RobotCommands.catchBall(); SimpleWorldState.previousOperation =
-		 * Operation.CATCH; } } else if (doesOurRobotHaveBall) { // 4. go to a
-		 * position from which robot can score and score //
-		 * RobotCommands.stop(); SimpleWorldState.previousOperation =
-		 * Operation.NONE;
-		 * System.out.println("We should have catched the ball"); }
-		 */
-		scoreAGoal(dynWorldState, worldState);
+		
+		// Values that we need to calculate
+		// Robot position (x,y) and heading in degrees
+		double robotX = robot.getCenter().getX();
+		double robotY = robot.getCenter().getY();
+		double robotDir = robot.getHeading();
+		double robotAngleDeg = Math.toDegrees(robotDir);
+		// Desired angle to face ball
+		double ballAngleDeg = RobotPlanner.desiredAngle(robotX, robotY, robotDir, ballX, ballY);
+		double ballDiffInHeadings = Math.abs(robotAngleDeg - ballAngleDeg);
+		// Robot is facing the ball if within this angle in degrees of the ball
+		isRobotFacingBall = ballDiffInHeadings < allowedDegreeError * 2;
+		// Desired angle to face goal (goalX and centre of goalY)
+		//double goalAngleDeg = RobotPlanner.desiredAngle(robotX, robotY, robotDir, goalX, goalY[0]);
+		
+		
+		// 1 - Rotate to face ball
+		if(!RobotPlanner.doesOurRobotHaveBall(robot, ball) && !isRobotFacingBall){
+			rotateToDesiredAngle(robotAngleDeg, ballAngleDeg);
+			System.out.println("Rotating to face ball.");
+		}
+		
+		// 2 - Go towards ball
+		if(!RobotPlanner.doesOurRobotHaveBall(robot, ball) && isRobotFacingBall && !RobotPlanner.canCatchBall(robot, ball)){
+			//TODO needs to only happen when the ball is in our zone
+			RobotCommands.goStraight();
+			System.out.println("Moving towards ball.");
+		}
+		
+		// 3 - Catch ball
+		if(!RobotPlanner.doesOurRobotHaveBall(robot, ball) && isRobotFacingBall && RobotPlanner.canCatchBall(robot, ball)){
+			RobotCommands.catchBall();
+			System.out.println("Catching ball.");
+		}
+		
+		// 4 - Rotate to face goal
+//		if(RobotPlanner.doesOurRobotHaveBall(robot, ball) && !isRobotFacingGoal){
+//			rotateToDesiredAngle(robotAngleDeg, goalAngleDeg);
+//		}
+		
+		// 5 - Kick ball (hopefully into the goal!)
+		if(RobotPlanner.doesOurRobotHaveBall(robot, ball) && isRobotFacingGoal){
+			//RobotCommands.kick();
+			scoreGoal(dynWorldState, worldState);
+			System.out.println("Scoring goal!");
+		}
 	}
 
 	private void rotateToDesiredAngle(double robotAngleDeg,
 			double desiredAngleDeg) {
 		double diffInHeadings = Math.abs(robotAngleDeg - desiredAngleDeg);
+		System.out.println("Difference in headings: " + diffInHeadings);
 		if ((diffInHeadings < allowedDegreeError)
 				|| (diffInHeadings > 360 - allowedDegreeError)) {
 			isRobotFacingBall = true;
@@ -120,6 +136,7 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 		double robotAngleDeg = Math.toDegrees(robotDir);
 		double goalX = SimpleGeneralStrategy.rightGoalX;
 		double goalY = SimpleGeneralStrategy.rightGoalY;
+		boolean robotHasBall = RobotPlanner.doesOurRobotHaveBall(robot, ball);
 
 		System.out.println("goal " + goalX + " " + goalY);
 		System.out.println("robot " + robotX + " " + robotY);
@@ -138,7 +155,7 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 		rotateToDesiredAngle(robotAngleDeg, desiredAngleDeg);
 
 		if (SimpleWorldState.previousOperation != Operation.KICK
-				&& isRobotFacingBall) {
+				&& robotHasBall) { //change to doesRobotHaveBall
 			RobotCommands.kick();
 			//SimpleWorldState.previousOperation = Operation.KICK;
 		}

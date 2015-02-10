@@ -38,7 +38,7 @@ public class RobotCommands {
 
 	public static void goStraight() {
 		System.out.println("goStraight");
-		RobotCommunication.getInstance().move(60, 50);
+		RobotCommunication.getInstance().move(50, 50);
 		// TODO fix by replacing motors!
 	}
 
