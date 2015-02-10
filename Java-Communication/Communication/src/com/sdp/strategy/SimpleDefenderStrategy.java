@@ -34,25 +34,45 @@ public class SimpleDefenderStrategy extends GeneralStrategy {
 		Point2 predictedPos = this.predictor.predictState(ballPositionHistory,
 				framesForward);
 
-		System.out.println("Current ball coordinates " + ballPos.getX() + " "
-				+ ballPos.getY());
+		//System.out.println("Current ball coordinates " + ballPos.getX() + " "
+		//		+ ballPos.getY());
 
-		System.out.println("Predicted ball coordinates " + predictedPos.getX()
-				+ " " + predictedPos.getY());
+		//System.out.println("Predicted ball coordinates " + predictedPos.getX()
+		//		+ " " + predictedPos.getY());
 
 		// 2. Predict ball y coordinate at near goal x coordinate
 		float slope = Calculations.getSlopeOfLine(ballPos, predictedPos);
 
-		if (!Float.isInfinite(slope) && isBallMoving(slope)) {
+		
+		/* Boolean variable to ensure a prediction exists (as default is (0,0)
+		 * this leads a legitimate yet incorrect result
+		 */
+
+		boolean predictionIsGenerated = ballPositionHistory.size() >
+			framesForward;
+			
+		boolean NotShaky = false;
+		
+		if (predictionIsGenerated){
+			double crosshairThreshX =  Math.abs(ballPos.getX() - predictedPos.getX());
+			double crosshairThreshY = Math.abs(ballPos.getY() - predictedPos.getY());
+			if(crosshairThreshX > 2 || crosshairThreshY > 2){
+				NotShaky = true;
+			}
+		}
+			
+
+		if (!Float.isInfinite(slope) && NotShaky) {
+			System.out.println("BALL IS MOVING");
 			float collisionX = (float) robot.getCenter().getX();
 			float collisionY = slope * collisionX;
 
-			System.out.println("Slope " + slope);
-			System.out.println("Collision coordinates " + collisionX + " "
-					+ collisionY);
+			//System.out.println("Slope " + slope);
+			//System.out.println("Collision coordinates " + collisionX + " "
+			//		+ collisionY);
 			double robotX = robot.getCenter().getX();
 			double robotY = robot.getCenter().getY();
-			System.out.println("Robot coordinates " + robotX + " " + robotY);
+			//System.out.println("Robot coordinates " + robotX + " " + robotY);
 
 			if (Math.abs(collisionY - robotY) > allowedDistError) {
 				if (shouldWeMoveForward(collisionY, robotY)) {
@@ -83,4 +103,7 @@ public class SimpleDefenderStrategy extends GeneralStrategy {
 		return collisionY > robotY
 				&& robotY > SimpleGeneralStrategy.leftGoalBotY;
 	}
+
+	
+	
 }
