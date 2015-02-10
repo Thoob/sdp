@@ -18,7 +18,6 @@ public class WorldState {
 	private MovingObject defenderRobot;
 	// Attacker
 	private MovingObject attackerRobot;
-
 	// Enemy team robots
 	// Defender
 	private MovingObject enemyDefenderRobot;
