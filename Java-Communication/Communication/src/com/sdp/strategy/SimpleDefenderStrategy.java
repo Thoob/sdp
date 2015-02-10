@@ -13,7 +13,7 @@ import com.sdp.world.WorldState;
 
 public class SimpleDefenderStrategy extends GeneralStrategy {
 	private Oracle predictor = null;
-	final int framesForward = 20;
+	final int framesForward = 50;
 	final int allowedDistError = 20;
 
 	public SimpleDefenderStrategy() {
@@ -54,21 +54,33 @@ public class SimpleDefenderStrategy extends GeneralStrategy {
 			double robotY = robot.getCenter().getY();
 			System.out.println("Robot coordinates " + robotX + " " + robotY);
 
-			if (Math.abs(collisionY - robotY) > allowedDistError
-					&& robotY < SimpleGeneralStrategy.leftGoalBotY) {
-				RobotCommands.goStraightFast();
+			if (Math.abs(collisionY - robotY) > allowedDistError) {
+				if (shouldWeMoveForward(collisionY, robotY)) {
+					RobotCommands.goStraightFast();
+				} else if (shouldWeMoveBackward(collisionY, robotY)) {
+					RobotCommands.goStraightBackwardsFast();
+				}
 			} else {
 				RobotCommands.stop();
 			}
 
 			// 3. Turn (if necessary) and go to this position
 		} else {
-			// stay in current position
 			RobotCommands.stop();
 		}
 	}
 
 	private boolean isBallMoving(float slope) {
-		return slope < 5;
+		return slope < 7;
+	}
+
+	private boolean shouldWeMoveForward(float collisionY, double robotY) {
+		return collisionY < robotY
+				&& robotY < SimpleGeneralStrategy.leftGoalTopY;
+	}
+
+	private boolean shouldWeMoveBackward(float collisionY, double robotY) {
+		return collisionY > robotY
+				&& robotY > SimpleGeneralStrategy.leftGoalBotY;
 	}
 }
