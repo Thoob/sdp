@@ -7,7 +7,7 @@ Commands that can be read by the arduino are strings with
 the command first followed by arguments after spaces, and
 terminated with a newline/carridge return character.
 e.g.
-"MOVE 50 100\n"
+"MOVE 50 -100\n"
 
 /////////////////////////////////////////////////////////
 Test Commands
@@ -19,9 +19,11 @@ Turns the LED on the board on.
 2. "OFF"
 Turns the LED off.
 
+
 /////////////////////////////////////////////////////////
 Movement Commands
 /////////////////////////////////////////////////////////
+
 1. "MOVE <leftpower> <rightpower>"
 Sets the left and right motors to move at powers 
 <leftpower> and <rightpower>. If either of these is 0,
@@ -36,21 +38,33 @@ Stops all motors.
 3. "KICK <time> <power>"
 Runs the kicker motor forward for <time> milliseconds at 
 <power>%.
-Also resets the catch flag.
+*Script with delays, may ignore commands sent while this
+is executing*
 
 4. "CATCH"
 Uses the catcher to catch a ball by moving forwards and
 lifting the catcher.
-When this is called a flag is set so that it can't catch
-over and over and over. This flag can be reset with the
-CFRESET command.
-
-5. "CFRESET"
-Resets the catch flag (for the case where the robot
-misses the catch).
+*Script with delays, may ignore commands sent while this
+is executing*
 
 5. "FSTOP"
 Force stop. Stops all motors from moving.
+
+6. "RSTOP"
+Stops a rotation quickly by rotating the motors strongly
+in the opposite direction.
+
+7. "SROTL <time> <power>"
+Short rotate left, rotates the robot left for <time> at 
+<power> for small course corrections.
+*Script with delays, may ignore commands sent while this
+is executing*
+
+7. "SROTR <time> <power>"
+Short rotate left, rotates the robot right for <time> at 
+<power> for small course corrections.
+*Script with delays, may ignore commands sent while this
+is executing*
 
 
 /////////////////////////////////////////////////////////

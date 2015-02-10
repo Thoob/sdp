@@ -108,26 +108,27 @@ void run_engine() {
 
 
   // Updates speed of left wheel motor only if a different power is given.
+  //This part of the function also takes into account that our left motor
+  //is slower than our right motor, and so fixes the values accordingly.
   if(new_leftpower != leftpower){
     leftpower = new_leftpower;
     if(leftpower < 0){
-      Serial.println(leftpower);
-      leftpower = abs(leftpower);
+      int negleftpower = abs(leftpower);
       
-      if(leftpower >= 30 && leftpower < 70){
-          motorBackward(left, 1.4*leftpower);
+      if(negleftpower >= 30 && negleftpower < 70){
+          motorBackward(left, 1.4*negleftpower);
       }
-      else if(leftpower >= 70 && leftpower < 80){
-          motorBackward(left, 1.29*leftpower);
+      else if(negleftpower >= 70 && negleftpower < 80){
+          motorBackward(left, 1.29*negleftpower);
       }
-      else if(leftpower >= 80 && leftpower < 90){
+      else if(negleftpower >= 80 && negleftpower < 90){
           motorBackward(left, 1.19*leftpower);
       }
-      else if(leftpower >= 90 && leftpower < 100){
-          motorBackward(left, 1.08*leftpower);
+      else if(negleftpower >= 90 && negleftpower < 100){
+          motorBackward(left, 1.08*negleftpower);
       }
       else{
-          motorBackward(left, leftpower);
+          motorBackward(left, negleftpower);
       }
     } 
     else {
