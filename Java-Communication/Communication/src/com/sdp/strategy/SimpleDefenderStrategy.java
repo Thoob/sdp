@@ -8,7 +8,9 @@ import com.sdp.prediction.Oracle;
 import com.sdp.world.DynamicWorldState;
 import com.sdp.world.DynamicWorldState.Ball;
 import com.sdp.world.DynamicWorldState.Robot;
+import com.sdp.world.SimpleWorldState.Operation;
 import com.sdp.world.Point2;
+import com.sdp.world.SimpleWorldState;
 import com.sdp.world.WorldState;
 
 public class SimpleDefenderStrategy extends GeneralStrategy {
@@ -34,20 +36,18 @@ public class SimpleDefenderStrategy extends GeneralStrategy {
 		Point2 predictedPos = this.predictor.predictState(ballPositionHistory,
 				framesForward);
 
-		//System.out.println("Current ball coordinates " + ballPos.getX() + " "
-		//		+ ballPos.getY());
+		System.out.println("Current ball coordinates " + ballPos.getX() + " "
+				+ ballPos.getY());
 
-		//System.out.println("Predicted ball coordinates " + predictedPos.getX()
-		//		+ " " + predictedPos.getY());
+		System.out.println("Predicted ball coordinates " + predictedPos.getX()
+				+ " " + predictedPos.getY());
 
 		// 2. Predict ball y coordinate at near goal x coordinate
 		float slope = Calculations.getSlopeOfLine(ballPos, predictedPos);
 
 		
-		/* Boolean variable to ensure a prediction exists (as default is (0,0)
-		 * this leads a legitimate yet incorrect result
-		 */
-
+		 // Boolean variable to ensure a prediction exists (as default is (0,0)
+		 // this leads a legitimate yet incorrect result
 		boolean predictionIsGenerated = ballPositionHistory.size() >
 			framesForward;
 			
@@ -67,12 +67,12 @@ public class SimpleDefenderStrategy extends GeneralStrategy {
 			float collisionX = (float) robot.getCenter().getX();
 			float collisionY = slope * collisionX;
 
-			//System.out.println("Slope " + slope);
-			//System.out.println("Collision coordinates " + collisionX + " "
-			//		+ collisionY);
+			System.out.println("Slope " + slope);
+			System.out.println("Collision coordinates " + collisionX + " "
+					+ collisionY);
 			double robotX = robot.getCenter().getX();
 			double robotY = robot.getCenter().getY();
-			//System.out.println("Robot coordinates " + robotX + " " + robotY);
+			System.out.println("Robot coordinates " + robotX + " " + robotY);
 
 			if (Math.abs(collisionY - robotY) > allowedDistError) {
 				if (shouldWeMoveForward(collisionY, robotY)) {
@@ -83,15 +83,11 @@ public class SimpleDefenderStrategy extends GeneralStrategy {
 			} else {
 				RobotCommands.stop();
 			}
-
 			// 3. Turn (if necessary) and go to this position
-		} else {
+		} else if(SimpleWorldState.previousOperation != Operation.NONE) {
 			RobotCommands.stop();
+			SimpleWorldState.previousOperation = Operation.NONE;
 		}
-	}
-
-	private boolean isBallMoving(float slope) {
-		return slope < 7;
 	}
 
 	private boolean shouldWeMoveForward(float collisionY, double robotY) {
