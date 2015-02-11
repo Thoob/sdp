@@ -12,7 +12,7 @@ public class RobotPlanner {
 	}
 
 	// Distance the robot must be from the ball in order to catch it
-	private static final int MAX_CATCH_DIST = 210;
+	private static final int MAX_CATCH_DIST = 200;
 	private static final int MIN_CATCH_DIST = 140;
 
 	private RobotPlanner() {
@@ -59,7 +59,7 @@ public class RobotPlanner {
 
 		if (deltaTotal < MAX_CATCH_DIST && deltaTotal > MIN_CATCH_DIST) {
 			return true;
-		} else if (deltaTotal < MIN_CATCH_DIST){
+		} else if (deltaTotal < MIN_CATCH_DIST && deltaTotal > 95){
 			RobotCommands.shortMoveBackwards();
 			return false;
 		} else {

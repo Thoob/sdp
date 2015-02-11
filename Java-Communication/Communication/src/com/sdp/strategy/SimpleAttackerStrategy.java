@@ -10,7 +10,7 @@ import com.sdp.world.SimpleWorldState.Operation;
 import com.sdp.world.WorldState;
 
 public class SimpleAttackerStrategy extends GeneralStrategy {
-	private final int allowedDegreeError = 20;
+	private final int allowedDegreeError = 15;
 	
 	public void sendWorldState(DynamicWorldState dynWorldState,
 			WorldState worldState) {
