@@ -591,5 +591,32 @@ public class GeneralStrategy implements Strategy {
 			ang1 += 2 * Math.PI;
 		return Math.toDegrees(ang1);
 	}
+	
+	//Scott Addition
+	//Returns the zone an object with a given X value is in
+	public int inZone(double objX) {
+		if (leftCheck > defenderCheck) { // Shooting right
+			if (objX < defenderCheck) {
+				return 0;
+			} else if (objX >= defenderCheck && objX < leftCheck) {
+				return 1;
+			} else if (objX >= leftCheck && objX < rightCheck) {
+				return 2;
+			} else {
+				return 3;
+			}
+		} else {
+			if (objX < leftCheck) {
+				return 0;
+			} else if (objX >= leftCheck && objX < rightCheck) {
+				return 1;
+			} else if (objX >= rightCheck && objX < defenderCheck) {
+				return 2;
+			} else {
+				return 3;
+			}
+		}
+
+	}
 
 }

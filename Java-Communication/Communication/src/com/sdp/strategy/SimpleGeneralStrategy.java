@@ -12,6 +12,11 @@ public class SimpleGeneralStrategy {
 
 	// TODO dirty solution for milestone 2
 	// center coordinates
+	protected static float leftGoalBotX = -606;
+	protected static float leftGoalBotY = 132;
+	protected static float leftGoalTopX = -601;
+	protected static float leftGoalTopY = -229;
+
 	protected static float leftGoalX = -572;
 	protected static float leftGoalY = -62;
 	protected static float rightGoalX = 575;
