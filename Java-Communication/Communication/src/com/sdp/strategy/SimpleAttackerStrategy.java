@@ -10,7 +10,7 @@ import com.sdp.world.SimpleWorldState.Operation;
 import com.sdp.world.WorldState;
 
 public class SimpleAttackerStrategy extends GeneralStrategy {
-	private final int allowedDegreeError = 30;
+	private final int allowedDegreeError = 20;
 	private boolean isRobotFacingBall = false;
 	private boolean isRobotFacingGoal = false;
 
@@ -137,12 +137,14 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 		double robotY = robot.getCenter().getY();
 		double robotDir = robot.getHeading();
 		double robotAngleDeg = Math.toDegrees(robotDir);
-		double goalX = SimpleGeneralStrategy.rightGoalX;
-		double goalY = SimpleGeneralStrategy.rightGoalY;
+		double rightGoalX = SimpleGeneralStrategy.rightGoalX;
+		double rightGoalY = SimpleGeneralStrategy.rightGoalY;
+		double leftGoalX = SimpleGeneralStrategy.leftGoalX;
+		double leftGoalY = SimpleGeneralStrategy.leftGoalY;		
 		boolean facingGoal = false;
 		boolean robotHasBall = RobotPlanner.doesOurRobotHaveBall(robot, ball);
 
-		System.out.println("goal " + goalX + " " + goalY);
+		System.out.println("goal " + leftGoalX + " " + leftGoalY);
 		System.out.println("robot " + robotX + " " + robotY);
 		System.out.println("ball " + ballX + " " + ballY);
 
@@ -151,8 +153,9 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 
 		System.out.println("desiredAngleBall " + desiredAngleDegb);
 
+		//for left goal
 		double desiredAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
-				robotDir, goalX, goalY);
+				robotDir, leftGoalX, leftGoalY);
 
 		System.out.println("desiredAngleGoal " + desiredAngleDeg);
 
