@@ -80,4 +80,8 @@ public class RobotCommands {
 	public static void rotateStop() {
 		RobotCommunication.getInstance().rotateStop();
 	}
+
+	public static void shortMoveBackwards() {
+		RobotCommunication.getInstance().shortMoveBackwards();
+	}
 }

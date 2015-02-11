@@ -15,7 +15,7 @@ import com.sdp.world.WorldState;
 
 public class SimpleDefenderStrategy extends GeneralStrategy {
 	private Oracle predictor = null;
-	final int framesForward = 50;
+	final int framesForward = 20; 
 	final int allowedDistError = 20;
 
 	public SimpleDefenderStrategy() {
@@ -24,7 +24,7 @@ public class SimpleDefenderStrategy extends GeneralStrategy {
 
 	public void sendWorldState(DynamicWorldState dynWorldState,
 			WorldState worldState) {
-		Robot robot = dynWorldState.getAttacker();
+		Robot robot = dynWorldState.getDefender();
 		Ball ball = dynWorldState.getBall();
 		Point2 ballPos = new Point2((float) ball.getPoint().getX(),
 				(float) ball.getPoint().getY());
@@ -33,6 +33,10 @@ public class SimpleDefenderStrategy extends GeneralStrategy {
 				.getBallPositionHistory();
 
 		// 1. Predict position where the ball will go
+		
+		System.out.println("Ball X: " + ball.getPoint().getX());
+		System.out.println("Ball Y: " + ball.getPoint().getY());
+		
 		Point2 predictedPos = this.predictor.predictState(ballPositionHistory,
 				framesForward);
 
@@ -63,8 +67,15 @@ public class SimpleDefenderStrategy extends GeneralStrategy {
 
 		if (!Float.isInfinite(slope) && notShaky) {
 			System.out.println("BALL IS MOVING");
-			float collisionX = (float) robot.getCenter().getX();
-			float collisionY = slope * collisionX;
+			double collisionX = robot.getCenter().getX();
+			double collisionY = 50;
+			if(slope*collisionX>SimpleGeneralStrategy.leftGoalTopY){
+				collisionY = SimpleGeneralStrategy.leftGoalTopY;
+			} else if(slope*collisionX<SimpleGeneralStrategy.leftGoalBotY){
+				collisionY = SimpleGeneralStrategy.leftGoalBotY;
+			} else {
+				collisionY = collisionX * slope;
+			}
 
 			System.out.println("Slope " + slope);
 			System.out.println("Collision coordinates " + collisionX + " "
@@ -76,8 +87,10 @@ public class SimpleDefenderStrategy extends GeneralStrategy {
 			if (Math.abs(collisionY - robotY) > allowedDistError) {
 				if (shouldWeMoveForward(collisionY, robotY)) {
 					RobotCommands.goStraightFast();
+					System.out.println("GO FORWARD!");
 				} else if (shouldWeMoveBackward(collisionY, robotY)) {
 					RobotCommands.goStraightBackwardsFast();
+					System.out.println("GO BACKWARD!");
 				}
 			} else {
 				RobotCommands.stop();
@@ -89,13 +102,13 @@ public class SimpleDefenderStrategy extends GeneralStrategy {
 		}
 	}
 
-	private boolean shouldWeMoveForward(float collisionY, double robotY) {
+	private boolean shouldWeMoveForward(double collisionY, double robotY) {
 		return collisionY < robotY
-				&& robotY < SimpleGeneralStrategy.leftGoalTopY;
+				&& robotY > -120;
 	}
 
-	private boolean shouldWeMoveBackward(float collisionY, double robotY) {
+	private boolean shouldWeMoveBackward(double collisionY, double robotY) {
 		return collisionY > robotY
-				&& robotY > SimpleGeneralStrategy.leftGoalBotY;
+				&& robotY < 220;
 	}
 }

@@ -11,7 +11,9 @@ public class RobotPlanner {
 		DEFENDER, ATTACKER, ENEMY_DEFENDER, ENEMY_ATTACKER
 	}
 
-	private static final int CAN_CATCH_BALL = 180;
+	// Distance the robot must be from the ball in order to catch it
+	private static final int MAX_CATCH_DIST = 210;
+	private static final int MIN_CATCH_DIST = 140;
 
 	private RobotPlanner() {
 
@@ -55,8 +57,11 @@ public class RobotPlanner {
 		double deltaTotal = Math.abs(deltaX) + Math.abs(deltaY);
 		System.out.println("Distance from ball: " + deltaTotal);
 
-		if (deltaTotal < CAN_CATCH_BALL) {// TODO test and discuss precision needed
+		if (deltaTotal < MAX_CATCH_DIST && deltaTotal > MIN_CATCH_DIST) {
 			return true;
+		} else if (deltaTotal < MIN_CATCH_DIST){
+			RobotCommands.shortMoveBackwards();
+			return false;
 		} else {
 			return false;
 		}

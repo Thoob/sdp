@@ -86,4 +86,9 @@ public class RobotCommunication {
 		String command = "SROTR 200 40\n";
 		Communication.getInstance().sendCommandViaPort(command);
 	}
+
+	public void shortMoveBackwards() {
+		String command = "SMOVB 250 100\n";
+		Communication.getInstance().sendCommandViaPort(command);		
+	}
 }

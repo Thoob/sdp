@@ -46,7 +46,7 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 					&& !RobotPlanner.canCatchBall(robot, ball)
 					&& (inZone(ballX) == 2)) {
 				RobotCommands.goStraight();
-				SimpleWorldState.previousOperation = Operation.FORWARD;
+				SimpleWorldState.previousOperation = Operation.NONE;
 				System.out.println("Moving towards ball.");
 			}
 		} else {
@@ -55,7 +55,7 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 					&& !RobotPlanner.canCatchBall(robot, ball)
 					&& (inZone(ballX)==1)) {
 				RobotCommands.goStraight();
-				SimpleWorldState.previousOperation = Operation.FORWARD;
+				SimpleWorldState.previousOperation = Operation.NONE;
 				System.out.println("Moving towards ball.");
 			}
 		}
@@ -115,11 +115,11 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 				if (shouldRotateRight
 						&& SimpleWorldState.previousOperation != Operation.RIGHT) {
 					RobotCommands.rotateRight();
-					SimpleWorldState.previousOperation = Operation.RIGHT;
+					SimpleWorldState.previousOperation = Operation.NONE;
 				} else if (!shouldRotateRight
 						&& SimpleWorldState.previousOperation != Operation.LEFT) {
 					RobotCommands.rotateLeft();
-					SimpleWorldState.previousOperation = Operation.LEFT;
+					SimpleWorldState.previousOperation = Operation.NONE;
 				}
 				return;
 			}
@@ -166,7 +166,7 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 		rotateToDesiredAngle(robotAngleDeg, desiredAngleDeg);
 		
 		// Decides whether or not the robot is facing the desired goal
-		if (robotAngleDeg - desiredAngleDeg < allowedDegreeError) {
+		if (Math.abs(robotAngleDeg - desiredAngleDeg) < allowedDegreeError) {
 			facingGoal = true;
 			System.out.println("Facing goal!");
 		} else {
