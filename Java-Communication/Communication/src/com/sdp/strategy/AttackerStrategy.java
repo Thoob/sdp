@@ -1,168 +1,183 @@
 package com.sdp.strategy;
 
-import com.sdp.strategy.Operation;
-import com.sdp.vision.PitchConstants;
+import com.sdp.planner.RobotCommands;
+import com.sdp.planner.RobotPlanner;
+import com.sdp.world.DynamicWorldState;
+import com.sdp.world.DynamicWorldState.Ball;
+import com.sdp.world.DynamicWorldState.Robot;
+import com.sdp.world.SimpleWorldState;
+import com.sdp.world.SimpleWorldState.Operation;
 import com.sdp.world.WorldState;
 
 public class AttackerStrategy extends GeneralStrategy {
-
-	private static final int KICK_TIMEOUT = 120000000;
+	private final int allowedDegreeError = 15;
 	
-	private ControlThread controlThread;
-	private boolean stopControlThread;
-	private boolean ballInEnemyAttackerArea = false;
-	private boolean justCaught = true;
-	private boolean fromSide = false;
-	private boolean timerOn = false;
-	private long kickTimer = 0;
+	public void sendWorldState(DynamicWorldState dynWorldState,
+			WorldState worldState) {
+		// Initialise robot and ball objects
+		Robot robot = dynWorldState.getAttacker();
+		Ball ball = dynWorldState.getBall();
 
-	public AttackerStrategy() {
-		controlThread = new ControlThread();
-	}
+		double robotX = robot.getCenter().getX();
+		double robotY = robot.getCenter().getY();
+		double robotAngleRad = robot.getHeading();
+		double robotAngleDeg = Math.toDegrees(robotAngleRad);
+		double ballX = ball.getPoint().getX();
+		double ballY = ball.getPoint().getY();
+		// Desired angle to face ball
+		double ballAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
+				robotAngleRad, ballX, ballY);
+		double ballDiffInHeadings = Math.abs(robotAngleDeg - ballAngleDeg);
+		// Robot is facing the ball if within this angle in degrees of the ball
+		boolean isRobotFacingGoal = (ballDiffInHeadings < allowedDegreeError || ballDiffInHeadings > 360 - allowedDegreeError);
 
-	@Override
-	public void stopControlThread() {
-		stopControlThread = true;
-	}
-
-	@Override
-	public void startControlThread() {
-		stopControlThread = false;
-		controlThread.start();
-	}
-
-	@Override
-	public void sendWorldState(WorldState worldState) {
-		super.sendWorldState(worldState);
-
-		if (worldState.weAreShootingRight && ballX > defenderCheck
-				&& ballX < leftCheck || !worldState.weAreShootingRight
-				&& ballX < defenderCheck && ballX > rightCheck) {
-			this.ballInEnemyAttackerArea = true;
-		} else {
-			this.ballInEnemyAttackerArea = false;
+		// 1 - Rotate to face ball
+		if (!RobotPlanner.doesOurRobotHaveBall(robot, ball)
+				&& !isRobotFacingGoal) {
+			rotateToDesiredAngle(robotAngleDeg, ballAngleDeg);
+			System.out.println("Rotating to face ball.");
 		}
-		if ((ballX < leftCheck || ballX > rightCheck)
-				&& !ballInEnemyAttackerArea) {
-			synchronized (controlThread) {
-				controlThread.operation.op = Operation.Type.DO_NOTHING;
+
+		// 2 - Go towards ball if it is in our attacker zone
+		System.out.println("Ball is in zone " + inZone(ballX));
+		if(worldState.weAreShootingRight){
+			if (!RobotPlanner.doesOurRobotHaveBall(robot, ball)
+					&& isRobotFacingGoal 
+					&& !RobotPlanner.canCatchBall(robot, ball)
+					&& (inZone(ballX) == 2)) {
+				RobotCommands.goStraight();
+				SimpleWorldState.previousOperation = Operation.NONE;
+				System.out.println("Moving towards ball.");
 			}
-			return;
-		}
-		if (Math.abs(ballY - PitchConstants.getPitchOutlineTop()) < 20 || Math.abs(ballY - PitchConstants.getPitchOutlineBottom()) < 20 ) {
-			fromSide = true;
 		} else {
-			fromSide = false;
+			if (!RobotPlanner.doesOurRobotHaveBall(robot, ball)
+					&& isRobotFacingGoal 
+					&& !RobotPlanner.canCatchBall(robot, ball)
+					&& (inZone(ballX)==1)) {
+				RobotCommands.goStraight();
+				SimpleWorldState.previousOperation = Operation.NONE;
+				System.out.println("Moving towards ball.");
+			}
 		}
-		synchronized (controlThread) {
-			if (ballInEnemyAttackerArea) { 
-				controlThread.operation = returnToOrigin(RobotType.ATTACKER);
+		
+
+		// 3 - Catch ball
+		if (!RobotPlanner.doesOurRobotHaveBall(robot, ball)
+				&& isRobotFacingGoal && RobotPlanner.canCatchBall(robot, ball)
+				&& !(SimpleWorldState.previousOperation == Operation.CATCH)) {
+			RobotCommands.catchBall();
+			SimpleWorldState.previousOperation = Operation.CATCH;
+			System.out.println("Catching ball.");
+		}
+
+		// 4 - Face goal and kick ball (hopefully into the goal!)
+		if (RobotPlanner.doesOurRobotHaveBall(robot, ball)) {
+			scoreGoal(dynWorldState, worldState);
+			System.out.println("Scoring goal!");
+		}
+	}
+
+	private void rotateToDesiredAngle(double robotAngleDeg,
+			double desiredAngleDeg) {
+		double diffInHeadings = Math.abs(robotAngleDeg - desiredAngleDeg);
+		System.out.println("Difference in headings: " + diffInHeadings);
+		if ((diffInHeadings < allowedDegreeError)
+				|| (diffInHeadings > 360 - allowedDegreeError)) {
+
+			System.out.println("Desired angle");
+			// stopping rotation but not other operations
+			if (SimpleWorldState.previousOperation == Operation.RIGHT
+					|| SimpleWorldState.previousOperation == Operation.LEFT) {
+				RobotCommands.stop();
+				SimpleWorldState.previousOperation = Operation.NONE;
+			}
+		} else {
+			System.out.println("Current robot heading:" + robotAngleDeg);
+			System.out.println("Angle to face:" + desiredAngleDeg);
+
+			if ((diffInHeadings < allowedDegreeError * 2)
+					|| (diffInHeadings > 360 - allowedDegreeError * 2)) {
+				RobotCommands.stop();
+				boolean shouldRotateRight = RobotPlanner.shouldRotateRight(
+						desiredAngleDeg, robotAngleDeg);
+				if (shouldRotateRight) {
+					RobotCommands.shortRotateRight();
+					SimpleWorldState.previousOperation = Operation.SHORT_RIGHT;
+				} else if (!shouldRotateRight) {
+					RobotCommands.shortRotateLeft();
+					SimpleWorldState.previousOperation = Operation.SHORT_LEFT;
+				}
+				return;
 			} else {
-				if (!ballCaughtAttacker) {
-					controlThread.operation = catchBall(RobotType.ATTACKER);
-					justCaught = true;
-					timerOn = false;
-				} else {
-					controlThread.operation = scoreGoal(RobotType.ATTACKER);
-					if (!timerOn) {
-					timerOn = true;
-					kickTimer = System.currentTimeMillis();
-					}
-					if (justCaught && fromSide) {
-						controlThread.operation.op = Operation.Type.ATKROTATE;
-						controlThread.operation.rotateBy = (int) calculateAngle(attackerRobotX, attackerRobotY, attackerOrientation, leftCheck, attackerRobotY);
-						controlThread.operation.rotateSpeed = 50;
-						if (Math.abs(controlThread.operation.rotateBy) < 10) {
-							controlThread.operation.op = Operation.Type.DO_NOTHING;
-						}
-						if (controlThread.operation.op == Operation.Type.DO_NOTHING) {
-							justCaught = false;
-						}
-					}
-					
+
+				boolean shouldRotateRight = RobotPlanner.shouldRotateRight(
+						desiredAngleDeg, robotAngleDeg);
+				if (shouldRotateRight
+						&& SimpleWorldState.previousOperation != Operation.RIGHT) {
+					RobotCommands.rotateRight();
+					SimpleWorldState.previousOperation = Operation.NONE;
+				} else if (!shouldRotateRight
+						&& SimpleWorldState.previousOperation != Operation.LEFT) {
+					RobotCommands.rotateLeft();
+					SimpleWorldState.previousOperation = Operation.NONE;
 				}
-				// kicks if detected false catch
-				if ((timerOn && (System.currentTimeMillis() - kickTimer) > KICK_TIMEOUT) || (ballCaughtAttacker
-						&& (Math.hypot(ballX - attackerRobotX, ballY
-								- attackerRobotY) > 60) && !worldState.ballNotOnPitch)) {
-					controlThread.operation.op = Operation.Type.ATKKICK;
-				}
+				return;
 			}
 		}
 	}
 
-	private class ControlThread extends Thread {
-		public Operation operation = new Operation();
+	private void scoreGoal(DynamicWorldState dynWorldState,
+			WorldState worldState) {
+		// turn towards the goal
+		Ball ball = dynWorldState.getBall();
+		double ballX = ball.getPoint().getX();
+		double ballY = ball.getPoint().getY();
+		Robot robot = dynWorldState.getAttacker();
+		double robotX = robot.getCenter().getX();
+		double robotY = robot.getCenter().getY();
+		double robotDir = robot.getHeading();
+		double robotAngleDeg = Math.toDegrees(robotDir);
+		double rightGoalX = GeneralStrategy.rightGoalX;
+		double rightGoalY = GeneralStrategy.rightGoalY;
+		double leftGoalX = GeneralStrategy.leftGoalX;
+		double leftGoalY = GeneralStrategy.leftGoalY;		
+		boolean facingGoal = false;
 
-		private long lastKickerEventTime = 0;
+		System.out.println("goal " + leftGoalX + " " + leftGoalY);
+		System.out.println("robot " + robotX + " " + robotY);
+		System.out.println("ball " + ballX + " " + ballY);
 
-		public ControlThread() {
-			super("Robot control thread");
-			setDaemon(true);
+		double desiredAngleDegb = RobotPlanner.desiredAngle(robotX, robotY,
+				robotDir, ballX, ballY);
+
+		System.out.println("desiredAngleBall " + desiredAngleDegb);
+
+		// Decide which goal to aim at, and calculate desired angle
+		double desiredAngleDeg = 0.0;
+		if(worldState.weAreShootingRight){
+			desiredAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
+					robotDir, rightGoalX, rightGoalY);
+		} else {
+			desiredAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
+					robotDir, leftGoalX, leftGoalY);
+		}
+		
+		System.out.println("desiredAngleGoal " + desiredAngleDeg);
+		rotateToDesiredAngle(robotAngleDeg, desiredAngleDeg);
+		
+		// Decides whether or not the robot is facing the desired goal
+		if (Math.abs(robotAngleDeg - desiredAngleDeg) < allowedDegreeError) {
+			facingGoal = true;
+			System.out.println("Facing goal!");
+		} else {
+			facingGoal = false;
+			System.out.println("Not facing goal.");
 		}
 
-		@Override
-		public void run() {
-			try {
-				while (!stopControlThread) {
-					int travelDist, rotateBy, rotateSpeed, travelSpeed;
-					Operation.Type op;
-					double radius;
-					synchronized (this) {
-						op = this.operation.op;
-						rotateBy = this.operation.rotateBy;
-						rotateSpeed = this.operation.rotateSpeed;
-						travelDist = this.operation.travelDistance;
-						travelSpeed = this.operation.travelSpeed;
-						radius = this.operation.radius;
-					}
-
-
-					switch (op) {
-					case DO_NOTHING:
-						break;
-					case ATKCATCH:
-						if (System.currentTimeMillis() - lastKickerEventTime > 1000) {
-							ballCaughtAttacker = true;
-							lastKickerEventTime = System.currentTimeMillis();
-						}
-						break;
-					case ATKMOVEKICK:
-						if (System.currentTimeMillis() - lastKickerEventTime > 1000) {
-							ballCaughtAttacker = false;
-							lastKickerEventTime = System.currentTimeMillis();
-						}
-						break;
-					case ATKKICK:
-						if (System.currentTimeMillis() - lastKickerEventTime > 1000) {
-							ballCaughtAttacker = false;
-							lastKickerEventTime = System.currentTimeMillis();
-						}
-						break;
-					case ATKCONFUSEKICKRIGHT:
-						if (System.currentTimeMillis() - lastKickerEventTime > 1000) {
-							ballCaughtAttacker = false;
-							lastKickerEventTime = System.currentTimeMillis();
-						}
-						break;
-					case ATKCONFUSEKICKLEFT:
-						if (System.currentTimeMillis() - lastKickerEventTime > 1000) {
-							ballCaughtAttacker = false;
-							lastKickerEventTime = System.currentTimeMillis();
-						}
-						break;
-
-					default:
-						break;
-					}
-					Thread.sleep(StrategyController.STRATEGY_TICK);
-				}
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-
+		if (SimpleWorldState.previousOperation != Operation.KICK
+				&& facingGoal && RobotPlanner.doesOurRobotHaveBall(robot, ball)) { // change to doesRobotHaveBall
+			RobotCommands.kick();
+			SimpleWorldState.previousOperation = Operation.KICK;
 		}
-
 	}
-
 }

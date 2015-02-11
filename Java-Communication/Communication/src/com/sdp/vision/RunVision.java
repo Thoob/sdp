@@ -11,6 +11,7 @@ import au.edu.jcu.v4l4j.V4L4JConstants;
 
 import com.sdp.Communication;
 import com.sdp.Constants;
+import com.sdp.Constants.Strategy;
 import com.sdp.strategy.StrategyController;
 import com.sdp.vision.gui.VisionGUI;
 import com.sdp.vision.gui.tools.AlignmentTool;
@@ -29,13 +30,6 @@ import com.sdp.world.WorldState;
  * initialises the image processing.
  */
 public class RunVision {
-	static Options cmdLineOptions;
-
-	static {
-		cmdLineOptions = new Options();
-		cmdLineOptions.addOption("nobluetooth", false,
-				"Disable Bluetooth support");
-	}
 
 	/**
 	 * The main method for the class. Creates the control GUI, and initialises
@@ -144,11 +138,11 @@ public class RunVision {
 			String action = args[0];
 			if (action.equals("attack")) {
 				// find the ball, move to this point and catch it
-				Constants.currentStrategy = Constants.Strategy.ATTACK;
+				Constants.currentStrategy = Strategy.ATTACK;
 				System.out.println("Attack strategy was chosen");
 
 			} else if (action.equals("defend")) {
-				Constants.currentStrategy = Constants.Strategy.DEFEND;
+				Constants.currentStrategy = Strategy.DEFEND;
 				System.out.println("Defence strategy was chosen");
 			} else {
 				System.out.println("Strategy not recognized.");

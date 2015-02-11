@@ -13,12 +13,12 @@ import com.sdp.world.Point2;
 import com.sdp.world.SimpleWorldState;
 import com.sdp.world.WorldState;
 
-public class SimpleDefenderStrategy extends GeneralStrategy {
+public class DefenderStrategy extends GeneralStrategy {
 	private Oracle predictor = null;
-	final int framesForward = 20; 
+	final int framesForward = 20;
 	final int allowedDistError = 20;
 
-	public SimpleDefenderStrategy() {
+	public DefenderStrategy() {
 		this.predictor = new Oracle(300, 300, 600, 600);
 	}
 
@@ -33,10 +33,10 @@ public class SimpleDefenderStrategy extends GeneralStrategy {
 				.getBallPositionHistory();
 
 		// 1. Predict position where the ball will go
-		
+
 		System.out.println("Ball X: " + ball.getPoint().getX());
 		System.out.println("Ball Y: " + ball.getPoint().getY());
-		
+
 		Point2 predictedPos = this.predictor.predictState(ballPositionHistory,
 				framesForward);
 
@@ -52,27 +52,17 @@ public class SimpleDefenderStrategy extends GeneralStrategy {
 		// Boolean variable to ensure a prediction exists (as default is (0,0)
 		// this leads a legitimate yet incorrect result
 		boolean predictionIsGenerated = ballPositionHistory.size() > framesForward;
-
-		boolean notShaky = false;
-
-		if (predictionIsGenerated) {
-			double crosshairThreshX = Math.abs(ballPos.getX()
-					- predictedPos.getX());
-			double crosshairThreshY = Math.abs(ballPos.getY()
-					- predictedPos.getY());
-			if (crosshairThreshX > 2 || crosshairThreshY > 2) {
-				notShaky = true;
-			}
-		}
+		boolean notShaky = isNotShaky(predictionIsGenerated, ballPos,
+				predictedPos);
 
 		if (!Float.isInfinite(slope) && notShaky) {
 			System.out.println("BALL IS MOVING");
 			double collisionX = robot.getCenter().getX();
 			double collisionY = 50;
-			if(slope*collisionX>SimpleGeneralStrategy.leftGoalTopY){
-				collisionY = SimpleGeneralStrategy.leftGoalTopY;
-			} else if(slope*collisionX<SimpleGeneralStrategy.leftGoalBotY){
-				collisionY = SimpleGeneralStrategy.leftGoalBotY;
+			if (slope * collisionX > GeneralStrategy.leftGoalTopY) {
+				collisionY = GeneralStrategy.leftGoalTopY;
+			} else if (slope * collisionX < GeneralStrategy.leftGoalBotY) {
+				collisionY = GeneralStrategy.leftGoalBotY;
 			} else {
 				collisionY = collisionX * slope;
 			}
@@ -102,13 +92,25 @@ public class SimpleDefenderStrategy extends GeneralStrategy {
 		}
 	}
 
+	private boolean isNotShaky(boolean predictionIsGenerated, Point2 ballPos,
+			Point2 predictedPos) {
+		if (predictionIsGenerated) {
+			double crosshairThreshX = Math.abs(ballPos.getX()
+					- predictedPos.getX());
+			double crosshairThreshY = Math.abs(ballPos.getY()
+					- predictedPos.getY());
+			if (crosshairThreshX > 2 || crosshairThreshY > 2) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	private boolean shouldWeMoveForward(double collisionY, double robotY) {
-		return collisionY < robotY
-				&& robotY > -120;
+		return collisionY < robotY && robotY > -120;
 	}
 
 	private boolean shouldWeMoveBackward(double collisionY, double robotY) {
-		return collisionY > robotY
-				&& robotY < 220;
+		return collisionY > robotY && robotY < 220;
 	}
 }
