@@ -11,7 +11,7 @@ public class RobotPlanner {
 		DEFENDER, ATTACKER, ENEMY_DEFENDER, ENEMY_ATTACKER
 	}
 
-	private static final int CAN_CATCH_BALL = 200;
+	private static final int CAN_CATCH_BALL = 180;
 
 	private RobotPlanner() {
 

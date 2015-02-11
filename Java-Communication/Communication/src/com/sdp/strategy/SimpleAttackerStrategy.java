@@ -11,9 +11,6 @@ import com.sdp.world.WorldState;
 
 public class SimpleAttackerStrategy extends GeneralStrategy {
 	private final int allowedDegreeError = 20;
-	private boolean isRobotFacingBall = false;
-	private boolean isRobotFacingGoal = false;
-
 	
 	public void sendWorldState(DynamicWorldState dynWorldState,
 			WorldState worldState) {
@@ -41,14 +38,28 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 			System.out.println("Rotating to face ball.");
 		}
 
-		// 2 - Go towards ball
-		if (!RobotPlanner.doesOurRobotHaveBall(robot, ball)
-				&& isRobotFacingGoal && !RobotPlanner.canCatchBall(robot, ball)) {
-			// TODO needs to only happen when the ball is in our zone
-			RobotCommands.goStraight();
-			SimpleWorldState.previousOperation = Operation.FORWARD;
-			System.out.println("Moving towards ball.");
+		// 2 - Go towards ball if it is in our attacker zone
+		System.out.println("Ball is in zone " + inZone(ballX));
+		if(worldState.weAreShootingRight){
+			if (!RobotPlanner.doesOurRobotHaveBall(robot, ball)
+					&& isRobotFacingGoal 
+					&& !RobotPlanner.canCatchBall(robot, ball)
+					&& (inZone(ballX) == 2)) {
+				RobotCommands.goStraight();
+				SimpleWorldState.previousOperation = Operation.FORWARD;
+				System.out.println("Moving towards ball.");
+			}
+		} else {
+			if (!RobotPlanner.doesOurRobotHaveBall(robot, ball)
+					&& isRobotFacingGoal 
+					&& !RobotPlanner.canCatchBall(robot, ball)
+					&& (inZone(ballX)==1)) {
+				RobotCommands.goStraight();
+				SimpleWorldState.previousOperation = Operation.FORWARD;
+				System.out.println("Moving towards ball.");
+			}
 		}
+		
 
 		// 3 - Catch ball
 		if (!RobotPlanner.doesOurRobotHaveBall(robot, ball)
@@ -141,18 +152,26 @@ public class SimpleAttackerStrategy extends GeneralStrategy {
 
 		System.out.println("desiredAngleBall " + desiredAngleDegb);
 
-		//for left goal
-		double desiredAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
-				robotDir, leftGoalX, leftGoalY);
-
+		// Decide which goal to aim at, and calculate desired angle
+		double desiredAngleDeg = 0.0;
+		if(worldState.weAreShootingRight){
+			desiredAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
+					robotDir, rightGoalX, rightGoalY);
+		} else {
+			desiredAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
+					robotDir, leftGoalX, leftGoalY);
+		}
+		
 		System.out.println("desiredAngleGoal " + desiredAngleDeg);
-
 		rotateToDesiredAngle(robotAngleDeg, desiredAngleDeg);
-
+		
+		// Decides whether or not the robot is facing the desired goal
 		if (robotAngleDeg - desiredAngleDeg < allowedDegreeError) {
 			facingGoal = true;
+			System.out.println("Facing goal!");
 		} else {
 			facingGoal = false;
+			System.out.println("Not facing goal.");
 		}
 
 		if (SimpleWorldState.previousOperation != Operation.KICK

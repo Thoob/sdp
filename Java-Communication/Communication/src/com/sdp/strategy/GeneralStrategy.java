@@ -592,29 +592,23 @@ public class GeneralStrategy implements Strategy {
 		return Math.toDegrees(ang1);
 	}
 	
-	//Scott Addition
 	//Returns the zone an object with a given X value is in
+	//I'm so sorry for all these magic numbers! - Theo
 	public int inZone(double objX) {
-		if (leftCheck > defenderCheck) { // Shooting right
-			if (objX < defenderCheck) {
-				return 0;
-			} else if (objX >= defenderCheck && objX < leftCheck) {
-				return 1;
-			} else if (objX >= leftCheck && objX < rightCheck) {
-				return 2;
-			} else {
-				return 3;
-			}
+		System.out.println("Ball X: " + (objX));
+//		System.out.println("Zone 0 rhs: " + worldState.dividers[0]);
+//		System.out.println("Zone 1 rhs: " + worldState.dividers[1]);
+//		System.out.println("Zone 2 rhs: " + worldState.dividers[2]);
+		if(objX < -324){
+			return 0;
+		} else if (objX < 25){
+			return 1;
+		} else if (objX < 374){
+			return 2;
+		} else if (objX < 650) {
+			return 3;
 		} else {
-			if (objX < leftCheck) {
-				return 0;
-			} else if (objX >= leftCheck && objX < rightCheck) {
-				return 1;
-			} else if (objX >= rightCheck && objX < defenderCheck) {
-				return 2;
-			} else {
-				return 3;
-			}
+			return -1;
 		}
 
 	}
