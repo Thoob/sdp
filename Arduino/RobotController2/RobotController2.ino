@@ -196,7 +196,7 @@ void move_catch() {
   //lift and move forward
   motorBackward(kicker, 60);
   motorForward(right, 70);
-  motorForward(left, 60);
+  motorForward(left, 1.29*70);
   delay(450);
   motorStop(kicker);
   delay(250);
@@ -211,7 +211,7 @@ void move_catch() {
   
   rightpower = 0;
   motorStop(right);
-  delay(500);
+  delay(100);
 
 
 }
