@@ -4,6 +4,8 @@ import java.awt.geom.Point2D;
 
 import com.sdp.world.DynamicWorldState.Ball;
 import com.sdp.world.DynamicWorldState.Robot;
+import com.sdp.world.SimpleWorldState;
+import com.sdp.world.SimpleWorldState.Operation;
 
 public class RobotPlanner {
 
@@ -60,7 +62,10 @@ public class RobotPlanner {
 		if (deltaTotal < MAX_CATCH_DIST && deltaTotal > MIN_CATCH_DIST) {
 			return true;
 		} else if (deltaTotal < MIN_CATCH_DIST && deltaTotal > 95){
-			RobotCommands.shortMoveBackwards();
+			if(SimpleWorldState.previousOperation != Operation.SHORT_BACK){
+				RobotCommands.shortMoveBackwards();		
+			}
+			SimpleWorldState.previousOperation = Operation.SHORT_BACK;
 			return false;
 		} else {
 			return false;
