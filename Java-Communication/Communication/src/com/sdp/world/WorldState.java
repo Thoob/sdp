@@ -14,26 +14,18 @@ public class WorldState {
 			defenderNotOnPitch, enemyDefenderNotOnPitch;
 	public boolean ballNotOnPitch;
 	private ArrayList<Point2> ballPositionHistory = new ArrayList<Point2>();
-	// Defender
 	private MovingObject defenderRobot;
-	// Attacker
 	private MovingObject attackerRobot;
 	// Enemy team robots
-	// Defender
 	private MovingObject enemyDefenderRobot;
-	// Attacker
 	private MovingObject enemyAttackerRobot;
 
-	// Ball
 	private MovingObject ball;
-
 	// Pitch
 	private Pitch playingField;
 
-	// #Peter: added these for use in the GUI.
 	// Flags
 	public boolean weAreBlue, weAreShootingRight;
-
 	// Oracle for prediction
 	private Oracle predictor = null;
 
@@ -59,7 +51,6 @@ public class WorldState {
 	public WorldState(Pitch field, MovingObject ball) {
 		this.playingField = field;
 		this.ball = ball;
-		// initialiseOracle(field);
 	}
 
 	/**
@@ -198,7 +189,6 @@ public class WorldState {
 			this.ballPositionHistory.remove(0);
 	}
 
-	// #endregion
 
 	// methods for implementation of the prediction system with the world state
 	public MovingObject predictNextState(int framesForward) {

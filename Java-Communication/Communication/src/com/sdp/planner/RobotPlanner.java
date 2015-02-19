@@ -61,9 +61,9 @@ public class RobotPlanner {
 
 		if (deltaTotal < MAX_CATCH_DIST && deltaTotal > MIN_CATCH_DIST) {
 			return true;
-		} else if (deltaTotal < MIN_CATCH_DIST && deltaTotal > 95){
-			if(SimpleWorldState.previousOperation != Operation.SHORT_BACK){
-				RobotCommands.shortMoveBackwards();		
+		} else if (deltaTotal < MIN_CATCH_DIST && deltaTotal > 95) {
+			if (SimpleWorldState.previousOperation != Operation.SHORT_BACK) {
+				RobotCommands.shortMoveBackwards();
 			}
 			SimpleWorldState.previousOperation = Operation.SHORT_BACK;
 			return false;
@@ -137,5 +137,22 @@ public class RobotPlanner {
 		if (angle > 90)
 			return 3;
 		return 4;
+	}
+
+	// Returns the zone an object with a given X value is in
+	// I'm so sorry for all these magic numbers! - Theo
+	public int inZone(double objX) {
+		System.out.println("Ball X: " + (objX));
+		if (objX < -324) {
+			return 0;
+		} else if (objX < 25) {
+			return 1;
+		} else if (objX < 374) {
+			return 2;
+		} else if (objX < 650) {
+			return 3;
+		} else {
+			return -1;
+		}
 	}
 }

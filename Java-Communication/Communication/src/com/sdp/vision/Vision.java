@@ -8,9 +8,9 @@ import java.util.ArrayList;
 
 import com.sdp.Constants;
 import com.sdp.Constants.Strategy;
-import com.sdp.strategy.SimpleAttackerStrategy;
-import com.sdp.strategy.SimpleDefenderStrategy;
-import com.sdp.strategy.SimpleGeneralStrategy;
+import com.sdp.strategy.AttackerStrategy;
+import com.sdp.strategy.DefenderStrategy;
+import com.sdp.strategy.GeneralStrategy;
 import com.sdp.vision.interfaces.ObjectRecogniser;
 import com.sdp.vision.interfaces.VideoReceiver;
 import com.sdp.vision.interfaces.VisionDebugReceiver;
@@ -36,9 +36,9 @@ public class Vision implements VideoReceiver {
 	private static ArrayList<WorldStateReceiver> worldStateReceivers = new ArrayList<WorldStateReceiver>();
 	private ArrayList<ObjectRecogniser> recognisers = new ArrayList<ObjectRecogniser>();
 
-	private SimpleAttackerStrategy attackerStrategy = new SimpleAttackerStrategy();
-	private SimpleDefenderStrategy defenderStrategy = new SimpleDefenderStrategy();
-	private SimpleGeneralStrategy generalStrategy = new SimpleGeneralStrategy();
+	private AttackerStrategy attackerStrategy = new AttackerStrategy();
+	private DefenderStrategy defenderStrategy = new DefenderStrategy();
+	private GeneralStrategy generalStrategy = new GeneralStrategy();
 
 	public Vision(WorldState worldState, PitchConstants pitchConstants,
 			DynamicWorldState dynamicWorldState) {
