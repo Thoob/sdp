@@ -174,7 +174,7 @@ public class StrategySelectorTool implements GUITool {
 		public StrategyPicker() {
 			this.add(atkStrat);
 			this.add(defStrat);
-			//this.add(passStrat);
+			this.add(passStrat);
 			//this.add(marStrat);
 			this.add(nullStrat);
 			//this.add(pauseController);
@@ -197,6 +197,7 @@ public class StrategySelectorTool implements GUITool {
 			passStrat.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					Constants.currentStrategy = Constants.Strategy.PASSING;
 					sc.changeToStrategy(StrategyType.PASSING);
 				}
 			});

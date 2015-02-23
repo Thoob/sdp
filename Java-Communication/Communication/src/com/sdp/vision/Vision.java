@@ -10,6 +10,7 @@ import com.sdp.Constants;
 import com.sdp.Constants.Strategy;
 import com.sdp.strategy.AttackerStrategy;
 import com.sdp.strategy.DefenderStrategy;
+import com.sdp.strategy.PassingStrategy;
 import com.sdp.strategy.GeneralStrategy;
 import com.sdp.vision.interfaces.ObjectRecogniser;
 import com.sdp.vision.interfaces.VideoReceiver;
@@ -38,6 +39,8 @@ public class Vision implements VideoReceiver {
 
 	private AttackerStrategy attackerStrategy = new AttackerStrategy();
 	private DefenderStrategy defenderStrategy = new DefenderStrategy();
+	private PassingStrategy passingStrategy = new PassingStrategy();
+
 	private GeneralStrategy generalStrategy = new GeneralStrategy();
 
 	public Vision(WorldState worldState, PitchConstants pitchConstants,
@@ -133,6 +136,10 @@ public class Vision implements VideoReceiver {
 		else if (Constants.currentStrategy == Strategy.DEFEND)
 			defenderStrategy.sendWorldState(this.dynamicWorldState,
 					this.worldState);
+		else if (Constants.currentStrategy == Strategy.PASSING)
+			passingStrategy.sendWorldState(this.dynamicWorldState,
+					this.worldState);
+		
 		
 		//update ball position history
 		Ball ball = dynamicWorldState.getBall();

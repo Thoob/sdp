@@ -4,7 +4,7 @@ public class Constants {
 	public static boolean areWeShootingRight = false;
 
 	public static enum Strategy {
-		ATTACK, DEFEND, NONE
+		ATTACK, DEFEND, PASSING, NONE
 	}
 
 	public static Strategy currentStrategy = Strategy.ATTACK;
