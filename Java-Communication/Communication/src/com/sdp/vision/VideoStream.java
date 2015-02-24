@@ -75,30 +75,10 @@ public class VideoStream {
 			// frames
 			if (VideoStream.this.ready) {
 				BufferedImage frameBuffer = frame.getBufferedImage();
-				// frameBuffer =
-				// DistortionFix.removeBarrelDistortion(frameBuffer, 0, 640, 0,
-				// 480);
-				// TODO: Should we blur?
-				// ColorProcessor cp = new ColorProcessor(frameBuffer);
-				// GaussianBlur gb = new GaussianBlur();
-				// gb.blurGaussian(cp, 2, 2, 0.02);
-				// frameBuffer = cp.getBufferedImage();
 				for (VideoReceiver receiver : VideoStream.this.videoReceivers) {
 					receiver.sendFrame(frameBuffer, delta,
 							VideoStream.this.frameCounter,
 							frame.getCaptureTime());
-				}
-				ArrayList<Strategy> currentStrategies = StrategyController
-						.getCurrentStrategies();
-				ArrayList<Strategy> removedStrategies = StrategyController
-						.getRemovedStrategies();
-				for (Strategy s : removedStrategies) {
-					Vision.removeWorldStateReceiver(s);
-				}
-				removedStrategies = new ArrayList<Strategy>();
-				StrategyController.setRemovedStrategies(removedStrategies);
-				for (Strategy s : currentStrategies) {
-					Vision.addWorldStateReceiver(s);
 				}
 			} else if (VideoStream.this.frameCounter > 3) {
 				VideoStream.this.ready = true;
@@ -158,13 +138,6 @@ public class VideoStream {
 			e.printStackTrace();
 			System.exit(1);
 		}
-
-		/*
-		 * Runtime.getRuntime().addShutdownHook(new Thread() {
-		 * 
-		 * @Override public void run() {
-		 * VideoStream.this.frameGrabber.stopCapture(); } });
-		 */
 	}
 
 	/**

@@ -37,13 +37,6 @@ public class StrategySelectorTool implements GUITool {
 		subWindow.setResizable(false);
 		subWindow.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
-		sc.addPropertyChangeListener(new PropertyChangeListener() {
-
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				updateInfoLabel();
-			}
-		});
 		infoLabel.setAlignmentX(JLabel.RIGHT_ALIGNMENT);
 
 		Container contentPane = subWindow.getContentPane();
@@ -238,38 +231,16 @@ public class StrategySelectorTool implements GUITool {
 	@SuppressWarnings("serial")
 	public class AdvancedStrategyEnabler extends JPanel {
 		private JCheckBox confusionEnabled = new JCheckBox("Confuse Shot");
-		private JCheckBox bounceShotEnabled = new JCheckBox("Bounce Shot");
-		private JCheckBox interceptorDefence = new JCheckBox(
-				"Interceptor Defence");
 		private JCheckBox bouncePassEnabled = new JCheckBox("Bounce Pass");
 
 		public AdvancedStrategyEnabler() {
 			this.add(confusionEnabled);
-			this.add(bounceShotEnabled);
-			this.add(interceptorDefence);
 			this.add(bouncePassEnabled);
 
 			confusionEnabled.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					StrategyController.confusionEnabled = confusionEnabled
-							.isSelected();
-				}
-			});
-
-			bounceShotEnabled.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					StrategyController.bounceShotEnabled = bounceShotEnabled
-							.isSelected();
-				}
-			});
-
-			interceptorDefence.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					StrategyController.interceptorDefenceEnabled = interceptorDefence
 							.isSelected();
 				}
 			});

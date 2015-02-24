@@ -1,36 +1,33 @@
 package com.sdp.strategy;
 
-import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.util.ArrayList;
 
-import com.sdp.strategy.interfaces.Strategy;
 import com.sdp.vision.interfaces.WorldStateReceiver;
 import com.sdp.world.WorldState;
 
-
+/**
+ * 
+ * This class will be important after milestone 3
+ *
+ */
 public class StrategyController implements WorldStateReceiver {
-	
+
 	public enum StrategyType {
 		DO_NOTHING, PASSING, ATTACKING, DEFENDING, MARKING
 	}
-	
-	public enum BallLocation{
+
+	public enum BallLocation {
 		DEFENDER, ATTACKER, ENEMY_DEFENDER, ENEMY_ATTACKER
 	}
+
 	private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 	private BallLocation ballLocation;
 	private StrategyType currentStrategy = StrategyType.DO_NOTHING;
 	private boolean pauseStrategyController = true;
-	
+
 	// Advanced Tactics flags
 	public static boolean confusionEnabled = false;
-	public static boolean bounceShotEnabled = false;
-	public static boolean interceptorDefenceEnabled = false;
 	public static boolean bouncePassEnabled = false;
-	
-	private static ArrayList<Strategy> currentStrategies = new ArrayList<Strategy>();
-	private static ArrayList<Strategy> removedStrategies = new ArrayList<Strategy>();
 
 	public StrategyController() {
 
@@ -40,94 +37,18 @@ public class StrategyController implements WorldStateReceiver {
 		return currentStrategy;
 	}
 
-	public boolean isPaused() {
-		return pauseStrategyController;
-	}
-
-	public void setPaused(boolean paused) {
-		boolean oldValue = pauseStrategyController;
-		pauseStrategyController = paused;
-		pcs.firePropertyChange("paused", oldValue, paused);
-	}	
-
-	public void addPropertyChangeListener(PropertyChangeListener listener) {
-		pcs.addPropertyChangeListener(listener);
-	}
-
-	public void removePropertyChangeListener(PropertyChangeListener listener) {
-		pcs.removePropertyChangeListener(listener);
-	}
-
-	public static ArrayList<Strategy> getCurrentStrategies() {
-		return currentStrategies;
-	}
-
-	public static ArrayList<Strategy> getRemovedStrategies() {
-		return removedStrategies;
-	}
-
-	public static void setRemovedStrategies(
-			ArrayList<Strategy> removedStrategies) {
-		StrategyController.removedStrategies = removedStrategies;
-	}
-
-	/**
-	 * Change to a particular strategy, removing and stopping the previously
-	 * running strategy(s).
-	 * 
-	 * @param type
-	 *            - The strategy type to run
-	 */
 	public void changeToStrategy(StrategyType type) {
-		// Stop old threads
-		for (Strategy s : StrategyController.currentStrategies) {
-			s.stopControlThread();
-			StrategyController.removedStrategies.add(s);
-		}
-		StrategyController.currentStrategies = new ArrayList<Strategy>();
-		
 		switch (type) {
 		case DO_NOTHING:
 			break;
-		/*
-		 TODO 
 		case PASSING:
-			Strategy ps = new PassingStrategy(this.bcsAttacker,
-					this.bcsDefender);
-			StrategyController.currentStrategies.add(ps);
-			ps.startControlThread();
 			break;
 		case ATTACKING:
-			Strategy as = new AttackerStrategy();
-			Strategy ic = new InterceptorStrategy(this.bcsDefender);
-			StrategyController.currentStrategies.add(as);
-			StrategyController.currentStrategies.add(ic);
-			as.startControlThread();
-			ic.startControlThread();
 			break;
 		case DEFENDING:
-			Strategy AS = new AttackerStrategy(this.bcsAttacker);
-			StrategyController.currentStrategies.add(AS);
-			AS.startControlThread();
-			if (interceptorDefenceEnabled){
-				Strategy inter = new InterceptorStrategy(this.bcsDefender);
-				StrategyController.currentStrategies.add(inter);
-				inter.startControlThread();
-			} else {
-				Strategy pds = new DefenderStrategy(this.bcsDefender);
-				StrategyController.currentStrategies.add(pds);
-				pds.startControlThread();
-			}
 			break;
 		case MARKING:
-			Strategy newMar = new newMarkingStrategy(this.bcsAttacker);
-			Strategy ics = new InterceptorStrategy(this.bcsDefender);
-			StrategyController.currentStrategies.add(newMar);
-			StrategyController.currentStrategies.add(ics);
-			newMar.startControlThread();
-			ics.startControlThread();
 			break;
-			*/
 		default:
 			break;
 		}
@@ -168,8 +89,8 @@ public class StrategyController implements WorldStateReceiver {
 		}
 
 		// Change strategy only if the ball has changed pitch area.
-		if (prevBallLocation != ballLocation){			
-			switch(this.ballLocation){
+		if (prevBallLocation != ballLocation) {
+			switch (this.ballLocation) {
 			case ATTACKER:
 				changeToStrategy(StrategyType.ATTACKING);
 				break;
@@ -184,5 +105,13 @@ public class StrategyController implements WorldStateReceiver {
 				break;
 			}
 		}
+	}
+
+	public boolean isPaused() {
+		return pauseStrategyController;
+	}
+
+	public void setPaused(boolean b) {
+		pauseStrategyController = b;
 	}
 }
