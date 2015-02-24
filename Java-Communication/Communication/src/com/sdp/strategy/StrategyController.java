@@ -5,11 +5,6 @@ import java.beans.PropertyChangeSupport;
 import com.sdp.vision.interfaces.WorldStateReceiver;
 import com.sdp.world.WorldState;
 
-/**
- * 
- * This class will be important after milestone 3
- *
- */
 public class StrategyController implements WorldStateReceiver {
 
 	public enum StrategyType {
@@ -57,6 +52,13 @@ public class StrategyController implements WorldStateReceiver {
 		pcs.firePropertyChange("currentStrategy", oldType, currentStrategy);
 	}
 
+	/*
+	 * TODO 
+	 * We start with defender strategy by default which tries to save the goal
+	 * and block ball and acquire it
+	 * 
+	 * Once we have the ball we either choose passing or attacking strategy
+	 */
 	@Override
 	public void sendWorldState(WorldState worldState) {
 		if (pauseStrategyController)

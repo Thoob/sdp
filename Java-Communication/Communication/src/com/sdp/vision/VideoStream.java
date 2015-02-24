@@ -6,9 +6,6 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sdp.strategy.StrategyController;
-import com.sdp.strategy.interfaces.Strategy;
-import com.sdp.vision.interfaces.VideoReceiver;
 import au.edu.jcu.v4l4j.CaptureCallback;
 import au.edu.jcu.v4l4j.Control;
 import au.edu.jcu.v4l4j.DeviceInfo;
@@ -18,6 +15,8 @@ import au.edu.jcu.v4l4j.VideoDevice;
 import au.edu.jcu.v4l4j.VideoFrame;
 import au.edu.jcu.v4l4j.exceptions.ImageFormatException;
 import au.edu.jcu.v4l4j.exceptions.V4L4JException;
+
+import com.sdp.vision.interfaces.VideoReceiver;
 
 /**
  * Reads frames from a video device, giving options for camera controls

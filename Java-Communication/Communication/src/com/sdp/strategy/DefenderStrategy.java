@@ -13,6 +13,7 @@ import com.sdp.world.Point2;
 import com.sdp.world.SimpleWorldState;
 import com.sdp.world.WorldState;
 
+
 public class DefenderStrategy extends GeneralStrategy {
 	private Oracle predictor = null;
 	final int framesForward = 20;
@@ -33,7 +34,6 @@ public class DefenderStrategy extends GeneralStrategy {
 				.getBallPositionHistory();
 
 		// 1. Predict position where the ball will go
-
 		System.out.println("Ball X: " + ball.getPoint().getX());
 		System.out.println("Ball Y: " + ball.getPoint().getY());
 

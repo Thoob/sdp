@@ -56,13 +56,10 @@ public class PassingStrategy extends GeneralStrategy {
 				- enemyDefenderAngle);
 
 		// STATE BOOLEANS //
-
 		/* We are currently facing the attacker */
 		boolean facingAttacker = (diffInHeadingsToAttacker < allowedDegreeError || diffInHeadingsToAttacker > 360 - allowedDegreeError);
-
 		/* The Blocker is currently outwith our facing angle */
 		boolean noObstruction = (diffInHeadingstoBlocker > allowedDegreeError || diffInHeadingstoBlocker < 360 - allowedDegreeError);
-
 		/* We are facing the attacker with no obstruction */
 		boolean inLineOfSight = (facingAttacker && noObstruction);
 
