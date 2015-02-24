@@ -1,12 +1,9 @@
 package com.sdp.strategy;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import com.sdp.world.DynamicWorldState;
 import com.sdp.planner.RobotPlanner;
-import com.sdp.vision.Vector2f;
-import com.sdp.world.WorldState;
+import com.sdp.world.DynamicWorldState;
 import com.sdp.world.DynamicWorldState.Robot;
+import com.sdp.world.WorldState;
 
 public class PassingStrategy extends GeneralStrategy {
 	private final int allowedDegreeError = 15;
@@ -21,74 +18,66 @@ public class PassingStrategy extends GeneralStrategy {
 	protected boolean defenderHasArrived = false;
 	protected boolean defenderHasArrivedAtSafe = false;
 	protected boolean defenderIsSafe = false;
-	private boolean needReset = false;
 	protected double defenderAngleToGoal;
 	protected double distFromBall;
-	private Deque<Vector2f> ballPositions = new ArrayDeque<Vector2f>();
-	private long passTimer;
-	private boolean passTimerOn = false;
 
-	public PassingStrategy(){
+	public PassingStrategy() {
 
 	}
 
 	public void sendWorldState(DynamicWorldState dynWorldState,
 			WorldState worldState) {
-
-		
-		// TODO: Test! - somewhat difficulty in recognising 3 robots across the pitch
-		//		ROBOT DECLARATIONS		//
+		// TODO: Test! - somewhat difficulty in recognising 3 robots across the
+		// pitch
+		// ROBOT DECLARATIONS //
 		Robot robot = dynWorldState.getDefender();
-		Robot AttackingRobot = dynWorldState.getAttacker();
-		Robot EnemyDefender = dynWorldState.getEnemyDefender();
-		
-		//		ROBOT COORDANATES		//
+		Robot attackingRobot = dynWorldState.getAttacker();
+		Robot enemyDefender = dynWorldState.getEnemyDefender();
+
+		// ROBOT COORDANATES //
 		double robotX = robot.getCenter().getX();
 		double robotY = robot.getCenter().getY();
-		double AttackerX = AttackingRobot.getCenter().getX();
-		double AttackerY = AttackingRobot.getCenter().getY();
-		double EnemyDefenderX = EnemyDefender.getCenter().getX();
-		double EnemyDefenderY = EnemyDefender.getCenter().getY();
+		double attackerX = attackingRobot.getCenter().getX();
+		double attackerY = attackingRobot.getCenter().getY();
+		double enemyDefenderX = enemyDefender.getCenter().getX();
+		double enemyDefenderY = enemyDefender.getCenter().getY();
 
-		//		FACING ANGLES			//
+		// FACING ANGLES //
 		double robotAngleRad = robot.getHeading();
 		double robotAngleDeg = Math.toDegrees(robotAngleRad);
-		
-		double AttackerAngle = RobotPlanner.desiredAngle(robotX, robotY,
-				robotAngleRad, AttackerX, AttackerY);
-		
-		double EnemyDefenderAngle = RobotPlanner.desiredAngle(robotX, robotY,
-				robotAngleRad, EnemyDefenderX, EnemyDefenderY);
-		
-		double DiffInHeadingstoAttacker = Math.abs(robotAngleDeg - AttackerAngle);
-		double DiffInHeadingstoBlocker = Math.abs(robotAngleDeg - EnemyDefenderAngle);
 
-		
-		//		STATE BOOLEANS			//
-		
-			/* We are currently facing the attacker */
-		boolean facingAttacker = (DiffInHeadingstoAttacker < allowedDegreeError ||
-									DiffInHeadingstoAttacker > 360 - allowedDegreeError);
-		
-			/* The Blocker is currently outwith our facing angle */
-		boolean noObstruction = (DiffInHeadingstoBlocker > allowedDegreeError || 
-									DiffInHeadingstoBlocker < 360 - allowedDegreeError);
-		
-			/* We are facing the attacker with no obstruction */
+		double attackerAngle = RobotPlanner.desiredAngle(robotX, robotY,
+				robotAngleRad, attackerX, attackerY);
+		double enemyDefenderAngle = RobotPlanner.desiredAngle(robotX, robotY,
+				robotAngleRad, enemyDefenderX, enemyDefenderY);
+		double diffInHeadingsToAttacker = Math.abs(robotAngleDeg
+				- attackerAngle);
+		double diffInHeadingstoBlocker = Math.abs(robotAngleDeg
+				- enemyDefenderAngle);
+
+		// STATE BOOLEANS //
+
+		/* We are currently facing the attacker */
+		boolean facingAttacker = (diffInHeadingsToAttacker < allowedDegreeError || diffInHeadingsToAttacker > 360 - allowedDegreeError);
+
+		/* The Blocker is currently outwith our facing angle */
+		boolean noObstruction = (diffInHeadingstoBlocker > allowedDegreeError || diffInHeadingstoBlocker < 360 - allowedDegreeError);
+
+		/* We are facing the attacker with no obstruction */
 		boolean inLineOfSight = (facingAttacker && noObstruction);
-		
-		System.out.println("Attacker " + AttackerX + " " + AttackerY + " Heading diff: " + DiffInHeadingstoAttacker);
-		System.out.println("Blocker " + EnemyDefenderX + " " + EnemyDefenderY);
 
+		System.out.println("Attacker " + attackerX + " " + attackerY
+				+ " Heading diff: " + diffInHeadingsToAttacker);
+		System.out.println("Blocker " + enemyDefenderX + " " + enemyDefenderY);
 
 		/* DEBUG */
-		if (!noObstruction){
+		if (!noObstruction) {
 			System.out.println("Enemy is blocking");
 		}
-		if(facingAttacker){
+		if (facingAttacker) {
 			System.out.println("We are facing Attacker");
 		}
-		if (inLineOfSight){
+		if (inLineOfSight) {
 			System.out.println("Attacker is in line of sight");
 		}
 

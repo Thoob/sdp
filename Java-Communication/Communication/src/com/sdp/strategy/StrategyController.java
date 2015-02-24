@@ -10,9 +10,6 @@ import com.sdp.world.WorldState;
 
 
 public class StrategyController implements WorldStateReceiver {
-
-	/** Measured in milliseconds */
-	public static final int STRATEGY_TICK = 100; // TODO: Test lower values for this and see where it breaks
 	
 	public enum StrategyType {
 		DO_NOTHING, PASSING, ATTACKING, DEFENDING, MARKING
