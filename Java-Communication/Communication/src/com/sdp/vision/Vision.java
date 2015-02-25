@@ -129,7 +129,7 @@ public class Vision implements VideoReceiver {
 		// For milestone 2
 		generalStrategy.sendWorldState(this.worldState);
 		if (Constants.currentStrategy == Strategy.ATTACK)
-			attackerStrategy.sendWorldState(this.dynamicWorldState);
+			attackerStrategy.sendWorldState(this.dynamicWorldState, worldState);
 		else if (Constants.currentStrategy == Strategy.DEFEND)
 			defenderStrategy.sendWorldState(this.dynamicWorldState,
 					this.worldState);
