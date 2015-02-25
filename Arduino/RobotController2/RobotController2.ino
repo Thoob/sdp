@@ -11,7 +11,8 @@
 #define arduinoLED 13                        // Arduino LED on board
 #define left 5                               // Left wheel motor
 #define right 4                              // Right wheel motor
-#define kicker 3                             // Kicker/catcher motor
+#define catcher 3                            // Catcher motor
+#define kicker 1
 #define minpower 30                          // Minimum Speed of the motors in power%
 
 SerialCommand sCmd;                          // The demo SerialCommand object
@@ -194,7 +195,7 @@ void move_catch() {
 
   Serial.println("Catching");
   //lift and move forward
-  motorBackward(kicker, 60);
+  motorBackward(catch, 60);
   motorForward(right, 70);
   motorForward(left, 1.29*70);
   delay(450);
@@ -202,9 +203,9 @@ void move_catch() {
   delay(250);
   
   //catch
-  motorForward(kicker, 100);  
+  motorForward(catch, 100);  
   delay(250);
-  motorStop(kicker);
+  motorStop(catch);
   
   leftpower = 0;
   motorStop(left);
