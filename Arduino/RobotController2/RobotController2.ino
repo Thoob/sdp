@@ -8,16 +8,21 @@
 #include "SDPArduino.h"
 #include <Wire.h>
 
+// TO DO: Check the slot for the KICKER motor, rework CATCH and KICK functions.
+
 #define arduinoLED 13                        // Arduino LED on board
 #define left 5                               // Left wheel motor
 #define right 4                              // Right wheel motor
-#define kicker 3                             // Kicker/catcher motor
+#define catcher 3                             // Catcher motor
+
+#define kicker 1                              //Kicker motor MOTOR NUMBER TO BE CHECKED!
+
 #define minpower 30                          // Minimum Speed of the motors in power%
 
 SerialCommand sCmd;                          // The demo SerialCommand object
 int leftpower = 0;                           // Speed of left wheel
 int rightpower = 0;                          // Speed of right wheel
-boolean rotateStopped = true;                // Rotation stopped flag
+int catchflag = 0;                           // If 1, the ball is caught and ready to be kicked, otherwise it is not in grabber
 
 void setup() {
   pinMode(arduinoLED, OUTPUT);               // Configure the onboard LED for output
@@ -35,12 +40,9 @@ void setup() {
     //Movement commands
   sCmd.addCommand("MOVE", run_engine);       // Runs wheel motors
   sCmd.addCommand("FSTOP", force_stop);      // Force stops all motors
-  sCmd.addCommand("RSTOP", rotate_stop);     // Stops rotation strongly
   sCmd.addCommand("KICK", move_kick);        // Runs kick script
   sCmd.addCommand("CATCH", move_catch);      // Runs catch script
-
-  sCmd.addCommand("SROTL", move_shortrotL);
-  sCmd.addCommand("SROTR", move_shortrotR);
+  sCmd.addCommand("CFRESET", rst_catchflag); // Resets the catch flag (if we didn't catch the ball)
 
   //Remote Control Commands
   sCmd.addCommand("RCFORWARD", rc_forward);
@@ -86,6 +88,12 @@ void run_engine() {
 
 
 
+  Serial.print("LSpeed is: ");
+  Serial.println(new_leftpower);
+
+  Serial.print("RSpeed is: ");
+  Serial.println(new_rightpower);
+
 
   //Stops the motors when the signal given is 0
   if(new_leftpower == 0){
@@ -99,7 +107,7 @@ void run_engine() {
   //Checks if the given speed is less than the minimum speed. If it is, 
   //it sets the given power to the minimum power. Left motor.
   if ((new_leftpower != 0) && (abs(new_leftpower) < minpower)) {
-    new_leftpower = 1.4*minpower * (new_leftpower/abs(new_leftpower));
+    new_leftpower = minpower * (new_leftpower/abs(new_leftpower));
   }
 
   if ((new_rightpower != 0) && (abs(new_rightpower) < minpower)) {
@@ -108,45 +116,14 @@ void run_engine() {
 
 
   // Updates speed of left wheel motor only if a different power is given.
-  //This part of the function also takes into account that our left motor
-  //is slower than our right motor, and so fixes the values accordingly.
   if(new_leftpower != leftpower){
     leftpower = new_leftpower;
     if(leftpower < 0){
-      int negleftpower = abs(leftpower);
-      
-      if(negleftpower >= 30 && negleftpower < 70){
-          motorBackward(left, 1.4*negleftpower);
-      }
-      else if(negleftpower >= 70 && negleftpower < 80){
-          motorBackward(left, 1.29*negleftpower);
-      }
-      else if(negleftpower >= 80 && negleftpower < 90){
-          motorBackward(left, 1.19*leftpower);
-      }
-      else if(negleftpower >= 90 && negleftpower < 100){
-          motorBackward(left, 1.08*negleftpower);
-      }
-      else{
-          motorBackward(left, negleftpower);
-      }
+      Serial.println(leftpower);
+      motorBackward(left, abs(leftpower));
     } 
     else {
-      if(leftpower >= 30 && leftpower < 70){
-          motorForward(left, 1.4*leftpower);
-      }
-      else if(leftpower >= 70 && leftpower < 80){
-          motorForward(left, 1.29*leftpower);
-      }
-      else if(leftpower >= 80 && leftpower < 90){
-          motorForward(left, 1.19*leftpower);
-      }
-      else if(leftpower >= 90 && leftpower < 100){
-          motorForward(left, 1.08*leftpower);
-      }
-      else{
-          motorForward(left, leftpower);
-      }
+      motorForward(left, leftpower);
     }
   }
 
@@ -160,9 +137,8 @@ void run_engine() {
       motorForward(right, rightpower);
     }
   }
-  rotateStopped = true;
 }
-
+//REWORK WITH NEW MOTORS
 // Kick script
 void move_kick() {
 
@@ -186,128 +162,50 @@ void move_kick() {
 
   delay(1000);
 
+  catchflag = 0;
+
 }
 
 // Catch script
 void move_catch() {
 
+  if (catchflag == 0) {
 
-  Serial.println("Catching");
-  //lift and move forward
-  motorBackward(kicker, 60);
-  motorForward(right, 70);
-  motorForward(left, 1.29*70);
-  delay(450);
-  motorStop(kicker);
-  delay(250);
-  
-  //catch
-  motorForward(kicker, 100);  
-  delay(250);
-  motorStop(kicker);
-  
-  leftpower = 0;
-  motorStop(left);
-  
-  rightpower = 0;
-  motorStop(right);
-  delay(100);
+    catchflag = 1;
 
+    Serial.println("Catching");
+    //lift and move forward
+    motorBackward(1, 60);
+    motorForward(4, 40);
+    motorForward(5, 40);
+    delay(450);
+    motorStop(kicker);
+    delay(250);
+    //catch
+    motorForward(1, 100);  
+    delay(250);
+    motorStop(kicker);
+    force_stop();
+    delay(1000);
+  }
+  else {
+    Serial.println("Already catching");
+  }
 
 }
 
-
+void rst_catchflag() {
+  catchflag = 0;
+}
 
 
 // Force stops all motors
 void force_stop(){
-  Serial.println("Force stopping");
-  leftpower = 0;
-  rightpower = 0;
-  motorAllStop(); 
+  Serial.println("Stopping");
+
+  motorAllStop();  
 }
 
-// Stops rotation by briefly rotating in the opposite direction
-void rotate_stop(){
-  if(leftpower>rightpower && rotateStopped){
-    motorForward(right, 100);
-    motorBackward(left, 100);
-  } 
-  else if (rightpower>leftpower && rotateStopped){
-    motorForward(left, 100);
-    motorBackward(right, 100);
-  }
-  rotateStopped = false;
-}
-
-//Script to rotate the robot quickly to the left for a specified time.
-void move_shortrotL() {
-
-  char *arg1;
-  char *arg2;
-  int time;
-  int power;
-
-  arg1 = sCmd.next();
-  time = atoi(arg1);
-
-  arg2 = sCmd.next();
-  power = atoi(arg2);
-
-  if (time == NULL) {
-    time = 250;
-  }
-  if (power == NULL) {
-    power = 100;
-  }
-
-
-  motorForward(right, power);
-  motorBackward(left, power);
-
-  delay(time);
-
-  leftpower = 0;
-  motorStop(left);
-  
-  rightpower = 0;
-  motorStop(right);
-
-}
-
-//Script to rotate the robot quickly to the right for a specified time.
-void move_shortrotR() {
-
-  char *arg1;
-  char *arg2;
-  int time;
-  int power;
-
-  arg1 = sCmd.next();
-  time = atoi(arg1);
-
-  arg2 = sCmd.next();
-  power = atoi(arg2);
-
-  if (time == NULL) {
-    time = 250;
-  }
-  if (power == NULL) {
-    power = 100;
-  }
-
-  motorForward(left, power);
-  motorBackward(right, power);
-
-  delay(time);
-
-  leftpower = 0;
-  motorStop(left);
-  
-  rightpower = 0;
-  motorStop(right);
-
-}
 
 
 //Remote Control Commands
