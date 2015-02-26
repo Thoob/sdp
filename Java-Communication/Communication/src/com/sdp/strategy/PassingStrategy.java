@@ -39,9 +39,6 @@ public class PassingStrategy extends GeneralStrategy {
 		double enemyDefenderY = enemyDefender.getCenter().getY();
 
 		// FACING ANGLES //
-		double robotAngleRad = robot.getHeading();
-		double robotAngleDeg = Math.toDegrees(robotAngleRad);
-
 		double attackerAngle = RobotPlanner.desiredAngle(robotX, robotY,
 				robotAngleRad, attackerX, attackerY);
 		double enemyDefenderAngle = RobotPlanner.desiredAngle(robotX, robotY,

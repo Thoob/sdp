@@ -21,7 +21,7 @@ public class AttackerStrategy extends GeneralStrategy {
 		boolean isRobotFacingGoal = (ballDiffInHeadings < allowedDegreeError || ballDiffInHeadings > 360 - allowedDegreeError);
 
 		// 1 - Rotate to face ball
-		if (!RobotPlanner.doesOurRobotHaveBall(robot, ball)
+		if (!RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)
 				&& !isRobotFacingGoal) {
 			rotateToDesiredAngle(robotAngleDeg, ballAngleDeg);
 			System.out.println("Rotating to face ball.");
@@ -30,18 +30,20 @@ public class AttackerStrategy extends GeneralStrategy {
 		// 2 - Go towards ball if it is in our attacker zone
 		System.out.println("Ball is in zone " + inZone(ballX));
 		if (worldState.weAreShootingRight) {
-			if (!RobotPlanner.doesOurRobotHaveBall(robot, ball)
+			if (!RobotPlanner
+					.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)
 					&& isRobotFacingGoal
-					&& !RobotPlanner.canCatchBall(robot, ball)
+					&& !RobotPlanner.canCatchBall(robotX, robotY, ballX, ballY)
 					&& (inZone(ballX) == 2)) {
 				RobotCommands.goStraight();
 				SimpleWorldState.previousOperation = Operation.NONE;
 				System.out.println("Moving towards ball.");
 			}
 		} else {
-			if (!RobotPlanner.doesOurRobotHaveBall(robot, ball)
+			if (!RobotPlanner
+					.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)
 					&& isRobotFacingGoal
-					&& !RobotPlanner.canCatchBall(robot, ball)
+					&& !RobotPlanner.canCatchBall(robotX, robotY, ballX, ballY)
 					&& (inZone(ballX) == 1)) {
 				RobotCommands.goStraight();
 				SimpleWorldState.previousOperation = Operation.NONE;
@@ -50,8 +52,9 @@ public class AttackerStrategy extends GeneralStrategy {
 		}
 
 		// 3 - Catch ball
-		if (!RobotPlanner.doesOurRobotHaveBall(robot, ball)
-				&& isRobotFacingGoal && RobotPlanner.canCatchBall(robot, ball)
+		if (!RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)
+				&& isRobotFacingGoal
+				&& RobotPlanner.canCatchBall(robotX, robotY, ballX, ballY)
 				&& !(SimpleWorldState.previousOperation == Operation.CATCH)) {
 			RobotCommands.catchBall();
 			SimpleWorldState.previousOperation = Operation.CATCH;
@@ -59,7 +62,7 @@ public class AttackerStrategy extends GeneralStrategy {
 		}
 
 		// 4 - Face goal and kick ball (hopefully into the goal!)
-		if (RobotPlanner.doesOurRobotHaveBall(robot, ball)) {
+		if (RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)) {
 			scoreGoal(dynWorldState, worldState);
 			System.out.println("Scoring goal!");
 		}
@@ -149,10 +152,12 @@ public class AttackerStrategy extends GeneralStrategy {
 			System.out.println("Not facing goal.");
 		}
 
-		if (SimpleWorldState.previousOperation != Operation.KICK && facingGoal
-				&& RobotPlanner.doesOurRobotHaveBall(robot, ball)) { // change
-																		// to
-																		// doesRobotHaveBall
+		if (SimpleWorldState.previousOperation != Operation.KICK
+				&& facingGoal
+				&& RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX,
+						ballY)) { // change
+			// to
+			// doesRobotHaveBall
 			RobotCommands.kick();
 			SimpleWorldState.previousOperation = Operation.KICK;
 		}

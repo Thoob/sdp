@@ -49,12 +49,10 @@ public class RobotPlanner {
 		return difference;
 	}
 
-	public static boolean canCatchBall(Robot robot, Ball ball) {
-		Point2D robotPos = robot.getCenter();
-		Point2D ballPos = ball.getPoint();
-
-		double deltaX = robotPos.getX() - ballPos.getX();
-		double deltaY = robotPos.getY() - ballPos.getY();
+	public static boolean canCatchBall(double robotX, double robotY,
+			double ballX, double ballY) {
+		double deltaX = robotX - ballX;
+		double deltaY = robotY - ballY;
 
 		double deltaTotal = Math.abs(deltaX) + Math.abs(deltaY);
 		System.out.println("Distance from ball: " + deltaTotal);
@@ -88,12 +86,10 @@ public class RobotPlanner {
 		}
 	}
 
-	public static boolean doesOurRobotHaveBall(Robot robot, Ball ball) {
-		Point2D robotPos = robot.getCenter();
-		Point2D ballPos = ball.getPoint();
-
-		double deltaX = robotPos.getX() - ballPos.getX();
-		double deltaY = robotPos.getY() - ballPos.getY();
+	public static boolean doesOurRobotHaveBall(double robotX, double robotY,
+			double ballX, double ballY) {
+		double deltaX = robotX - ballX;
+		double deltaY = robotY - ballY;
 
 		double deltaTotal = Math.abs(deltaX) + Math.abs(deltaY);
 

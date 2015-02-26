@@ -23,15 +23,15 @@ public class DefenderStrategy extends GeneralStrategy {
 	public void sendWorldState(DynamicWorldState dynWorldState,
 			WorldState worldState) {
 		if(robot==null||ball==null)return;
-		Point2 ballPos = new Point2((float) ball.getPoint().getX(),
-				(float) ball.getPoint().getY());
+		Point2 ballPos = new Point2((float) ballX,
+				(float) ballY);
 
 		ArrayList<Point2> ballPositionHistory = worldState
 				.getBallPositionHistory();
 
 		// 1. Predict position where the ball will go
-		System.out.println("Ball X: " + ball.getPoint().getX());
-		System.out.println("Ball Y: " + ball.getPoint().getY());
+		System.out.println("Ball X: " + ballX);
+		System.out.println("Ball Y: " + ballY);
 
 		Point2 predictedPos = this.predictor.predictState(ballPositionHistory,
 				framesForward);
@@ -53,7 +53,7 @@ public class DefenderStrategy extends GeneralStrategy {
 
 		if (!Float.isInfinite(slope) && notShaky) {
 			System.out.println("BALL IS MOVING");
-			double collisionX = robot.getCenter().getX();
+			double collisionX = robotX;
 			double collisionY = 50;
 			if (slope * collisionX > leftGoalTopY) {
 				collisionY = leftGoalTopY;
@@ -66,8 +66,6 @@ public class DefenderStrategy extends GeneralStrategy {
 			System.out.println("Slope " + slope);
 			System.out.println("Collision coordinates " + collisionX + " "
 					+ collisionY);
-			double robotX = robot.getCenter().getX();
-			double robotY = robot.getCenter().getY();
 			System.out.println("Robot coordinates " + robotX + " " + robotY);
 
 			if (Math.abs(collisionY - robotY) > allowedDistError) {
