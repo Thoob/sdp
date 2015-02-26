@@ -3,9 +3,8 @@ package com.sdp.strategy;
 import com.sdp.Constants;
 import com.sdp.vision.PitchConstants;
 import com.sdp.world.DynamicWorldState;
+import com.sdp.world.MovingObject;
 import com.sdp.world.WorldState;
-import com.sdp.world.DynamicWorldState.Ball;
-import com.sdp.world.DynamicWorldState.Robot;
 
 public class GeneralStrategy {
 
@@ -29,30 +28,31 @@ public class GeneralStrategy {
 	protected float[] ourGoalEdges = new float[3];
 	protected int topOfPitch;
 	protected int botOfPitch;
-	
-	Robot robot;
-	Ball ball;
+
+	MovingObject robot;
+	MovingObject ball;
 	double robotX;
 	double robotY;
 	double robotAngleRad;
 	double robotAngleDeg;
 	double ballX;
 	double ballY;
-	
+
 	// Allowed errors
 	final int allowedDegreeError = 15;
 	final int allowedDistError = 20;
 
-	public void sendWorldState(WorldState worldState, DynamicWorldState dynWorldState) {
-		robot = dynWorldState.getAttacker();
-		ball = dynWorldState.getBall();
-		
-		robotX = robot.getCenter().getX();
-		robotY = robot.getCenter().getY();
-		robotAngleRad = robot.getHeading();
+	public void sendWorldState(WorldState worldState,
+			DynamicWorldState dynWorldState) {
+		robot = worldState.getDefenderRobot();
+		ball = worldState.getBall();
+
+		robotX = robot.x;
+		robotY = robot.y;
+		robotAngleRad = robot.orientation_angle;
 		robotAngleDeg = Math.toDegrees(robotAngleRad);
-		ballX = ball.getPoint().getX();
-		ballY = ball.getPoint().getY();
+		ballX = ball.x;
+		ballY = ball.y;
 
 		topOfPitch = PitchConstants.getPitchOutlineTop();
 		botOfPitch = PitchConstants.getPitchOutlineBottom();
@@ -78,16 +78,16 @@ public class GeneralStrategy {
 			ourGoalEdges[2] = PitchConstants.getPitchOutline()[3].getY();
 		}
 	}
-	
-	//Returns the zone an object with a given X value is in
-	//I'm so sorry for all these magic numbers! - Theo
+
+	// Returns the zone an object with a given X value is in
+	// I'm so sorry for all these magic numbers! - Theo
 	public int inZone(double objX) {
 		System.out.println("Ball X: " + (objX));
-		if(objX < -324){
+		if (objX < -324) {
 			return 0;
-		} else if (objX < 25){
+		} else if (objX < 25) {
 			return 1;
-		} else if (objX < 374){
+		} else if (objX < 374) {
 			return 2;
 		} else if (objX < 650) {
 			return 3;
@@ -95,7 +95,7 @@ public class GeneralStrategy {
 			return -1;
 		}
 	}
-	
+
 	public static double calculateAngle(float robotX, float robotY,
 			float robotOrientation, float targetX, float targetY) {
 		double robotRad = Math.toRadians(robotOrientation);

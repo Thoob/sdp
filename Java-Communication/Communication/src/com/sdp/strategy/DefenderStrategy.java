@@ -6,11 +6,9 @@ import com.sdp.planner.RobotCommands;
 import com.sdp.prediction.Calculations;
 import com.sdp.prediction.Oracle;
 import com.sdp.world.DynamicWorldState;
-import com.sdp.world.DynamicWorldState.Ball;
-import com.sdp.world.DynamicWorldState.Robot;
-import com.sdp.world.SimpleWorldState.Operation;
 import com.sdp.world.Point2;
 import com.sdp.world.SimpleWorldState;
+import com.sdp.world.SimpleWorldState.Operation;
 import com.sdp.world.WorldState;
 
 
