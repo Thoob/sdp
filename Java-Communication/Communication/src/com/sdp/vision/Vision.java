@@ -6,20 +6,20 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import com.sdp.Constants;
-import com.sdp.Constants.Strategy;
 import com.sdp.strategy.AttackerStrategy;
 import com.sdp.strategy.DefenderStrategy;
-import com.sdp.strategy.PassingStrategy;
 import com.sdp.strategy.GeneralStrategy;
+import com.sdp.strategy.PassingStrategy;
+import com.sdp.strategy.StrategyController;
+import com.sdp.strategy.StrategyController.StrategyType;
 import com.sdp.vision.interfaces.ObjectRecogniser;
 import com.sdp.vision.interfaces.VideoReceiver;
 import com.sdp.vision.interfaces.VisionDebugReceiver;
 import com.sdp.vision.interfaces.WorldStateReceiver;
 import com.sdp.world.DynamicWorldState;
+import com.sdp.world.DynamicWorldState.Ball;
 import com.sdp.world.StaticWorldState;
 import com.sdp.world.WorldState;
-import com.sdp.world.DynamicWorldState.Ball;
 
 /**
  * The main class for showing the video feed and processing the video data.
@@ -129,19 +129,19 @@ public class Vision implements VideoReceiver {
 		for (WorldStateReceiver receiver : Vision.worldStateReceivers) {
 			receiver.sendWorldState(this.worldState);
 		}
-		// For milestone 2
+
+		StrategyController sc = new StrategyController();
 		generalStrategy.sendWorldState(this.worldState);
-		if (Constants.currentStrategy == Strategy.ATTACK)
+		if (sc.getCurrentStrategy() == StrategyType.ATTACKING)
 			attackerStrategy.sendWorldState(this.dynamicWorldState, worldState);
-		else if (Constants.currentStrategy == Strategy.DEFEND)
+		else if (sc.getCurrentStrategy() == StrategyType.DEFENDING)
 			defenderStrategy.sendWorldState(this.dynamicWorldState,
 					this.worldState);
-		else if (Constants.currentStrategy == Strategy.PASSING)
+		else if (sc.getCurrentStrategy() == StrategyType.PASSING)
 			passingStrategy.sendWorldState(this.dynamicWorldState,
 					this.worldState);
-		
-		
-		//update ball position history
+
+		// update ball position history
 		Ball ball = dynamicWorldState.getBall();
 		worldState.updateBallPositionHistory(ball.getPoint());
 

@@ -5,13 +5,10 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.UIManager;
 
-import org.apache.commons.cli.Options;
-
 import au.edu.jcu.v4l4j.V4L4JConstants;
 
 import com.sdp.Communication;
 import com.sdp.Constants;
-import com.sdp.Constants.Strategy;
 import com.sdp.strategy.StrategyController;
 import com.sdp.vision.gui.VisionGUI;
 import com.sdp.vision.gui.tools.AlignmentTool;
@@ -131,24 +128,6 @@ public class RunVision {
 			gui.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-
-		// Code for milestone 2
-		if (args.length != 0) {
-			String action = args[0];
-			if (action.equals("attack")) {
-				// find the ball, move to this point and catch it
-				Constants.currentStrategy = Strategy.ATTACK;
-				System.out.println("Attack strategy was chosen");
-
-			} else if (action.equals("defend")) {
-				Constants.currentStrategy = Strategy.DEFEND;
-				System.out.println("Defence strategy was chosen");
-			} else {
-				System.out.println("Strategy not recognized.");
-			}
-		} else {
-			System.out.println("No strategy specified");
 		}
 	}
 }
