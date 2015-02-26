@@ -2,34 +2,57 @@ package com.sdp.strategy;
 
 import com.sdp.Constants;
 import com.sdp.vision.PitchConstants;
+import com.sdp.world.DynamicWorldState;
 import com.sdp.world.WorldState;
+import com.sdp.world.DynamicWorldState.Ball;
+import com.sdp.world.DynamicWorldState.Robot;
 
 public class GeneralStrategy {
 
 	// TODO dirty solution for milestone 2
 	// center coordinates
-	protected static float leftGoalBotX = -606;
-	protected static float leftGoalBotY = 132;
-	protected static float leftGoalTopX = -601;
-	protected static float leftGoalTopY = -229;
+	protected float leftGoalBotX = -606;
+	protected float leftGoalBotY = 132;
+	protected float leftGoalTopX = -601;
+	protected float leftGoalTopY = -229;
 
-	protected static float leftGoalX = -572;
-	protected static float leftGoalY = -62;
-	protected static float rightGoalX = 575;
-	protected static float rightGoalY = -52;
+	protected float leftGoalX = -572;
+	protected float leftGoalY = -62;
+	protected float rightGoalX = 575;
+	protected float rightGoalY = -52;
 
-	protected static float goalX;
-	protected static float[] goalY;
-	protected static float ourGoalX;
-	protected static float[] ourGoalY;
+	protected float goalX;
+	protected float[] goalY;
+	protected float ourGoalX;
+	protected float[] ourGoalY;
 
-	protected static float[] ourGoalEdges = new float[3];
-	protected static int topOfPitch;
-	protected static int botOfPitch;
+	protected float[] ourGoalEdges = new float[3];
+	protected int topOfPitch;
+	protected int botOfPitch;
 	
-	public static final int allowedDegreeError = 15;
+	Robot robot;
+	Ball ball;
+	double robotX;
+	double robotY;
+	double robotAngleRad;
+	double robotAngleDeg;
+	double ballX;
+	double ballY;
+	
+	// Allowed errors
+	final int allowedDegreeError = 15;
+	final int allowedDistError = 20;
 
-	public void sendWorldState(WorldState worldState) {
+	public void sendWorldState(WorldState worldState, DynamicWorldState dynWorldState) {
+		robot = dynWorldState.getAttacker();
+		ball = dynWorldState.getBall();
+		
+		robotX = robot.getCenter().getX();
+		robotY = robot.getCenter().getY();
+		robotAngleRad = robot.getHeading();
+		robotAngleDeg = Math.toDegrees(robotAngleRad);
+		ballX = ball.getPoint().getX();
+		ballY = ball.getPoint().getY();
 
 		topOfPitch = PitchConstants.getPitchOutlineTop();
 		botOfPitch = PitchConstants.getPitchOutlineBottom();

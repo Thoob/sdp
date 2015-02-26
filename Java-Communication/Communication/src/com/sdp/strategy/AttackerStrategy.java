@@ -3,8 +3,6 @@ package com.sdp.strategy;
 import com.sdp.planner.RobotCommands;
 import com.sdp.planner.RobotPlanner;
 import com.sdp.world.DynamicWorldState;
-import com.sdp.world.DynamicWorldState.Ball;
-import com.sdp.world.DynamicWorldState.Robot;
 import com.sdp.world.SimpleWorldState;
 import com.sdp.world.SimpleWorldState.Operation;
 import com.sdp.world.WorldState;
@@ -13,22 +11,13 @@ public class AttackerStrategy extends GeneralStrategy {
 	
 	public void sendWorldState(DynamicWorldState dynWorldState,
 			WorldState worldState) {
-		// Initialise robot and ball objects
-		Robot robot = dynWorldState.getAttacker();
-		Ball ball = dynWorldState.getBall();
 
-		double robotX = robot.getCenter().getX();
-		double robotY = robot.getCenter().getY();
-		double robotAngleRad = robot.getHeading();
-		double robotAngleDeg = Math.toDegrees(robotAngleRad);
-		double ballX = ball.getPoint().getX();
-		double ballY = ball.getPoint().getY();
 		// Desired angle to face ball
 		double ballAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
 				robotAngleRad, ballX, ballY);
 		double ballDiffInHeadings = Math.abs(robotAngleDeg - ballAngleDeg);
 		// Robot is facing the ball if within this angle in degrees of the ball
-		boolean isRobotFacingGoal = (ballDiffInHeadings < GeneralStrategy.allowedDegreeError || ballDiffInHeadings > 360 - allowedDegreeError);
+		boolean isRobotFacingGoal = (ballDiffInHeadings < allowedDegreeError || ballDiffInHeadings > 360 - allowedDegreeError);
 
 		// 1 - Rotate to face ball
 		if (!RobotPlanner.doesOurRobotHaveBall(robot, ball)
@@ -59,7 +48,6 @@ public class AttackerStrategy extends GeneralStrategy {
 			}
 		}
 		
-
 		// 3 - Catch ball
 		if (!RobotPlanner.doesOurRobotHaveBall(robot, ball)
 				&& isRobotFacingGoal && RobotPlanner.canCatchBall(robot, ball)
@@ -126,20 +114,7 @@ public class AttackerStrategy extends GeneralStrategy {
 	}
 
 	private void scoreGoal(DynamicWorldState dynWorldState,
-			WorldState worldState) {
-		// turn towards the goal
-		Ball ball = dynWorldState.getBall();
-		double ballX = ball.getPoint().getX();
-		double ballY = ball.getPoint().getY();
-		Robot robot = dynWorldState.getAttacker();
-		double robotX = robot.getCenter().getX();
-		double robotY = robot.getCenter().getY();
-		double robotDir = robot.getHeading();
-		double robotAngleDeg = Math.toDegrees(robotDir);
-		double rightGoalX = GeneralStrategy.rightGoalX;
-		double rightGoalY = GeneralStrategy.rightGoalY;
-		double leftGoalX = GeneralStrategy.leftGoalX;
-		double leftGoalY = GeneralStrategy.leftGoalY;		
+			WorldState worldState) {	
 		boolean facingGoal = false;
 
 		System.out.println("goal " + leftGoalX + " " + leftGoalY);
@@ -147,7 +122,7 @@ public class AttackerStrategy extends GeneralStrategy {
 		System.out.println("ball " + ballX + " " + ballY);
 
 		double desiredAngleDegb = RobotPlanner.desiredAngle(robotX, robotY,
-				robotDir, ballX, ballY);
+				robotAngleRad, ballX, ballY);
 
 		System.out.println("desiredAngleBall " + desiredAngleDegb);
 
@@ -155,10 +130,10 @@ public class AttackerStrategy extends GeneralStrategy {
 		double desiredAngleDeg = 0.0;
 		if(worldState.weAreShootingRight){
 			desiredAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
-					robotDir, rightGoalX, rightGoalY);
+					robotAngleRad, rightGoalX, rightGoalY);
 		} else {
 			desiredAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
-					robotDir, leftGoalX, leftGoalY);
+					robotAngleRad, leftGoalX, leftGoalY);
 		}
 		
 		System.out.println("desiredAngleGoal " + desiredAngleDeg);

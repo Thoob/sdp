@@ -6,8 +6,6 @@ import com.sdp.world.DynamicWorldState.Robot;
 import com.sdp.world.WorldState;
 
 public class PassingStrategy extends GeneralStrategy {
-	private final int allowedDegreeError = 15;
-
 	protected boolean ballIsOnSlopeEdge;
 	protected boolean ballIsOnSideEdge;
 	protected boolean ballIsOnGoalLine;
@@ -30,13 +28,10 @@ public class PassingStrategy extends GeneralStrategy {
 		// TODO: Test! - somewhat difficulty in recognising 3 robots across the
 		// pitch
 		// ROBOT DECLARATIONS //
-		Robot robot = dynWorldState.getDefender();
 		Robot attackingRobot = dynWorldState.getAttacker();
 		Robot enemyDefender = dynWorldState.getEnemyDefender();
 
 		// ROBOT COORDANATES //
-		double robotX = robot.getCenter().getX();
-		double robotY = robot.getCenter().getY();
 		double attackerX = attackingRobot.getCenter().getX();
 		double attackerY = attackingRobot.getCenter().getY();
 		double enemyDefenderX = enemyDefender.getCenter().getX();

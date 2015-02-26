@@ -17,7 +17,6 @@ import com.sdp.world.WorldState;
 public class DefenderStrategy extends GeneralStrategy {
 	private Oracle predictor = null;
 	final int framesForward = 20;
-	final int allowedDistError = 20;
 
 	public DefenderStrategy() {
 		this.predictor = new Oracle(300, 300, 600, 600);
@@ -25,8 +24,6 @@ public class DefenderStrategy extends GeneralStrategy {
 
 	public void sendWorldState(DynamicWorldState dynWorldState,
 			WorldState worldState) {
-		Robot robot = dynWorldState.getDefender();
-		Ball ball = dynWorldState.getBall();
 		Point2 ballPos = new Point2((float) ball.getPoint().getX(),
 				(float) ball.getPoint().getY());
 
@@ -59,10 +56,10 @@ public class DefenderStrategy extends GeneralStrategy {
 			System.out.println("BALL IS MOVING");
 			double collisionX = robot.getCenter().getX();
 			double collisionY = 50;
-			if (slope * collisionX > GeneralStrategy.leftGoalTopY) {
-				collisionY = GeneralStrategy.leftGoalTopY;
-			} else if (slope * collisionX < GeneralStrategy.leftGoalBotY) {
-				collisionY = GeneralStrategy.leftGoalBotY;
+			if (slope * collisionX > leftGoalTopY) {
+				collisionY = leftGoalTopY;
+			} else if (slope * collisionX < leftGoalBotY) {
+				collisionY = leftGoalBotY;
 			} else {
 				collisionY = collisionX * slope;
 			}
