@@ -17,7 +17,7 @@ public class StrategyController implements WorldStateReceiver {
 
 	private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 	private BallLocation ballLocation;
-	private StrategyType currentStrategy = StrategyType.DO_NOTHING;
+	private static StrategyType currentStrategy = StrategyType.DO_NOTHING;
 	private boolean pauseStrategyController = true;
 
 	// Advanced Tactics flags
