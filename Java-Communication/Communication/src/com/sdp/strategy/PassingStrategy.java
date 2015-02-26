@@ -25,6 +25,7 @@ public class PassingStrategy extends GeneralStrategy {
 
 	public void sendWorldState(DynamicWorldState dynWorldState,
 			WorldState worldState) {
+		if(robot==null||ball==null)return;
 		// TODO: Test! - somewhat difficulty in recognising 3 robots across the
 		// pitch
 		// ROBOT DECLARATIONS //

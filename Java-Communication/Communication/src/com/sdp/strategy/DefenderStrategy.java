@@ -24,6 +24,7 @@ public class DefenderStrategy extends GeneralStrategy {
 
 	public void sendWorldState(DynamicWorldState dynWorldState,
 			WorldState worldState) {
+		if(robot==null||ball==null)return;
 		Point2 ballPos = new Point2((float) ball.getPoint().getX(),
 				(float) ball.getPoint().getY());
 
