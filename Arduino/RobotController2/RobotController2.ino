@@ -8,10 +8,15 @@
 #include "SDPArduino.h"
 #include <Wire.h>
 
+// TO DO: Check the slot for the KICKER motor, rework CATCH and KICK functions.
+
 #define arduinoLED 13                        // Arduino LED on board
 #define left 5                               // Left wheel motor
 #define right 4                              // Right wheel motor
-#define kicker 3                             // Kicker/catcher motor
+#define catcher 3                             // Catcher motor
+
+#define kicker 1                              //Kicker motor MOTOR NUMBER TO BE CHECKED!
+
 #define minpower 30                          // Minimum Speed of the motors in power%
 
 SerialCommand sCmd;                          // The demo SerialCommand object
@@ -164,7 +169,7 @@ void run_engine() {
   }
   rotateStopped = true;
 }
-
+//REWORK WITH NEW MOTORS
 // Kick script
 void move_kick() {
 
@@ -193,6 +198,7 @@ void move_kick() {
 // Catch script
 void move_catch() {
 
+<<<<<<< HEAD
 
   Serial.println("Catching");
   //lift and move forward
@@ -258,6 +264,26 @@ void move_shortrotL() {
 
   if (time == NULL) {
     time = 250;
+=======
+  if (catchflag == 0) {
+
+    catchflag = 1;
+
+    Serial.println("Catching");
+    //lift and move forward
+    motorBackward(1, 60);
+    motorForward(4, 40);
+    motorForward(5, 40);
+    delay(450);
+    motorStop(kicker);
+    delay(250);
+    //catch
+    motorForward(1, 100);  
+    delay(250);
+    motorStop(kicker);
+    force_stop();
+    delay(1000);
+>>>>>>> 17d7ea6c61afcebf166a01901ee4a86269785b0b
   }
   if (power == NULL) {
     power = 100;
