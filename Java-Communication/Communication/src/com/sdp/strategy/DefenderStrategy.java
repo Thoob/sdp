@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import com.sdp.planner.RobotCommands;
 import com.sdp.prediction.Calculations;
 import com.sdp.prediction.Oracle;
-import com.sdp.world.DynamicWorldState;
 import com.sdp.world.Point2;
 import com.sdp.world.SimpleWorldState;
 import com.sdp.world.SimpleWorldState.Operation;
@@ -20,7 +19,7 @@ public class DefenderStrategy extends GeneralStrategy {
 		this.predictor = new Oracle(300, 300, 600, 600);
 	}
 
-	public void sendWorldState(DynamicWorldState dynWorldState,
+	public void sendWorldState(
 			WorldState worldState) {
 		if(robot==null||ball==null)return;
 		Point2 ballPos = new Point2((float) ballX,

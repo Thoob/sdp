@@ -2,15 +2,13 @@ package com.sdp.strategy;
 
 import com.sdp.planner.RobotCommands;
 import com.sdp.planner.RobotPlanner;
-import com.sdp.world.DynamicWorldState;
 import com.sdp.world.SimpleWorldState;
 import com.sdp.world.SimpleWorldState.Operation;
 import com.sdp.world.WorldState;
 
 public class AttackerStrategy extends GeneralStrategy {
 
-	public void sendWorldState(DynamicWorldState dynWorldState,
-			WorldState worldState) {
+	public void sendWorldState(WorldState worldState) {
 		if (robot == null || ball == null)
 			return;
 		// Desired angle to face ball
@@ -63,7 +61,7 @@ public class AttackerStrategy extends GeneralStrategy {
 
 		// 4 - Face goal and kick ball (hopefully into the goal!)
 		if (RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)) {
-			scoreGoal(dynWorldState, worldState);
+			scoreGoal(worldState);
 			System.out.println("Scoring goal!");
 		}
 	}
@@ -100,7 +98,6 @@ public class AttackerStrategy extends GeneralStrategy {
 				}
 				return;
 			} else {
-
 				boolean shouldRotateRight = RobotPlanner.shouldRotateRight(
 						desiredAngleDeg, robotAngleDeg);
 				if (shouldRotateRight
@@ -117,8 +114,7 @@ public class AttackerStrategy extends GeneralStrategy {
 		}
 	}
 
-	private void scoreGoal(DynamicWorldState dynWorldState,
-			WorldState worldState) {
+	private void scoreGoal(WorldState worldState) {
 		boolean facingGoal = false;
 
 		System.out.println("goal " + leftGoalX + " " + leftGoalY);

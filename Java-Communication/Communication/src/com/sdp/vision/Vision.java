@@ -133,10 +133,9 @@ public class Vision implements VideoReceiver {
 		StrategyController sc = new StrategyController();
 		generalStrategy.sendWorldState(this.worldState, this.dynamicWorldState);
 		if (sc.getCurrentStrategy() == StrategyType.ATTACKING)
-			attackerStrategy.sendWorldState(this.dynamicWorldState, worldState);
+			attackerStrategy.sendWorldState(worldState);
 		else if (sc.getCurrentStrategy() == StrategyType.DEFENDING)
-			defenderStrategy.sendWorldState(this.dynamicWorldState,
-					this.worldState);
+			defenderStrategy.sendWorldState(this.worldState);
 		else if (sc.getCurrentStrategy() == StrategyType.PASSING)
 			passingStrategy.sendWorldState(this.dynamicWorldState,
 					this.worldState);

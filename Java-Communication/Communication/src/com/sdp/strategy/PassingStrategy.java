@@ -20,7 +20,6 @@ public class PassingStrategy extends GeneralStrategy {
 	protected double distFromBall;
 
 	public PassingStrategy() {
-
 	}
 
 	public void sendWorldState(DynamicWorldState dynWorldState,
