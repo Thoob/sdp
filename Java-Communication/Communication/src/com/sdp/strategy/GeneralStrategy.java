@@ -7,16 +7,10 @@ import com.sdp.world.WorldState;
 
 public class GeneralStrategy {
 
-	// TODO dirty solution for milestone 2
-
-	protected float leftGoalBotX = -606;
-	protected float leftGoalBotY = 132;
-	protected float leftGoalTopX = -601;
-	protected float leftGoalTopY = -229;
 	// center coordinates
 	protected float leftGoalX = -572;
 	protected float[] leftGoalY = new float[3];
-	protected float rightGoalX = 575;
+	protected float rightGoalX;
 	protected float[] rightGoalY = new float[3];
 
 	protected int topOfPitch;

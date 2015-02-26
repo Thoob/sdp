@@ -55,10 +55,10 @@ public class DefenderStrategy extends GeneralStrategy {
 			System.out.println("BALL IS MOVING");
 			double collisionX = robotX;
 			double collisionY = 50;
-			if (slope * collisionX > leftGoalTopY) {
-				collisionY = leftGoalTopY;
-			} else if (slope * collisionX < leftGoalBotY) {
-				collisionY = leftGoalBotY;
+			if (slope * collisionX > leftGoalY[2]) {
+				collisionY = leftGoalY[2];
+			} else if (slope * collisionX < leftGoalY[0]) {
+				collisionY = leftGoalY[0];
 			} else {
 				collisionY = collisionX * slope;
 			}
