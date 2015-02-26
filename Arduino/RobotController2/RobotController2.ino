@@ -42,8 +42,6 @@ void setup() {
 
   sCmd.addCommand("SROTL", move_shortrotL);
   sCmd.addCommand("SROTR", move_shortrotR);
-  
-  sCmd.addCommand("SMOVB", move_shortmovB);
 
   //Remote Control Commands
   sCmd.addCommand("RCFORWARD", rc_forward);
@@ -194,18 +192,10 @@ void move_kick() {
 // Catch script
 void move_catch() {
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 
   Serial.println("Catching");
   //lift and move forward
-  motorBackward(kicker, 70);
-=======
-
-  Serial.println("Catching");
-  //lift and move forward
-  motorBackward(catch, 60);
->>>>>>> 56a9e0a0a3af7a154113969b459f1908059b3719
+  motorBackward(catcher, 60);
   motorForward(right, 70);
   motorForward(left, 1.29*70);
   delay(450);
@@ -213,9 +203,9 @@ void move_catch() {
   delay(250);
   
   //catch
-  motorForward(catch, 100);  
+  motorForward(catcher, 100);  
   delay(250);
-  motorStop(catch);
+  motorStop(catcher);
   
   leftpower = 0;
   motorStop(left);
@@ -267,26 +257,6 @@ void move_shortrotL() {
 
   if (time == NULL) {
     time = 250;
-=======
-  if (catchflag == 0) {
-
-    catchflag = 1;
-
-    Serial.println("Catching");
-    //lift and move forward
-    motorBackward(1, 60);
-    motorForward(4, 40);
-    motorForward(5, 40);
-    delay(450);
-    motorStop(kicker);
-    delay(250);
-    //catch
-    motorForward(1, 100);  
-    delay(250);
-    motorStop(kicker);
-    force_stop();
-    delay(1000);
->>>>>>> 17d7ea6c61afcebf166a01901ee4a86269785b0b
   }
   if (power == NULL) {
     power = 100;
@@ -327,7 +297,7 @@ void move_shortrotR() {
     power = 100;
   }
 
-  motorBackward(left, power);
+  motorForward(left, power);
   motorBackward(right, power);
 
   delay(time);
@@ -339,42 +309,6 @@ void move_shortrotR() {
   motorStop(right);
 
 }
-
-//Script to rotate the robot quickly to the right for a specified time.
-void move_shortmovB() {
-
-  char *arg1;
-  char *arg2;
-  int time;
-  int power;
-
-  arg1 = sCmd.next();
-  time = atoi(arg1);
-
-  arg2 = sCmd.next();
-  power = atoi(arg2);
-
-  if (time == NULL) {
-    time = 250;
-  }
-  if (power == NULL) {
-    power = 100;
-  }
-
-  motorBackward(left, power);
-  motorBackward(right, power);
-
-  delay(time);
-
-  leftpower = 0;
-  motorStop(left);
-  
-  rightpower = 0;
-  motorStop(right);
-
-}
-
-
 
 
 //Remote Control Commands
