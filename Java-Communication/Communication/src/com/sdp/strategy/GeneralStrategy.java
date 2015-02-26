@@ -26,6 +26,8 @@ public class GeneralStrategy {
 	protected static float[] ourGoalEdges = new float[3];
 	protected static int topOfPitch;
 	protected static int botOfPitch;
+	
+	public static final int allowedDegreeError = 15;
 
 	public void sendWorldState(WorldState worldState) {
 

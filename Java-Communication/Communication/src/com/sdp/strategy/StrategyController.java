@@ -8,7 +8,7 @@ import com.sdp.world.WorldState;
 public class StrategyController implements WorldStateReceiver {
 
 	public enum StrategyType {
-		DO_NOTHING, PASSING, ATTACKING, DEFENDING, MARKING
+		DO_NOTHING, PASSING, ATTACKING, DEFENDING,
 	}
 
 	public enum BallLocation {
@@ -42,8 +42,6 @@ public class StrategyController implements WorldStateReceiver {
 			break;
 		case DEFENDING:
 			break;
-		case MARKING:
-			break;
 		default:
 			break;
 		}
@@ -52,17 +50,33 @@ public class StrategyController implements WorldStateReceiver {
 		pcs.firePropertyChange("currentStrategy", oldType, currentStrategy);
 	}
 
-	/*
-	 * TODO 
-	 * We start with defender strategy by default which tries to save the goal
-	 * and block ball and acquire it
-	 * 
-	 * Once we have the ball we either choose passing or attacking strategy
-	 */
 	@Override
 	public void sendWorldState(WorldState worldState) {
 		if (pauseStrategyController)
 			return;
+		// Mark zone the ball was in on the previous frame.
+		BallLocation prevBallLocation = this.ballLocation;
+
+		// Find where the ball is located on the pitch
+		findBallLocation(worldState);
+
+		// Change strategy only if the ball has changed pitch area.
+		if (prevBallLocation != ballLocation) {
+			switch (this.ballLocation) {
+			case DEFENDER:
+				// TODO maybe add attacking in some cases?
+				changeToStrategy(StrategyType.PASSING);
+				break;
+			case ENEMY_ATTACKER:
+				changeToStrategy(StrategyType.DEFENDING);
+				break;
+			default:
+				break;
+			}
+		}
+	}
+
+	private void findBallLocation(WorldState worldState) {
 		// Check where the ball is, and make a decision on which strategies to
 		// run based upon that.
 		int defenderCheck = (worldState.weAreShootingRight) ? worldState.dividers[0]
@@ -72,10 +86,7 @@ public class StrategyController implements WorldStateReceiver {
 		int rightCheck = (worldState.weAreShootingRight) ? worldState.dividers[2]
 				: worldState.dividers[1];
 		float ballX = worldState.getBall().x;
-		// Mark zone the ball was in on the previous frame.
-		BallLocation prevBallLocation = this.ballLocation;
 
-		// Find where the ball is located on the pitch
 		if ((worldState.weAreShootingRight && ballX < defenderCheck)
 				|| (!worldState.weAreShootingRight && ballX > defenderCheck)) {
 			this.ballLocation = BallLocation.DEFENDER;
@@ -88,24 +99,6 @@ public class StrategyController implements WorldStateReceiver {
 		} else if (!worldState.weAreShootingRight && (ballX < leftCheck)
 				|| worldState.weAreShootingRight && (ballX > rightCheck)) {
 			this.ballLocation = BallLocation.ENEMY_DEFENDER;
-		}
-
-		// Change strategy only if the ball has changed pitch area.
-		if (prevBallLocation != ballLocation) {
-			switch (this.ballLocation) {
-			case ATTACKER:
-				changeToStrategy(StrategyType.ATTACKING);
-				break;
-			case DEFENDER:
-				changeToStrategy(StrategyType.PASSING);
-				break;
-			case ENEMY_ATTACKER:
-				changeToStrategy(StrategyType.DEFENDING);
-				break;
-			case ENEMY_DEFENDER:
-				changeToStrategy(StrategyType.MARKING);
-				break;
-			}
 		}
 	}
 

@@ -10,7 +10,6 @@ import com.sdp.world.SimpleWorldState.Operation;
 import com.sdp.world.WorldState;
 
 public class AttackerStrategy extends GeneralStrategy {
-	private final int allowedDegreeError = 15;
 	
 	public void sendWorldState(DynamicWorldState dynWorldState,
 			WorldState worldState) {
@@ -29,7 +28,7 @@ public class AttackerStrategy extends GeneralStrategy {
 				robotAngleRad, ballX, ballY);
 		double ballDiffInHeadings = Math.abs(robotAngleDeg - ballAngleDeg);
 		// Robot is facing the ball if within this angle in degrees of the ball
-		boolean isRobotFacingGoal = (ballDiffInHeadings < allowedDegreeError || ballDiffInHeadings > 360 - allowedDegreeError);
+		boolean isRobotFacingGoal = (ballDiffInHeadings < GeneralStrategy.allowedDegreeError || ballDiffInHeadings > 360 - allowedDegreeError);
 
 		// 1 - Rotate to face ball
 		if (!RobotPlanner.doesOurRobotHaveBall(robot, ball)
