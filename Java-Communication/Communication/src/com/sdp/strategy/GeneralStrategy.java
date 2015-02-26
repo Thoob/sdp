@@ -1,6 +1,5 @@
 package com.sdp.strategy;
 
-import com.sdp.Constants;
 import com.sdp.vision.PitchConstants;
 import com.sdp.world.DynamicWorldState;
 import com.sdp.world.MovingObject;
@@ -9,23 +8,17 @@ import com.sdp.world.WorldState;
 public class GeneralStrategy {
 
 	// TODO dirty solution for milestone 2
-	// center coordinates
+
 	protected float leftGoalBotX = -606;
 	protected float leftGoalBotY = 132;
 	protected float leftGoalTopX = -601;
 	protected float leftGoalTopY = -229;
-
+	// center coordinates
 	protected float leftGoalX = -572;
-	protected float leftGoalY = -62;
+	protected float[] leftGoalY = new float[3];
 	protected float rightGoalX = 575;
-	protected float rightGoalY = -52;
+	protected float[] rightGoalY = new float[3];
 
-	protected float goalX;
-	protected float[] goalY;
-	protected float ourGoalX;
-	protected float[] ourGoalY;
-
-	protected float[] ourGoalEdges = new float[3];
 	protected int topOfPitch;
 	protected int botOfPitch;
 
@@ -56,27 +49,12 @@ public class GeneralStrategy {
 
 		topOfPitch = PitchConstants.getPitchOutlineTop();
 		botOfPitch = PitchConstants.getPitchOutlineBottom();
-		if (Constants.areWeShootingRight) {
-			goalX = PitchConstants.getPitchOutline()[3].getX();
-			goalY = worldState.rightGoal;
 
-			ourGoalX = PitchConstants.getPitchOutline()[7].getX();
-			ourGoalY = worldState.leftGoal;
+		leftGoalX = PitchConstants.getPitchOutline()[7].getX();
+		leftGoalY = worldState.leftGoal;
 
-			ourGoalEdges[0] = PitchConstants.getPitchOutline()[7].getY();
-			ourGoalEdges[1] = worldState.leftGoal[1];
-			ourGoalEdges[2] = PitchConstants.getPitchOutline()[6].getY();
-		} else {
-			goalX = PitchConstants.getPitchOutline()[7].getX();
-			goalY = worldState.leftGoal;
-
-			ourGoalX = PitchConstants.getPitchOutline()[3].getX();
-			ourGoalY = worldState.rightGoal;
-
-			ourGoalEdges[0] = PitchConstants.getPitchOutline()[2].getY();
-			ourGoalEdges[1] = worldState.rightGoal[1];
-			ourGoalEdges[2] = PitchConstants.getPitchOutline()[3].getY();
-		}
+		rightGoalX = PitchConstants.getPitchOutline()[3].getX();
+		rightGoalY = worldState.rightGoal;
 	}
 
 	// Returns the zone an object with a given X value is in

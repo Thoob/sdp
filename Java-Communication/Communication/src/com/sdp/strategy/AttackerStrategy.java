@@ -134,10 +134,10 @@ public class AttackerStrategy extends GeneralStrategy {
 		double desiredAngleDeg = 0.0;
 		if (worldState.weAreShootingRight) {
 			desiredAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
-					robotAngleRad, rightGoalX, rightGoalY);
+					robotAngleRad, rightGoalX, rightGoalY[1]);
 		} else {
 			desiredAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
-					robotAngleRad, leftGoalX, leftGoalY);
+					robotAngleRad, leftGoalX, leftGoalY[1]);
 		}
 
 		System.out.println("desiredAngleGoal " + desiredAngleDeg);
