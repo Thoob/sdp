@@ -85,20 +85,28 @@ public class StrategyController implements WorldStateReceiver {
 				: worldState.dividers[0];
 		int rightCheck = (worldState.weAreShootingRight) ? worldState.dividers[2]
 				: worldState.dividers[1];
+		if(worldState.getBall()==null){
+			System.out.println("No ball on pitch");
+			return;
+		}
 		float ballX = worldState.getBall().x;
 
 		if ((worldState.weAreShootingRight && ballX < defenderCheck)
 				|| (!worldState.weAreShootingRight && ballX > defenderCheck)) {
 			this.ballLocation = BallLocation.DEFENDER;
+			System.out.println("DEFENDER");
 		} else if (ballX > leftCheck && ballX < rightCheck) {
 			this.ballLocation = BallLocation.ATTACKER;
+			System.out.println("ATACKER");
 		} else if (worldState.weAreShootingRight && ballX > defenderCheck
 				&& ballX < leftCheck || !worldState.weAreShootingRight
 				&& ballX < defenderCheck && ballX > rightCheck) {
 			this.ballLocation = BallLocation.ENEMY_ATTACKER;
+			System.out.println("E_ATACKER");
 		} else if (!worldState.weAreShootingRight && (ballX < leftCheck)
 				|| worldState.weAreShootingRight && (ballX > rightCheck)) {
 			this.ballLocation = BallLocation.ENEMY_DEFENDER;
+			System.out.println("E_DEFENDER");			
 		}
 	}
 

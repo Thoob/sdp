@@ -19,11 +19,9 @@ public class WorldState {
 	// Enemy team robots
 	private MovingObject enemyDefenderRobot;
 	private MovingObject enemyAttackerRobot;
-
+	
 	private MovingObject ball;
-	// Pitch
 	private Pitch playingField;
-
 	// Flags
 	public boolean weAreBlue, weAreShootingRight;
 	// Oracle for prediction
@@ -188,7 +186,6 @@ public class WorldState {
 		if (this.ballPositionHistory.size() > 5)
 			this.ballPositionHistory.remove(0);
 	}
-
 
 	// methods for implementation of the prediction system with the world state
 	public MovingObject predictNextState(int framesForward) {

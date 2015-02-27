@@ -85,6 +85,8 @@ public class StrategySelectorTool implements GUITool {
 			this.add(defStrat);
 			this.add(passStrat);
 			this.add(nullStrat);
+			this.add(pauseController);
+			this.add(startController);
 
 			atkStrat.addActionListener(new ActionListener() {
 				@Override

@@ -7,30 +7,34 @@ import com.sdp.world.WorldState;
 
 public class GeneralStrategy {
 
-	// center coordinates
-	protected float leftGoalX = -572;
-	protected float[] leftGoalY = new float[3];
+	protected float leftGoalX;
 	protected float rightGoalX;
+	protected float[] leftGoalY = new float[3];
 	protected float[] rightGoalY = new float[3];
 
 	protected int topOfPitch;
 	protected int botOfPitch;
 
-	MovingObject robot;
-	MovingObject ball;
-	double robotX;
-	double robotY;
-	double robotAngleRad;
-	double robotAngleDeg;
-	double ballX;
-	double ballY;
+	protected MovingObject robot;
+	protected MovingObject ball;
+	protected double robotX;
+	protected double robotY;
+	protected double robotAngleRad;
+	protected double robotAngleDeg;
+	protected double ballX;
+	protected double ballY;
 
 	// Allowed errors
-	final int allowedDegreeError = 15;
-	final int allowedDistError = 20;
+	protected final int allowedDegreeError = 15;
+	protected final int allowedDistError = 20;
+	protected WorldState worldState = null;
 
 	public void sendWorldState(WorldState worldState,
 			DynamicWorldState dynWorldState) {
+		this.worldState = worldState;
+		if (robot == null || ball == null)
+			return;
+
 		robot = worldState.getDefenderRobot();
 		ball = worldState.getBall();
 
@@ -51,23 +55,13 @@ public class GeneralStrategy {
 		rightGoalY = worldState.rightGoal;
 	}
 
-	// Returns the zone an object with a given X value is in
-	// I'm so sorry for all these magic numbers! - Theo
-	public int inZone(double objX) {
-		System.out.println("Ball X: " + (objX));
-		if (objX < -324) {
-			return 0;
-		} else if (objX < 25) {
-			return 1;
-		} else if (objX < 374) {
-			return 2;
-		} else if (objX < 650) {
-			return 3;
-		} else {
-			return -1;
-		}
-	}
-
+	/*
+	 * // Returns the zone an object with a given X value is in // I'm so sorry
+	 * for all these magic numbers! - Theo public int inZone(double objX) {
+	 * System.out.println("Ball X: " + (objX)); if (objX < -324) { //-324 return
+	 * 0; } else if (objX < 25) { return 1; } else if (objX < 374) { return 2; }
+	 * else if (objX < 650) { return 3; } else { return -1; } }
+	 */
 	public static double calculateAngle(float robotX, float robotY,
 			float robotOrientation, float targetX, float targetY) {
 		double robotRad = Math.toRadians(robotOrientation);

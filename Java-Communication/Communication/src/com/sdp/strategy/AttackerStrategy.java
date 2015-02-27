@@ -9,6 +9,7 @@ import com.sdp.world.WorldState;
 public class AttackerStrategy extends GeneralStrategy {
 
 	public void sendWorldState(WorldState worldState) {
+		System.out.println("ballX " + ballX + " ballY " + ballY);
 		if (robot == null || ball == null)
 			return;
 		// Desired angle to face ball
@@ -26,13 +27,11 @@ public class AttackerStrategy extends GeneralStrategy {
 		}
 
 		// 2 - Go towards ball if it is in our attacker zone
-		System.out.println("Ball is in zone " + inZone(ballX));
 		if (worldState.weAreShootingRight) {
 			if (!RobotPlanner
 					.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)
 					&& isRobotFacingGoal
-					&& !RobotPlanner.canCatchBall(robotX, robotY, ballX, ballY)
-					&& (inZone(ballX) == 2)) {
+					&& !RobotPlanner.canCatchBall(robotX, robotY, ballX, ballY)) {
 				RobotCommands.goStraight();
 				SimpleWorldState.previousOperation = Operation.NONE;
 				System.out.println("Moving towards ball.");
@@ -41,8 +40,7 @@ public class AttackerStrategy extends GeneralStrategy {
 			if (!RobotPlanner
 					.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)
 					&& isRobotFacingGoal
-					&& !RobotPlanner.canCatchBall(robotX, robotY, ballX, ballY)
-					&& (inZone(ballX) == 1)) {
+					&& !RobotPlanner.canCatchBall(robotX, robotY, ballX, ballY)) {
 				RobotCommands.goStraight();
 				SimpleWorldState.previousOperation = Operation.NONE;
 				System.out.println("Moving towards ball.");
@@ -151,9 +149,7 @@ public class AttackerStrategy extends GeneralStrategy {
 		if (SimpleWorldState.previousOperation != Operation.KICK
 				&& facingGoal
 				&& RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX,
-						ballY)) { // change
-			// to
-			// doesRobotHaveBall
+						ballY)) {
 			RobotCommands.kick();
 			SimpleWorldState.previousOperation = Operation.KICK;
 		}
