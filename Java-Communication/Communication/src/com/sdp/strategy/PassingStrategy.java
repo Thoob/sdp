@@ -2,7 +2,6 @@ package com.sdp.strategy;
 
 import com.sdp.planner.RobotPlanner;
 import com.sdp.world.DynamicWorldState;
-import com.sdp.world.DynamicWorldState.Robot;
 import com.sdp.world.WorldState;
 
 /**
@@ -10,17 +9,6 @@ import com.sdp.world.WorldState;
  * pitch
  */
 public class PassingStrategy extends GeneralStrategy {
-	/*
-	 * why do we need these???? they are not used anywhere...
-	 * 
-	 * protected boolean ballIsOnSlopeEdge; protected boolean ballIsOnSideEdge;
-	 * protected boolean ballIsOnGoalLine; protected boolean ballIsOnDefCheck;
-	 * protected boolean robotIsOnGoalLine; protected boolean catcherIsUp =
-	 * false; protected boolean affectBallCaught = true; protected boolean
-	 * defenderHasArrived = false; protected boolean defenderHasArrivedAtSafe =
-	 * false; protected boolean defenderIsSafe = false; protected double
-	 * defenderAngleToGoal; protected double distFromBall;
-	 */
 	StrategyHelper sh;
 
 	public PassingStrategy() {
@@ -32,37 +20,11 @@ public class PassingStrategy extends GeneralStrategy {
 		if (robot == null || ball == null)
 			return;
 
-		// TODO this seems to be wrong!!! We don't really care about enemy
-		// defender angle
-
-		// ROBOT DECLARATIONS //
-		Robot enemyDefender = dynWorldState.getEnemyDefender();
-
-		// ROBOT COORDINATES //
-		double enemyDefenderX = enemyDefender.getCenter().getX();
-		double enemyDefenderY = enemyDefender.getCenter().getY();
-
-		// FACING ANGLES //
-		double attackerAngle = RobotPlanner.desiredAngle(robotX, robotY,
-				robotAngleRad, attackerX, attackerY);
-		double enemyDefenderAngle = RobotPlanner.desiredAngle(robotX, robotY,
-				robotAngleRad, enemyDefenderX, enemyDefenderY);
-		double diffInHeadingsToAttacker = Math.abs(robotAngleDeg
-				- attackerAngle);
-
-		double diffInHeadingsToBlocker = Math.abs(robotAngleDeg
-				- enemyDefenderAngle);
-
 		// STATE BOOLEANS //
-		/* We are currently facing the attacker */
-		boolean facingAttacker = isFacingAttacker(diffInHeadingsToAttacker);
-		/* The Blocker is currently outwith our facing angle */
-		boolean enemyBlocking = isEnemyBlocking(diffInHeadingsToBlocker);
-		/* We are facing the attacker with no obstruction */
+		boolean facingAttacker = isFacingAttacker();
+		boolean enemyBlocking = isEnemyBlocking();
 		boolean attackerInLineOfSight = (facingAttacker && enemyBlocking);
 
-		System.out.println("Attacker " + attackerX + " " + attackerY
-				+ " Heading diff: " + diffInHeadingsToAttacker);
 		System.out.println("Blocker " + enemyDefenderX + " " + enemyDefenderY);
 
 		/* DEBUG */
@@ -72,14 +34,24 @@ public class PassingStrategy extends GeneralStrategy {
 			System.out.println("Enemy is blocking");
 		else if (facingAttacker)
 			System.out.println("We are facing Attacker");
-
 	}
-
-	private boolean isEnemyBlocking(double diffInHeadingsToBlocker) {
+	
+	// TODO fix this
+	private boolean isEnemyBlocking() {
+		double enemyDefenderAngle = RobotPlanner.desiredAngle(robotX, robotY,
+				robotAngleRad, enemyDefenderX, enemyDefenderY);
+		double diffInHeadingsToBlocker = Math.abs(robotAngleDeg
+				- enemyDefenderAngle);
 		return !(diffInHeadingsToBlocker > allowedDegreeError || diffInHeadingsToBlocker < 360 - allowedDegreeError);
 	}
 
-	private boolean isFacingAttacker(double diffInHeadingsToAttacker) {
+	private boolean isFacingAttacker() {
+		double attackerAngle = RobotPlanner.desiredAngle(robotX, robotY,
+				robotAngleRad, attackerX, attackerY);
+		double diffInHeadingsToAttacker = Math.abs(robotAngleDeg
+				- attackerAngle);
+		System.out.println("Attacker " + attackerX + " " + attackerY
+				+ " Heading diff: " + diffInHeadingsToAttacker);
 		return (diffInHeadingsToAttacker < allowedDegreeError || diffInHeadingsToAttacker > 360 - allowedDegreeError);
 	}
 }

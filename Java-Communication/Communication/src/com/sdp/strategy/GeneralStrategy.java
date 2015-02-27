@@ -25,6 +25,11 @@ public class GeneralStrategy {
 	protected double attackerX;
 	protected double attackerY;
 	
+	protected double enemyDefenderX;
+	protected double enemyDefenderY;
+	protected double enemyAttackerX;
+	protected double enemyAttackerY;
+	
 	protected double ballX;
 	protected double ballY;
 
@@ -53,6 +58,14 @@ public class GeneralStrategy {
 		MovingObject attacker = worldState.getAttackerRobot();
 		attackerX = attacker.x;
 		attackerY = attacker.y;
+		
+		MovingObject enemyDefender = worldState.getEnemyDefenderRobot();
+		enemyDefenderX = enemyDefender.x;
+		enemyDefenderY = enemyDefender.y;
+		
+		MovingObject enemyAttacker = worldState.getEnemyDefenderRobot();
+		enemyAttackerX = enemyAttacker.x;
+		enemyAttackerY = enemyAttacker.y;
 
 		topOfPitch = PitchConstants.getPitchOutlineTop();
 		botOfPitch = PitchConstants.getPitchOutlineBottom();
