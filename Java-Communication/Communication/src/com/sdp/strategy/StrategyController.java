@@ -1,7 +1,5 @@
 package com.sdp.strategy;
 
-import java.beans.PropertyChangeSupport;
-
 import com.sdp.vision.interfaces.WorldStateReceiver;
 import com.sdp.world.WorldState;
 
@@ -15,7 +13,6 @@ public class StrategyController implements WorldStateReceiver {
 		DEFENDER, ATTACKER, ENEMY_DEFENDER, ENEMY_ATTACKER
 	}
 
-	private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 	private BallLocation ballLocation;
 	private static StrategyType currentStrategy = StrategyType.DO_NOTHING;
 	private boolean pauseStrategyController = true;
@@ -45,9 +42,7 @@ public class StrategyController implements WorldStateReceiver {
 		default:
 			break;
 		}
-		StrategyType oldType = currentStrategy;
 		currentStrategy = type;
-		pcs.firePropertyChange("currentStrategy", oldType, currentStrategy);
 	}
 
 	@Override
@@ -67,10 +62,8 @@ public class StrategyController implements WorldStateReceiver {
 				// TODO maybe add attacking in some cases?
 				changeToStrategy(StrategyType.PASSING);
 				break;
-			case ENEMY_ATTACKER:
-				changeToStrategy(StrategyType.DEFENDING);
-				break;
 			default:
+				changeToStrategy(StrategyType.DEFENDING);
 				break;
 			}
 		}

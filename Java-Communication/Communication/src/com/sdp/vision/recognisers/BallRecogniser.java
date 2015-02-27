@@ -66,7 +66,6 @@ public class BallRecogniser implements ObjectRecogniser {
 		}
 
 		Vector2f ballPosition = vision.calculatePosition(ballPoints);
-		
 		if (ballPosition.x != 0 || ballPosition.y != 0) {
 			debugGraphics.setColor(Color.red);
 			debugGraphics.drawLine(0, (int) ballPosition.y, 640,
@@ -80,7 +79,6 @@ public class BallRecogniser implements ObjectRecogniser {
 		if (ballPosition.x == 0 && ballPosition.y == 0) {
 			ballPosition = previousBallPosition;
 			worldState.ballNotOnPitch = true;
-			// logger.Log("Ball Lost");
 		} else {
 			// Distortion fixing
 			Point2D.Double point = new Point2D.Double(ballPosition.x,
