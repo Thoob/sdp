@@ -5,31 +5,40 @@ import com.sdp.world.DynamicWorldState;
 import com.sdp.world.DynamicWorldState.Robot;
 import com.sdp.world.WorldState;
 
+/**
+ * This strategy is used when don't have the ball but it is in our part of the
+ * pitch
+ */
 public class PassingStrategy extends GeneralStrategy {
 	/*
-	 * why do we need these???? they are not used anywhere... protected boolean
-	 * ballIsOnSlopeEdge; protected boolean ballIsOnSideEdge; protected boolean
-	 * ballIsOnGoalLine; protected boolean ballIsOnDefCheck; protected boolean
-	 * robotIsOnGoalLine; protected boolean catcherIsUp = false; protected
-	 * boolean affectBallCaught = true; protected boolean defenderHasArrived =
-	 * false; protected boolean defenderHasArrivedAtSafe = false; protected
-	 * boolean defenderIsSafe = false; protected double defenderAngleToGoal;
-	 * protected double distFromBall;
+	 * why do we need these???? they are not used anywhere...
+	 * 
+	 * protected boolean ballIsOnSlopeEdge; protected boolean ballIsOnSideEdge;
+	 * protected boolean ballIsOnGoalLine; protected boolean ballIsOnDefCheck;
+	 * protected boolean robotIsOnGoalLine; protected boolean catcherIsUp =
+	 * false; protected boolean affectBallCaught = true; protected boolean
+	 * defenderHasArrived = false; protected boolean defenderHasArrivedAtSafe =
+	 * false; protected boolean defenderIsSafe = false; protected double
+	 * defenderAngleToGoal; protected double distFromBall;
 	 */
+	StrategyHelper sh;
+
 	public PassingStrategy() {
+		sh = new StrategyHelper();
 	}
 
 	public void sendWorldState(DynamicWorldState dynWorldState,
 			WorldState worldState) {
 		if (robot == null || ball == null)
 			return;
+
+		// TODO this seems to be wrong!!! We don't really care about enemy
+		// defender angle
+
 		// ROBOT DECLARATIONS //
-		Robot attackingRobot = dynWorldState.getAttacker();
 		Robot enemyDefender = dynWorldState.getEnemyDefender();
 
 		// ROBOT COORDINATES //
-		double attackerX = attackingRobot.getCenter().getX();
-		double attackerY = attackingRobot.getCenter().getY();
 		double enemyDefenderX = enemyDefender.getCenter().getX();
 		double enemyDefenderY = enemyDefender.getCenter().getY();
 
@@ -40,6 +49,7 @@ public class PassingStrategy extends GeneralStrategy {
 				robotAngleRad, enemyDefenderX, enemyDefenderY);
 		double diffInHeadingsToAttacker = Math.abs(robotAngleDeg
 				- attackerAngle);
+
 		double diffInHeadingsToBlocker = Math.abs(robotAngleDeg
 				- enemyDefenderAngle);
 

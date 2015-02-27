@@ -21,6 +21,10 @@ public class GeneralStrategy {
 	protected double robotY;
 	protected double robotAngleRad;
 	protected double robotAngleDeg;
+	
+	protected double attackerX;
+	protected double attackerY;
+	
 	protected double ballX;
 	protected double ballY;
 
@@ -45,6 +49,10 @@ public class GeneralStrategy {
 		robotAngleDeg = Math.toDegrees(robotAngleRad);
 		ballX = ball.x;
 		ballY = ball.y;
+		
+		MovingObject attacker = worldState.getAttackerRobot();
+		attackerX = attacker.x;
+		attackerY = attacker.y;
 
 		topOfPitch = PitchConstants.getPitchOutlineTop();
 		botOfPitch = PitchConstants.getPitchOutlineBottom();

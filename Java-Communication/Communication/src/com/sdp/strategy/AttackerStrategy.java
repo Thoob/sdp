@@ -7,108 +7,21 @@ import com.sdp.world.SimpleWorldState.Operation;
 import com.sdp.world.WorldState;
 
 public class AttackerStrategy extends GeneralStrategy {
+	StrategyHelper sh;
+
+	public AttackerStrategy() {
+		sh = new StrategyHelper();
+	}
 
 	public void sendWorldState(WorldState worldState) {
-		System.out.println("ballX " + ballX + " ballY " + ballY);
 		if (robot == null || ball == null)
 			return;
-		// Desired angle to face ball
-		double ballAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
-				robotAngleRad, ballX, ballY);
-		double ballDiffInHeadings = Math.abs(robotAngleDeg - ballAngleDeg);
-		// Robot is facing the ball if within this angle in degrees of the ball
-		boolean isRobotFacingGoal = (ballDiffInHeadings < allowedDegreeError || ballDiffInHeadings > 360 - allowedDegreeError);
-
-		// 1 - Rotate to face ball
-		if (!RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)
-				&& !isRobotFacingGoal) {
-			rotateToDesiredAngle(robotAngleDeg, ballAngleDeg);
-			System.out.println("Rotating to face ball.");
-		}
-
-		// 2 - Go towards ball if it is in our attacker zone
-		if (worldState.weAreShootingRight) {
-			if (!RobotPlanner
-					.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)
-					&& isRobotFacingGoal
-					&& !RobotPlanner.canCatchBall(robotX, robotY, ballX, ballY)) {
-				RobotCommands.goStraight();
-				SimpleWorldState.previousOperation = Operation.NONE;
-				System.out.println("Moving towards ball.");
-			}
-		} else {
-			if (!RobotPlanner
-					.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)
-					&& isRobotFacingGoal
-					&& !RobotPlanner.canCatchBall(robotX, robotY, ballX, ballY)) {
-				RobotCommands.goStraight();
-				SimpleWorldState.previousOperation = Operation.NONE;
-				System.out.println("Moving towards ball.");
-			}
-		}
-
-		// 3 - Catch ball
-		if (!RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)
-				&& isRobotFacingGoal
-				&& RobotPlanner.canCatchBall(robotX, robotY, ballX, ballY)
-				&& !(SimpleWorldState.previousOperation == Operation.CATCH)) {
-			RobotCommands.catchBall();
-			SimpleWorldState.previousOperation = Operation.CATCH;
-			System.out.println("Catching ball.");
-		}
+		sh.acquireBall();
 
 		// 4 - Face goal and kick ball (hopefully into the goal!)
 		if (RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)) {
 			scoreGoal(worldState);
 			System.out.println("Scoring goal!");
-		}
-	}
-
-	private void rotateToDesiredAngle(double robotAngleDeg,
-			double desiredAngleDeg) {
-		double diffInHeadings = Math.abs(robotAngleDeg - desiredAngleDeg);
-		System.out.println("Difference in headings: " + diffInHeadings);
-		if ((diffInHeadings < allowedDegreeError)
-				|| (diffInHeadings > 360 - allowedDegreeError)) {
-
-			System.out.println("Desired angle");
-			// stopping rotation but not other operations
-			if (SimpleWorldState.previousOperation == Operation.RIGHT
-					|| SimpleWorldState.previousOperation == Operation.LEFT) {
-				RobotCommands.stop();
-				SimpleWorldState.previousOperation = Operation.NONE;
-			}
-		} else {
-			System.out.println("Current robot heading:" + robotAngleDeg);
-			System.out.println("Angle to face:" + desiredAngleDeg);
-
-			if ((diffInHeadings < allowedDegreeError * 2)
-					|| (diffInHeadings > 360 - allowedDegreeError * 2)) {
-				RobotCommands.stop();
-				boolean shouldRotateRight = RobotPlanner.shouldRotateRight(
-						desiredAngleDeg, robotAngleDeg);
-				if (shouldRotateRight) {
-					RobotCommands.shortRotateRight();
-					SimpleWorldState.previousOperation = Operation.SHORT_RIGHT;
-				} else if (!shouldRotateRight) {
-					RobotCommands.shortRotateLeft();
-					SimpleWorldState.previousOperation = Operation.SHORT_LEFT;
-				}
-				return;
-			} else {
-				boolean shouldRotateRight = RobotPlanner.shouldRotateRight(
-						desiredAngleDeg, robotAngleDeg);
-				if (shouldRotateRight
-						&& SimpleWorldState.previousOperation != Operation.RIGHT) {
-					RobotCommands.rotateRight();
-					SimpleWorldState.previousOperation = Operation.NONE;
-				} else if (!shouldRotateRight
-						&& SimpleWorldState.previousOperation != Operation.LEFT) {
-					RobotCommands.rotateLeft();
-					SimpleWorldState.previousOperation = Operation.NONE;
-				}
-				return;
-			}
 		}
 	}
 
@@ -135,7 +48,7 @@ public class AttackerStrategy extends GeneralStrategy {
 		}
 
 		System.out.println("desiredAngleGoal " + desiredAngleDeg);
-		rotateToDesiredAngle(robotAngleDeg, desiredAngleDeg);
+		sh.rotateToDesiredAngle(robotAngleDeg, desiredAngleDeg);
 
 		// Decides whether or not the robot is facing the desired goal
 		if (Math.abs(robotAngleDeg - desiredAngleDeg) < allowedDegreeError) {

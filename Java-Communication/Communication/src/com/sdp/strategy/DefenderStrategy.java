@@ -10,7 +10,6 @@ import com.sdp.world.SimpleWorldState;
 import com.sdp.world.SimpleWorldState.Operation;
 import com.sdp.world.WorldState;
 
-
 public class DefenderStrategy extends GeneralStrategy {
 	private Oracle predictor = null;
 	final int framesForward = 20;
