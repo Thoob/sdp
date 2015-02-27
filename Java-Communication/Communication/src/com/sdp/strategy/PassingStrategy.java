@@ -19,6 +19,8 @@ public class PassingStrategy extends GeneralStrategy {
 			WorldState worldState) {
 		if (robot == null || ball == null)
 			return;
+		
+		sh.acquireBall();
 
 		// STATE BOOLEANS //
 		boolean facingAttacker = isFacingAttacker();

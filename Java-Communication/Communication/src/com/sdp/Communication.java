@@ -12,7 +12,7 @@ public class Communication {
 
 	}
 
-	public boolean isPortInitialized(){
+	public boolean isPortInitialized() {
 		return isPortInitialized;
 	}
 
@@ -33,7 +33,7 @@ public class Communication {
 
 	public void initializeSerialPort(String portName) {
 		serialPort = new SerialPort(portName);
-		isPortInitialized  = true;
+		isPortInitialized = true;
 	}
 
 	void sendCommandViaPort(String command) {
@@ -42,7 +42,7 @@ public class Communication {
 			serialPort.writeString(command);
 			serialPort.closePort();
 		} catch (SerialPortException e) {
-			//e.printStackTrace();
+			// e.printStackTrace();
 		}
 	}
 }
