@@ -179,25 +179,22 @@ void move_kick() {
   power = atoi(arg2);
 
   Serial.println("Kicking");
-  //motorBackward(catcher, 100);
-  delay(200);
   
-  //motorBackward(catcher, 100);
-  motorForward(kicker, 100);
+  motorBackward(catcher, 100);
+  motorForward(right, 100);
+  motorForward(left, 100);
+  delay(450);
+  leftStop();
+  rightStop();
+  
+  motorForward(kicker, power);
 
-  delay(250);
+  delay(time/2);
+  motorStop(catcher);
   
+  delay(time/2);
   motorStop(kicker);
-  
-  delay(350);
-  
-  motorBackward(kicker, 100);
-  //motorForward(catcher, 80);
-  
-  delay(250);
 
-  motorStop(kicker); 
-  //motorStop(catcher);
 
   delay(1000);
 
@@ -211,27 +208,37 @@ void move_catch() {
   //lift and move forward
   motorBackward(catcher, 100);
   motorForward(right, 80);
-  motorForward(left, 80);
+  motorForward(left, 1.19*80);
   delay(450);
-  motorStop(kicker);
+  motorStop(catcher);
   delay(250);
   
   //catch
   motorForward(catcher, 100);  
   delay(250);
+  
   motorStop(catcher);
+  leftStop();
+  rightStop();
   
-  leftpower = 0;
-  motorStop(left);
-  
-  rightpower = 0;
-  motorStop(right);
   delay(100);
 
 
 }
 
 
+// Function to stop left motor, also sets the speed to 0
+// (These are used so I don't have to copy and paste this code everywhere)
+void leftStop() {
+  leftpower = 0;
+  motorStop(left);
+}
+
+// Function to stop right motor, also sets the speed to 0
+void rightStop() {
+  rightpower = 0;
+  motorStop(right);
+}
 
 
 // Force stops all motors
@@ -282,11 +289,8 @@ void move_shortrotL() {
 
   delay(time);
 
-  leftpower = 0;
-  motorStop(left);
-  
-  rightpower = 0;
-  motorStop(right);
+  leftStop();
+  rightStop();
 
 }
 
@@ -316,11 +320,8 @@ void move_shortrotR() {
 
   delay(time);
 
-  leftpower = 0;
-  motorStop(left);
-  
-  rightpower = 0;
-  motorStop(right);
+  leftStop();
+  rightStop();
 
 }
 
