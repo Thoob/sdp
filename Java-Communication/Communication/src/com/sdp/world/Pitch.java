@@ -14,7 +14,6 @@ public class Pitch extends Observable {
 	/*
 	 * All lengths and distances are in millimetres.
 	 */
-
 	public static final int BALL_RADIUS = 25;
 	public static final int PLATE_EDGE_LENGTH = 100;
 
@@ -23,7 +22,6 @@ public class Pitch extends Observable {
 	private int cornerCutoffX = 100;
 	private int cornerCutoffY = 200;
 	private int goalHeight = 300;
-	private int ballRadius = 20;
 
 	private int zoneDividerWidth = 100;
 	private int zoneDividerOffset = 400;

@@ -32,6 +32,7 @@ public class GeneralStrategy {
 	public void sendWorldState(WorldState worldState,
 			DynamicWorldState dynWorldState) {
 		this.worldState = worldState;
+
 		if (robot == null || ball == null)
 			return;
 
@@ -55,13 +56,6 @@ public class GeneralStrategy {
 		rightGoalY = worldState.rightGoal;
 	}
 
-	/*
-	 * // Returns the zone an object with a given X value is in // I'm so sorry
-	 * for all these magic numbers! - Theo public int inZone(double objX) {
-	 * System.out.println("Ball X: " + (objX)); if (objX < -324) { //-324 return
-	 * 0; } else if (objX < 25) { return 1; } else if (objX < 374) { return 2; }
-	 * else if (objX < 650) { return 3; } else { return -1; } }
-	 */
 	public static double calculateAngle(float robotX, float robotY,
 			float robotOrientation, float targetX, float targetY) {
 		double robotRad = Math.toRadians(robotOrientation);

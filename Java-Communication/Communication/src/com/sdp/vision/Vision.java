@@ -40,7 +40,6 @@ public class Vision implements VideoReceiver {
 	private AttackerStrategy attackerStrategy = new AttackerStrategy();
 	private DefenderStrategy defenderStrategy = new DefenderStrategy();
 	private PassingStrategy passingStrategy = new PassingStrategy();
-
 	private GeneralStrategy generalStrategy = new GeneralStrategy();
 
 	public Vision(WorldState worldState, PitchConstants pitchConstants,
@@ -78,8 +77,8 @@ public class Vision implements VideoReceiver {
 		worldStateReceivers.add(receiver);
 	}
 
-	public static void removeWorldStateReceiver(WorldStateReceiver reciver) {
-		worldStateReceivers.remove(reciver);
+	public static void removeWorldStateReceiver(WorldStateReceiver receiver) {
+		worldStateReceivers.remove(receiver);
 	}
 
 	public void addRecogniser(ObjectRecogniser recogniser) {
@@ -118,6 +117,7 @@ public class Vision implements VideoReceiver {
 				pixels[column][row] = p;
 			}
 		}
+		
 		StaticWorldState staticWorldState = new StaticWorldState();
 		for (ObjectRecogniser recogniser : recognisers)
 			recogniser.processFrame(pixels, frame, debugGraphics, debugOverlay,
@@ -143,7 +143,6 @@ public class Vision implements VideoReceiver {
 		// update ball position history
 		Ball ball = dynamicWorldState.getBall();
 		worldState.updateBallPositionHistory(ball.getPoint());
-
 	}
 
 	/**

@@ -43,15 +43,6 @@ public class WorldState {
 	}
 
 	/**
-	 * Constructor, use it for milestone 2 once the playing field data has been
-	 * assembled
-	 */
-	public WorldState(Pitch field, MovingObject ball) {
-		this.playingField = field;
-		this.ball = ball;
-	}
-
-	/**
 	 * Constructor, use it for initial world model initialisation once the
 	 * playing field data has been assembled
 	 */
