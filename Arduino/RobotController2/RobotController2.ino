@@ -207,6 +207,7 @@ void move_catch() {
   Serial.println("Catching");
   //lift and move forward
   motorBackward(catcher, 100);
+  delay(100);
   motorForward(right, 80);
   motorForward(left, 1.19*80);
   delay(450);
@@ -308,8 +309,10 @@ void move_shortrotR() {
   arg2 = sCmd.next();
   power = atoi(arg2);
 
+
+  // left motor is more powrful than left so this compensated here
   if (time == NULL) {
-    time = 250;
+    time = 300;
   }
   if (power == NULL) {
     power = 100;
