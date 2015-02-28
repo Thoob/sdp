@@ -117,7 +117,7 @@ public class Vision implements VideoReceiver {
 				pixels[column][row] = p;
 			}
 		}
-		
+
 		StaticWorldState staticWorldState = new StaticWorldState();
 		for (ObjectRecogniser recogniser : recognisers)
 			recogniser.processFrame(pixels, frame, debugGraphics, debugOverlay,
@@ -131,14 +131,13 @@ public class Vision implements VideoReceiver {
 		}
 
 		StrategyController sc = new StrategyController();
-		generalStrategy.sendWorldState(this.worldState, this.dynamicWorldState);
+		generalStrategy.sendWorldState(this.worldState);
 		if (sc.getCurrentStrategy() == StrategyType.ATTACKING)
 			attackerStrategy.sendWorldState(worldState);
 		else if (sc.getCurrentStrategy() == StrategyType.DEFENDING)
 			defenderStrategy.sendWorldState(this.worldState);
 		else if (sc.getCurrentStrategy() == StrategyType.PASSING)
-			passingStrategy.sendWorldState(this.dynamicWorldState,
-					this.worldState);
+			passingStrategy.sendWorldState(this.worldState);
 
 		// update ball position history
 		Ball ball = dynamicWorldState.getBall();

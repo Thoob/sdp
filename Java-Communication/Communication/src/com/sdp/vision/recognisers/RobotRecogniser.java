@@ -216,7 +216,7 @@ public class RobotRecogniser implements ObjectRecogniser {
 		Point2D pt = movObj.asPoint();
 		pitch.framePointToModel(pt);
 		return new DirectedPoint((int) pt.getX(), (int) pt.getY(),
-				Math.toRadians(movObj.orientation_angle));
+				Math.toRadians(movObj.orientationAngle));
 	}
 
 	/**

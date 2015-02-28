@@ -90,7 +90,6 @@ public class RobotPlanner {
 			double ballX, double ballY) {
 		double deltaX = robotX - ballX;
 		double deltaY = robotY - ballY;
-
 		double deltaTotal = Math.abs(deltaX) + Math.abs(deltaY);
 
 		if (deltaTotal < 90) {// TODO test and discuss precision needed

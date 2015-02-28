@@ -4,6 +4,7 @@ import com.sdp.planner.RobotCommands;
 import com.sdp.planner.RobotPlanner;
 import com.sdp.world.SimpleWorldState;
 import com.sdp.world.SimpleWorldState.Operation;
+import com.sdp.world.WorldState;
 
 /**
  * 
@@ -13,7 +14,10 @@ import com.sdp.world.SimpleWorldState.Operation;
  */
 public class StrategyHelper extends GeneralStrategy {
 
-	void acquireBall() {
+	void acquireBall(WorldState worldState) {
+		System.out.println("trying to acquire the ball");
+		initializeVars(worldState);
+		double robotAngleRad = Math.toRadians(robotAngleDeg);
 		// Desired angle to face ball
 		double ballAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
 				robotAngleRad, ballX, ballY);

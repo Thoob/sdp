@@ -15,7 +15,8 @@ public class StrategyController implements WorldStateReceiver {
 
 	private BallLocation ballLocation;
 	private static StrategyType currentStrategy = StrategyType.DO_NOTHING;
-	private boolean pauseStrategyController = true;
+	//TODO change it back to true 
+	private boolean pauseStrategyController = true; 
 
 	// Advanced Tactics flags
 	public static boolean confusionEnabled = false;
@@ -57,15 +58,19 @@ public class StrategyController implements WorldStateReceiver {
 
 		// Change strategy only if the ball has changed pitch area.
 		if (prevBallLocation != ballLocation) {
+			System.out.println("ball is in " + ballLocation.toString());
 			switch (this.ballLocation) {
 			case DEFENDER:
-				// TODO maybe add attacking in some cases?
 				changeToStrategy(StrategyType.PASSING);
 				break;
 			default:
-				changeToStrategy(StrategyType.DEFENDING);
+				// TODO this is just for passing dev
+				changeToStrategy(StrategyType.PASSING);
+				//changeToStrategy(StrategyType.DEFENDING);
 				break;
 			}
+			System.out.println("strategy " + currentStrategy.toString()
+					+ " enabled");
 		}
 	}
 
@@ -78,7 +83,7 @@ public class StrategyController implements WorldStateReceiver {
 				: worldState.dividers[0];
 		int rightCheck = (worldState.weAreShootingRight) ? worldState.dividers[2]
 				: worldState.dividers[1];
-		if(worldState.getBall()==null){
+		if (worldState.getBall() == null) {
 			System.out.println("No ball on pitch");
 			return;
 		}
@@ -87,19 +92,15 @@ public class StrategyController implements WorldStateReceiver {
 		if ((worldState.weAreShootingRight && ballX < defenderCheck)
 				|| (!worldState.weAreShootingRight && ballX > defenderCheck)) {
 			this.ballLocation = BallLocation.DEFENDER;
-			System.out.println("DEFENDER");
 		} else if (ballX > leftCheck && ballX < rightCheck) {
 			this.ballLocation = BallLocation.ATTACKER;
-			System.out.println("ATACKER");
 		} else if (worldState.weAreShootingRight && ballX > defenderCheck
 				&& ballX < leftCheck || !worldState.weAreShootingRight
 				&& ballX < defenderCheck && ballX > rightCheck) {
 			this.ballLocation = BallLocation.ENEMY_ATTACKER;
-			System.out.println("E_ATACKER");
 		} else if (!worldState.weAreShootingRight && (ballX < leftCheck)
 				|| worldState.weAreShootingRight && (ballX > rightCheck)) {
 			this.ballLocation = BallLocation.ENEMY_DEFENDER;
-			System.out.println("E_DEFENDER");			
 		}
 	}
 

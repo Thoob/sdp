@@ -8,15 +8,17 @@ import com.sdp.world.WorldState;
 
 public class AttackerStrategy extends GeneralStrategy {
 	StrategyHelper sh;
+	double robotAngleRad;
 
 	public AttackerStrategy() {
 		sh = new StrategyHelper();
 	}
 
 	public void sendWorldState(WorldState worldState) {
+		robotAngleRad = Math.toRadians(robotAngleDeg);
 		if (robot == null || ball == null)
 			return;
-		sh.acquireBall();
+		sh.acquireBall(worldState);
 
 		// 4 - Face goal and kick ball (hopefully into the goal!)
 		if (RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)) {

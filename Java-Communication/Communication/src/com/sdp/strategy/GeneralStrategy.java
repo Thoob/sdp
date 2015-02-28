@@ -1,7 +1,6 @@
 package com.sdp.strategy;
 
 import com.sdp.vision.PitchConstants;
-import com.sdp.world.DynamicWorldState;
 import com.sdp.world.MovingObject;
 import com.sdp.world.WorldState;
 
@@ -19,54 +18,28 @@ public class GeneralStrategy {
 	protected MovingObject ball;
 	protected double robotX;
 	protected double robotY;
-	protected double robotAngleRad;
 	protected double robotAngleDeg;
-	
+
 	protected double attackerX;
 	protected double attackerY;
-	
+
 	protected double enemyDefenderX;
 	protected double enemyDefenderY;
 	protected double enemyAttackerX;
 	protected double enemyAttackerY;
-	
+
 	protected double ballX;
 	protected double ballY;
 
 	// Allowed errors
 	protected final int allowedDegreeError = 15;
 	protected final int allowedDistError = 20;
-	protected WorldState worldState = null;
+	protected WorldState worldState;
 
-	public void sendWorldState(WorldState worldState,
-			DynamicWorldState dynWorldState) {
+	public void sendWorldState(WorldState worldState) {
 		this.worldState = worldState;
-
-		if (robot == null || ball == null)
-			return;
-
-		robot = worldState.getDefenderRobot();
-		ball = worldState.getBall();
-
-		robotX = robot.x;
-		robotY = robot.y;
-		robotAngleRad = robot.orientation_angle;
-		robotAngleDeg = Math.toDegrees(robotAngleRad);
-		ballX = ball.x;
-		ballY = ball.y;
+		initializeVars(worldState);
 		
-		MovingObject attacker = worldState.getAttackerRobot();
-		attackerX = attacker.x;
-		attackerY = attacker.y;
-		
-		MovingObject enemyDefender = worldState.getEnemyDefenderRobot();
-		enemyDefenderX = enemyDefender.x;
-		enemyDefenderY = enemyDefender.y;
-		
-		MovingObject enemyAttacker = worldState.getEnemyDefenderRobot();
-		enemyAttackerX = enemyAttacker.x;
-		enemyAttackerY = enemyAttacker.y;
-
 		topOfPitch = PitchConstants.getPitchOutlineTop();
 		botOfPitch = PitchConstants.getPitchOutlineBottom();
 
@@ -92,4 +65,27 @@ public class GeneralStrategy {
 			ang1 += 2 * Math.PI;
 		return Math.toDegrees(ang1);
 	}
+
+	void initializeVars(WorldState worldState) {
+		robot = (MovingObject) worldState.getDefenderRobot();
+		ball = (MovingObject) worldState.getBall();
+		robotX = robot.x;
+		robotY = robot.y;
+		robotAngleDeg = robot.orientationAngle;
+		ballX = ball.x;
+		ballY = ball.y;
+
+		MovingObject attacker = worldState.getAttackerRobot();
+		attackerX = attacker.x;
+		attackerY = attacker.y;
+
+		MovingObject enemyDefender = worldState.getEnemyDefenderRobot();
+		enemyDefenderX = enemyDefender.x;
+		enemyDefenderY = enemyDefender.y;
+
+		MovingObject enemyAttacker = worldState.getEnemyDefenderRobot();
+		enemyAttackerX = enemyAttacker.x;
+		enemyAttackerY = enemyAttacker.y;
+	}
+
 }

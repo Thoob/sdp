@@ -1,7 +1,6 @@
 package com.sdp.strategy;
 
 import com.sdp.planner.RobotPlanner;
-import com.sdp.world.DynamicWorldState;
 import com.sdp.world.WorldState;
 
 /**
@@ -15,31 +14,32 @@ public class PassingStrategy extends GeneralStrategy {
 		sh = new StrategyHelper();
 	}
 
-	public void sendWorldState(DynamicWorldState dynWorldState,
-			WorldState worldState) {
-		if (robot == null || ball == null)
-			return;
+	public void sendWorldState(WorldState worldState) {
+		sh.acquireBall(worldState);
+		// TODO fix this??
 		
-		sh.acquireBall();
+		initializeVars(worldState);
+		// get position of our robot and attacker!
+
+		System.out.println("our position " + robotX + " " + robotY+" "+robotAngleDeg);
+		System.out.println("attacker position " + attackerX + " " + attackerY);
 
 		// STATE BOOLEANS //
 		boolean facingAttacker = isFacingAttacker();
 		boolean enemyBlocking = isEnemyBlocking();
 		boolean attackerInLineOfSight = (facingAttacker && enemyBlocking);
 
-		System.out.println("Blocker " + enemyDefenderX + " " + enemyDefenderY);
-
-		/* DEBUG */
-		if (attackerInLineOfSight)
-			System.out.println("Attacker is in line of sight");
-		else if (enemyBlocking)
-			System.out.println("Enemy is blocking");
-		else if (facingAttacker)
-			System.out.println("We are facing Attacker");
+		/*
+		 * if (attackerInLineOfSight)
+		 * System.out.println("Attacker is in line of sight"); else if
+		 * (enemyBlocking) System.out.println("Enemy is blocking"); else if
+		 * (facingAttacker) System.out.println("We are facing Attacker");
+		 */
 	}
-	
+
 	// TODO fix this
 	private boolean isEnemyBlocking() {
+		double robotAngleRad = Math.toRadians(robotAngleDeg);
 		double enemyDefenderAngle = RobotPlanner.desiredAngle(robotX, robotY,
 				robotAngleRad, enemyDefenderX, enemyDefenderY);
 		double diffInHeadingsToBlocker = Math.abs(robotAngleDeg
@@ -48,6 +48,7 @@ public class PassingStrategy extends GeneralStrategy {
 	}
 
 	private boolean isFacingAttacker() {
+		double robotAngleRad = Math.toRadians(robotAngleDeg);
 		double attackerAngle = RobotPlanner.desiredAngle(robotX, robotY,
 				robotAngleRad, attackerX, attackerY);
 		double diffInHeadingsToAttacker = Math.abs(robotAngleDeg
