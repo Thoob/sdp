@@ -30,15 +30,20 @@ public class RobotCommands {
 		System.out.println("shortRotateRight");
 		RobotCommunication.getInstance().shortRotateRight();
 	}
+	
+	public static void rotateLeft() {
+		System.out.println("rotateLeft");
+		RobotCommunication.getInstance().move(-60, 60);
+	}
 
 	public static void rotateRight() {
 		System.out.println("rotateRight");
-		RobotCommunication.getInstance().move(40, -40);
+		RobotCommunication.getInstance().move(50, -50);
 	}
 
 	public static void goStraight() {
 		System.out.println("goStraight");
-		RobotCommunication.getInstance().move(50, 50);
+		RobotCommunication.getInstance().move(65, 65);
 		// TODO fix by replacing motors!
 	}
 	
@@ -50,20 +55,15 @@ public class RobotCommands {
 	
 	
 	public static void goStraightBackwardsFast() {
-		System.out.println("goStraightFast");
+		System.out.println("goStraightBackwardsFast");
 		RobotCommunication.getInstance().move(-100, -100);
 		// TODO fix by replacing motors!
 	}
 
 	public static void goStraightBackwards() {
 		System.out.println("goStraightBackwards");
-		RobotCommunication.getInstance().move(-60, -50);
+		RobotCommunication.getInstance().move(-70, -70);
 		// TODO fix by replacing motors!
-	}
-
-	public static void rotateLeft() {
-		System.out.println("rotateLeft");
-		RobotCommunication.getInstance().move(-40, 40);
 	}
 
 	public static void stop() {

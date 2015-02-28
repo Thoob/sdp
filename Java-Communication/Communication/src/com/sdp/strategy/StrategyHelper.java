@@ -15,7 +15,7 @@ import com.sdp.world.WorldState;
 public class StrategyHelper extends GeneralStrategy {
 
 	void acquireBall(WorldState worldState) {
-		System.out.println("trying to acquire the ball");
+		//System.out.println("trying to acquire the ball");
 		initializeVars(worldState);
 		double robotAngleRad = Math.toRadians(robotAngleDeg);
 		// Desired angle to face ball
@@ -23,15 +23,13 @@ public class StrategyHelper extends GeneralStrategy {
 				robotAngleRad, ballX, ballY);
 		double ballDiffInHeadings = Math.abs(robotAngleDeg - ballAngleDeg);
 		// Robot is facing the ball if within this angle in degrees of the ball
-		boolean isRobotFacingBall = (ballDiffInHeadings < allowedDegreeError || ballDiffInHeadings > 360 - allowedDegreeError);
-
-		// 1 - Rotate to face ball
+		boolean isRobotFacingBall = (ballDiffInHeadings < allowedDegreeError || ballDiffInHeadings > 360 - allowedDegreeError);		// 1 - Rotate to face ball
 		if (!RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)
 				&& !isRobotFacingBall) {
 			rotateToDesiredAngle(robotAngleDeg, ballAngleDeg);
 			System.out.println("Rotating to face ball.");
 		}
-
+		/*
 		// 2 - Go towards ball if it is in our attacker zone
 		if (worldState.weAreShootingRight) {
 			if (!RobotPlanner
@@ -61,6 +59,7 @@ public class StrategyHelper extends GeneralStrategy {
 			SimpleWorldState.previousOperation = Operation.CATCH;
 			System.out.println("Catching ball.");
 		}
+		*/
 	}
 
 	 void rotateToDesiredAngle(double robotAngleDeg,
@@ -72,11 +71,13 @@ public class StrategyHelper extends GeneralStrategy {
 
 			System.out.println("Desired angle");
 			// stopping rotation but not other operations
-			if (SimpleWorldState.previousOperation == Operation.RIGHT
-					|| SimpleWorldState.previousOperation == Operation.LEFT) {
-				RobotCommands.stop();
-				SimpleWorldState.previousOperation = Operation.NONE;
-			}
+			RobotCommands.stop();
+			SimpleWorldState.previousOperation = Operation.NONE;
+			//if (SimpleWorldState.previousOperation == Operation.RIGHT
+			//		|| SimpleWorldState.previousOperation == Operation.LEFT) {
+			//	RobotCommands.stop();
+			//	SimpleWorldState.previousOperation = Operation.NONE;
+			//}
 		} else {
 			System.out.println("Current robot heading:" + robotAngleDeg);
 			System.out.println("Angle to face:" + desiredAngleDeg);

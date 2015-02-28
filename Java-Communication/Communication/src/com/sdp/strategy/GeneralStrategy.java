@@ -32,7 +32,7 @@ public class GeneralStrategy {
 	protected double ballY;
 
 	// Allowed errors
-	protected final int allowedDegreeError = 15;
+	protected final int allowedDegreeError = 25;
 	protected final int allowedDistError = 20;
 	protected WorldState worldState;
 

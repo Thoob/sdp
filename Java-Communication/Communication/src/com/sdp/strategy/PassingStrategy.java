@@ -21,8 +21,8 @@ public class PassingStrategy extends GeneralStrategy {
 		initializeVars(worldState);
 		// get position of our robot and attacker!
 
-		System.out.println("our position " + robotX + " " + robotY+" "+robotAngleDeg);
-		System.out.println("attacker position " + attackerX + " " + attackerY);
+//		System.out.println("our position " + robotX + " " + robotY+" "+robotAngleDeg);
+//		System.out.println("attacker position " + attackerX + " " + attackerY);
 
 		// STATE BOOLEANS //
 		boolean facingAttacker = isFacingAttacker();
@@ -53,8 +53,6 @@ public class PassingStrategy extends GeneralStrategy {
 				robotAngleRad, attackerX, attackerY);
 		double diffInHeadingsToAttacker = Math.abs(robotAngleDeg
 				- attackerAngle);
-		System.out.println("Attacker " + attackerX + " " + attackerY
-				+ " Heading diff: " + diffInHeadingsToAttacker);
 		return (diffInHeadingsToAttacker < allowedDegreeError || diffInHeadingsToAttacker > 360 - allowedDegreeError);
 	}
 }

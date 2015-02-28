@@ -2,7 +2,6 @@ package com.sdp.planner;
 
 import java.awt.geom.Point2D;
 
-import com.sdp.world.DynamicWorldState.Ball;
 import com.sdp.world.DynamicWorldState.Robot;
 import com.sdp.world.SimpleWorldState;
 import com.sdp.world.SimpleWorldState.Operation;
@@ -88,6 +87,7 @@ public class RobotPlanner {
 
 	public static boolean doesOurRobotHaveBall(double robotX, double robotY,
 			double ballX, double ballY) {
+		/*
 		double deltaX = robotX - ballX;
 		double deltaY = robotY - ballY;
 		double deltaTotal = Math.abs(deltaX) + Math.abs(deltaY);
@@ -96,7 +96,8 @@ public class RobotPlanner {
 			return true;
 		} else {
 			return false;
-		}
+		}*/
+		return false;
 	}
 
 	public static double desiredAngle(double robotX, double robotY,
