@@ -24,10 +24,14 @@ public class StrategyHelper extends GeneralStrategy {
 		double ballDiffInHeadings = Math.abs(robotAngleDeg - ballAngleDeg);
 		// Robot is facing the ball if within this angle in degrees of the ball
 		boolean isRobotFacingBall = (ballDiffInHeadings < allowedDegreeError || ballDiffInHeadings > 360 - allowedDegreeError);		// 1 - Rotate to face ball
+		System.out.println("Current robot heading:" + robotAngleDeg);
+		System.out.println("Angle to face:" + ballAngleDeg);
 		if (!RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)
 				&& !isRobotFacingBall) {
 			rotateToDesiredAngle(robotAngleDeg, ballAngleDeg);
 			System.out.println("Rotating to face ball.");
+		}else{
+			System.out.println("Desired angle");
 		}
 		/*
 		// 2 - Go towards ball if it is in our attacker zone
@@ -68,23 +72,14 @@ public class StrategyHelper extends GeneralStrategy {
 		System.out.println("Difference in headings: " + diffInHeadings);
 		if ((diffInHeadings < allowedDegreeError)
 				|| (diffInHeadings > 360 - allowedDegreeError)) {
-
-			System.out.println("Desired angle");
 			// stopping rotation but not other operations
 			RobotCommands.stop();
 			SimpleWorldState.previousOperation = Operation.NONE;
-			//if (SimpleWorldState.previousOperation == Operation.RIGHT
-			//		|| SimpleWorldState.previousOperation == Operation.LEFT) {
-			//	RobotCommands.stop();
-			//	SimpleWorldState.previousOperation = Operation.NONE;
-			//}
-		} else {
-			System.out.println("Current robot heading:" + robotAngleDeg);
-			System.out.println("Angle to face:" + desiredAngleDeg);
 
-			if ((diffInHeadings < allowedDegreeError * 2)
-					|| (diffInHeadings > 360 - allowedDegreeError * 2)) {
-				RobotCommands.stop();
+		} else {
+		//	if ((diffInHeadings < allowedDegreeError * 2)
+			//		|| (diffInHeadings > 360 - allowedDegreeError * 2)) {
+			//	RobotCommands.stop();
 				boolean shouldRotateRight = RobotPlanner.shouldRotateRight(
 						desiredAngleDeg, robotAngleDeg);
 				if (shouldRotateRight) {
@@ -93,9 +88,8 @@ public class StrategyHelper extends GeneralStrategy {
 				} else if (!shouldRotateRight) {
 					RobotCommands.shortRotateLeft();
 					SimpleWorldState.previousOperation = Operation.SHORT_LEFT;
-				}
-				return;
-			} else {
+			//	}
+			} /*else {
 				boolean shouldRotateRight = RobotPlanner.shouldRotateRight(
 						desiredAngleDeg, robotAngleDeg);
 				if (shouldRotateRight
@@ -108,7 +102,7 @@ public class StrategyHelper extends GeneralStrategy {
 					SimpleWorldState.previousOperation = Operation.NONE;
 				}
 				return;
-			}
+			}*/
 		}
 	}
 

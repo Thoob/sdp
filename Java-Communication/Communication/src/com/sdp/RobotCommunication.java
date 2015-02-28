@@ -79,12 +79,12 @@ public class RobotCommunication {
 	}
 
 	public void shortRotateLeft() {
-		String command = "SROTL 300 80\n";
+		String command = "SROTL 200 70\n";
 		Communication.getInstance().sendCommandViaPort(command);
 	}
 
 	public void shortRotateRight() {
-		String command = "SROTR 200 80\n";
+		String command = "SROTR 200 60\n";
 		Communication.getInstance().sendCommandViaPort(command);
 	}
 

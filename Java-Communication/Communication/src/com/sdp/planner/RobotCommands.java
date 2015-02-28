@@ -38,7 +38,7 @@ public class RobotCommands {
 
 	public static void rotateRight() {
 		System.out.println("rotateRight");
-		RobotCommunication.getInstance().move(50, -50);
+		RobotCommunication.getInstance().move(60, -60);
 	}
 
 	public static void goStraight() {
