@@ -1,5 +1,6 @@
 package com.sdp.strategy;
 
+import com.sdp.planner.RobotCommands;
 import com.sdp.planner.RobotPlanner;
 import com.sdp.world.WorldState;
 
@@ -21,45 +22,60 @@ public class PassingStrategy extends GeneralStrategy {
 		initializeVars(worldState);
 		System.out.println("our position " + robotX + " " + robotY + " "
 				+ robotAngleDeg);
-		System.out.println("attacker position " + attackerX + " " + attackerY);
+		System.out.println("attacker position " + attackerX + " " + attackerY
+				+ " " + getAttackerAngle());
 
 		// STATE BOOLEANS //
 		boolean facingAttacker = isFacingAttacker();
 		boolean enemyBlocking = isEnemyBlocking();
-		boolean attackerInLineOfSight = (facingAttacker && enemyBlocking);
 
-		if (attackerInLineOfSight)
-			System.out.println("Attacker is in line of sight");
-		else if (enemyBlocking)
-			System.out.println("Enemy is blocking");
-		else if (facingAttacker)
+		if (facingAttacker) {
 			System.out.println("We are facing Attacker");
+			RobotCommands.passKick();
 
+		} else {
+			double desiredAngle = getAttackerAngle();
+			sh.rotateToDesiredAngle(robotAngleDeg, desiredAngle);
+		}
+
+		if (enemyBlocking) {
+			System.out.println("Enemy is blocking");
+			// TODO do bounce pass
+		}
 	}
 
 	private boolean isEnemyBlocking() {
 		double enemyAttackerAngle = RobotPlanner.desiredAngle(robotX, robotY,
 				enemyAttackerX, enemyAttackerY);
 		double attackerAngle = getAttackerAngle();
-		double diffEnemyAngle = Math.min(Math.abs(360 - enemyAttackerAngle),
-				Math.abs(enemyAttackerAngle));
-		double diffAttackerAngle = Math.min(Math.abs(360 - attackerAngle),
-				Math.abs(attackerAngle));
 
-		return diffAttackerAngle + diffEnemyAngle < 20;
+		return diffInHeadings(enemyAttackerAngle, attackerAngle) < 20;
 	}
 
 	private boolean isFacingAttacker() {
 		double attackerAngle = getAttackerAngle();
-		double diffInHeadingsToAttacker = Math.abs(robotAngleDeg
-				- attackerAngle);
-		return (diffInHeadingsToAttacker < allowedDegreeError || diffInHeadingsToAttacker > 360 - allowedDegreeError);
+		return diffInHeadings(attackerAngle, robotAngleDeg) < allowedDegreeError;
 	}
 
 	private double getAttackerAngle() {
 		double attackerAngle = RobotPlanner.desiredAngle(robotX, robotY,
 				attackerX, attackerY);
 		return attackerAngle;
+	}
 
+	private double diffInHeadings(double angleA, double angleB) {
+		double diffAngleA, diffAngleB;
+		if (Math.abs(360 - angleA) < Math.abs(angleA)) {
+			diffAngleA = Math.abs(360 - angleA) * (-1);
+		} else {
+			diffAngleA = Math.abs(angleA);
+		}
+		if (Math.abs(360 - angleB) < Math.abs(angleB)) {
+			diffAngleB = Math.abs(360 - angleB) * (-1);
+		} else {
+			diffAngleB = Math.abs(angleB);
+		}
+		return Math.min(Math.abs(diffAngleA - diffAngleB),
+				Math.abs(diffAngleB - diffAngleA));
 	}
 }

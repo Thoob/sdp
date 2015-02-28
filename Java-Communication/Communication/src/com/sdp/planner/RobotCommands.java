@@ -15,6 +15,12 @@ public class RobotCommands {
 	public void changePosition(Robot robot, Point2 desiredPos) {
 
 	}
+	
+	public static void passKick() {
+		System.out.println("passKick");
+		RobotCommunication.getInstance().passKick();
+	}
+
 
 	public static void kick() {
 		System.out.println("kick");
