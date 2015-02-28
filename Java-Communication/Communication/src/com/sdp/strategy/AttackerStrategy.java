@@ -35,7 +35,7 @@ public class AttackerStrategy extends GeneralStrategy {
 		System.out.println("ball " + ballX + " " + ballY);
 
 		double desiredAngleDegb = RobotPlanner.desiredAngle(robotX, robotY,
-				robotAngleRad, ballX, ballY);
+				ballX, ballY);
 
 		System.out.println("desiredAngleBall " + desiredAngleDegb);
 
@@ -43,10 +43,10 @@ public class AttackerStrategy extends GeneralStrategy {
 		double desiredAngleDeg = 0.0;
 		if (worldState.weAreShootingRight) {
 			desiredAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
-					robotAngleRad, rightGoalX, rightGoalY[1]);
+					rightGoalX, rightGoalY[1]);
 		} else {
 			desiredAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
-					robotAngleRad, leftGoalX, leftGoalY[1]);
+					leftGoalX, leftGoalY[1]);
 		}
 
 		System.out.println("desiredAngleGoal " + desiredAngleDeg);

@@ -17,10 +17,9 @@ public class StrategyHelper extends GeneralStrategy {
 	void acquireBall(WorldState worldState) {
 		//System.out.println("trying to acquire the ball");
 		initializeVars(worldState);
-		double robotAngleRad = Math.toRadians(robotAngleDeg);
 		// Desired angle to face ball
 		double ballAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
-				robotAngleRad, ballX, ballY);
+				 ballX, ballY);
 		double ballDiffInHeadings = Math.abs(robotAngleDeg - ballAngleDeg);
 		// Robot is facing the ball if within this angle in degrees of the ball
 		boolean isRobotFacingBall = (ballDiffInHeadings < allowedDegreeError || ballDiffInHeadings > 360 - allowedDegreeError);		// 1 - Rotate to face ball

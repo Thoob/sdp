@@ -100,8 +100,7 @@ public class RobotPlanner {
 		return false;
 	}
 
-	public static double desiredAngle(double robotX, double robotY,
-			double robotOrientation, double targetX, double targetY) {
+	public static double desiredAngle(double robotX, double robotY, double targetX, double targetY) {
 
 		double targetRad = Math.atan2(targetY - robotY, targetX - robotX);
 		double targetDeg = Math.toDegrees(targetRad);
