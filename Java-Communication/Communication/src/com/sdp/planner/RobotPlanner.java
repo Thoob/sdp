@@ -24,7 +24,6 @@ public class RobotPlanner {
 	 * TODO: Make more general functions, ones compatible with an abstract
 	 * objects we may need to rotate toward / move to
 	 */
-
 	private static double calculateDesiredRobotHeading(Point2D robotPos,
 			Point2D ballPos) {
 		double deltaX = Math.abs(robotPos.getX() - ballPos.getX());

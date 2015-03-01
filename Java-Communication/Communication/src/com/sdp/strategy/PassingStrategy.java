@@ -2,6 +2,7 @@ package com.sdp.strategy;
 
 import com.sdp.planner.RobotCommands;
 import com.sdp.planner.RobotPlanner;
+import com.sdp.prediction.Calculations;
 import com.sdp.world.WorldState;
 
 /**
@@ -17,9 +18,10 @@ public class PassingStrategy extends GeneralStrategy {
 	}
 
 	public void sendWorldState(WorldState worldState) {
+		
 		// TODO check if we have the ball if not get it
-		sh.acquireBall(worldState);
-		/*
+		//sh.acquireBall(worldState);
+	
 		// TODO fix this??
 		initializeVars(worldState);
 		System.out.println("our position " + robotX + " " + robotY + " "
@@ -30,6 +32,9 @@ public class PassingStrategy extends GeneralStrategy {
 		// STATE BOOLEANS //
 		boolean facingAttacker = isFacingAttacker();
 		boolean enemyBlocking = isEnemyBlocking();
+		
+		double desiredAngleA = Calculations.getBounceAngle(robotX, robotY, Math.toRadians(robotAngleDeg), attackerX, attackerY, enemyAttackerX, enemyAttackerY);
+		System.out.println("desired angle "+desiredAngleA);
 
 		if (facingAttacker) {
 			System.out.println("We are facing Attacker");
@@ -40,7 +45,8 @@ public class PassingStrategy extends GeneralStrategy {
 
 		} else {
 			facingCounter = 0;
-			double desiredAngle = getAttackerAngle();
+			double desiredAngle = Calculations.getBounceAngle(robotX, robotY, Math.toRadians(robotAngleDeg), attackerX, attackerY, enemyAttackerX, enemyAttackerY);
+			System.out.println("desired angle "+desiredAngle);
 			sh.rotateToDesiredAngle(robotAngleDeg, desiredAngle);
 		}
 
@@ -48,7 +54,7 @@ public class PassingStrategy extends GeneralStrategy {
 			System.out.println("Enemy is blocking");
 			// TODO do bounce pass
 		}
-	*/}
+	}
 
 	private boolean isEnemyBlocking() {
 		double enemyAttackerAngle = RobotPlanner.desiredAngle(robotX, robotY,

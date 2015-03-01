@@ -2,6 +2,7 @@ package com.sdp.prediction;
 
 import java.util.ArrayList;
 
+import com.sdp.planner.RobotPlanner;
 import com.sdp.strategy.GeneralStrategy;
 import com.sdp.vision.PitchConstants;
 import com.sdp.world.Point2;
@@ -135,61 +136,52 @@ public final class Calculations {
 	 * returns the angle from which a bounce shot can be scored, from the
 	 * position supplied
 	 * 
-	 * @param bounce_direction
+	 * @param bounceDirection
 	 *            0 for automatic, 1 for top, -1 for bottom bounce
 	 * */
-	public static float getBounceAngle(float robotX, float robotY,
-			float robotOrientation, float targetX, float targetY,
-			int bounce_direction, float pitchMid) {
-
-		int bottom_boundary = PitchConstants.getPitchOutlineBottom();
-		int top_boundary = PitchConstants.getPitchOutlineTop();
+	public static float getBounceAngle(double robotX, double robotY,
+			double robotOrientation, double targetX, double targetY,
+			double blockerX, double blockerY) {
 
 		double robotRad = Math.toRadians(robotOrientation);
 		if (robotRad > Math.PI)
 			robotRad -= 2 * Math.PI;
 
-		// Get X and Y velocities
 		double x1 = (double) robotX;
 		double y1 = (double) robotY;
 		double x2 = (double) targetX;
 		double y2 = (double) targetY;
+		
+		int bottomBoundary = PitchConstants.getPitchOutlineBottom();
+		int topBoundary = PitchConstants.getPitchOutlineTop();
+		int middleBoundary = (bottomBoundary + topBoundary) / 2;
 		double y3;
-		// check which wall we are bouncing off
-		if (bounce_direction == 0) {
-			if (Math.abs(y1) > pitchMid)
-				y3 = bottom_boundary;
-			else
-				y3 = top_boundary;
-		} else if (bounce_direction == -1) {
-			y3 = bottom_boundary + 20;
+
+		if (blockerY < middleBoundary) {
+			y3 = topBoundary - 50;
 		} else {
-			y3 = top_boundary - 50;
+			y3 = bottomBoundary + 20;
 		}
-
-		double z = Math.abs(x1 - x2);
-
+		
 		double a = Math.abs(y3 - y2);
-		double d = Math.abs(y3 - y1);
+		double b = Math.abs(y3 - y1);
+
+		double c = Math.abs(x1 - x2);
+
 		// calculate the coordinates of the middle point
-		double c = (z * d) / (a + d);
-		double b = z - c;
+		double middle = (c * b) / (a + b);
+
+		double deltaA = c - middle;
+		double deltaB = middle;
 
 		double x3;
-		if (x2 > x1)
-			x3 = x1 + c;
+		if (x2 > x1) // shooting right
+			x3 = x1 + deltaB;
 		else
-			x3 = x2 + b;
+			x3 = x2 + deltaA;
 
-		// tangent values
-		double tan_val_right = c / d;
+		double choiceAngle = RobotPlanner.desiredAngle(robotX, robotY, targetX, targetY);
 
-		double right_angle = Math.atan(tan_val_right);
-		double choice_angle = right_angle;
-		// REWORK IN PROGRESS
-		choice_angle = GeneralStrategy.calculateAngle(robotX, robotY,
-				robotOrientation, (float) x3, (float) y3);
-
-		return (float) choice_angle;
+		return (float) choiceAngle;
 	}
 }

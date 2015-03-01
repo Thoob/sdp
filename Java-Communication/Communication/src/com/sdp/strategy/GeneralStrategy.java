@@ -50,8 +50,8 @@ public class GeneralStrategy {
 		rightGoalY = worldState.rightGoal;
 	}
 
-	public static double calculateAngle(float robotX, float robotY,
-			float robotOrientation, float targetX, float targetY) {
+	public static double calculateAngle(double robotX, double robotY,
+			double robotOrientation, double targetX, double targetY) {
 		double robotRad = Math.toRadians(robotOrientation);
 		double targetRad = Math.atan2(targetY - robotY, targetX - robotX);
 
