@@ -86,7 +86,7 @@ public class RobotPlanner {
 
 	public static boolean doesOurRobotHaveBall(double robotX, double robotY,
 			double ballX, double ballY) {
-		/*
+		
 		double deltaX = robotX - ballX;
 		double deltaY = robotY - ballY;
 		double deltaTotal = Math.abs(deltaX) + Math.abs(deltaY);
@@ -95,8 +95,7 @@ public class RobotPlanner {
 			return true;
 		} else {
 			return false;
-		}*/
-		return false;
+		}
 	}
 
 	public static double desiredAngle(double robotX, double robotY, double targetX, double targetY) {
@@ -135,7 +134,7 @@ public class RobotPlanner {
 
 	// Returns the zone an object with a given X value is in
 	// I'm so sorry for all these magic numbers! - Theo
-	public int inZone(double objX) {
+	public static int inZone(double objX) {
 		System.out.println("Ball X: " + (objX));
 		if (objX < -324) {
 			return 0;

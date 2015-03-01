@@ -20,40 +20,40 @@ public class PassingStrategy extends GeneralStrategy {
 	public void sendWorldState(WorldState worldState) {
 		
 		// TODO check if we have the ball if not get it
-		//sh.acquireBall(worldState);
-	
-		// TODO fix this??
-		initializeVars(worldState);
-		System.out.println("our position " + robotX + " " + robotY + " "
-				+ robotAngleDeg);
-		System.out.println("attacker position " + attackerX + " " + attackerY
-				+ " " + getAttackerAngle());
-
-		// STATE BOOLEANS //
-		boolean facingAttacker = isFacingAttacker();
-		boolean enemyBlocking = isEnemyBlocking();
-		
-		double desiredAngleA = Calculations.getBounceAngle(robotX, robotY, Math.toRadians(robotAngleDeg), attackerX, attackerY, enemyAttackerX, enemyAttackerY);
-		System.out.println("desired angle "+desiredAngleA);
-
-		if (facingAttacker) {
-			System.out.println("We are facing Attacker");
-			facingCounter++;
-			
-			if (facingCounter >= 20)
-				RobotCommands.passKick();
-
-		} else {
-			facingCounter = 0;
-			double desiredAngle = Calculations.getBounceAngle(robotX, robotY, Math.toRadians(robotAngleDeg), attackerX, attackerY, enemyAttackerX, enemyAttackerY);
-			System.out.println("desired angle "+desiredAngle);
-			sh.rotateToDesiredAngle(robotAngleDeg, desiredAngle);
-		}
-
-		if (enemyBlocking) {
-			System.out.println("Enemy is blocking");
-			// TODO do bounce pass
-		}
+		sh.acquireBall(worldState);
+//	
+//		// TODO fix this??
+//		initializeVars(worldState);
+//		System.out.println("our position " + robotX + " " + robotY + " "
+//				+ robotAngleDeg);
+//		System.out.println("attacker position " + attackerX + " " + attackerY
+//				+ " " + getAttackerAngle());
+//
+//		// STATE BOOLEANS //
+//		boolean facingAttacker = isFacingAttacker();
+//		boolean enemyBlocking = isEnemyBlocking();
+//		
+//		double desiredAngleA = Calculations.getBounceAngle(robotX, robotY, Math.toRadians(robotAngleDeg), attackerX, attackerY, enemyAttackerX, enemyAttackerY);
+//		System.out.println("desired angle "+desiredAngleA);
+//
+//		if (facingAttacker) {
+//			System.out.println("We are facing Attacker");
+//			facingCounter++;
+//			
+//			if (facingCounter >= 20)
+//				RobotCommands.passKick();
+//
+//		} else {
+//			facingCounter = 0;
+//			double desiredAngle = Calculations.getBounceAngle(robotX, robotY, Math.toRadians(robotAngleDeg), attackerX, attackerY, enemyAttackerX, enemyAttackerY);
+//			System.out.println("desired angle "+desiredAngle);
+//			sh.rotateToDesiredAngle(robotAngleDeg, desiredAngle);
+//		}
+//
+//		if (enemyBlocking) {
+//			System.out.println("Enemy is blocking");
+//			// TODO do bounce pass
+//		}
 	}
 
 	private boolean isEnemyBlocking() {

@@ -13,43 +13,48 @@ import com.sdp.world.WorldState;
  * 
  */
 public class StrategyHelper extends GeneralStrategy {
-	
+
 	int facingCounter = 0;
 
 	void acquireBall(WorldState worldState) {
-		//System.out.println("trying to acquire the ball");
+		// System.out.println("trying to acquire the ball");
 		initializeVars(worldState);
 		// Desired angle to face ball
-		double ballAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
-				 ballX, ballY);
+		double ballAngleDeg = RobotPlanner.desiredAngle(robotX, robotY, ballX,
+				ballY);
 		double ballDiffInHeadings = Math.abs(robotAngleDeg - ballAngleDeg);
 		// Robot is facing the ball if within this angle in degrees of the ball
-		boolean isRobotFacingBall = (ballDiffInHeadings < allowedDegreeError || ballDiffInHeadings > 360 - allowedDegreeError);		// 1 - Rotate to face ball
+		boolean isRobotFacingBall = (ballDiffInHeadings < allowedDegreeError || ballDiffInHeadings > 360 - allowedDegreeError);
+		
+		// 1 - Rotate to face ball
 		System.out.println("Current robot heading:" + robotAngleDeg);
 		System.out.println("Angle to face:" + ballAngleDeg);
 		if (!RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)
 				&& !isRobotFacingBall) {
 			rotateToDesiredAngle(robotAngleDeg, ballAngleDeg);
 			System.out.println("Rotating to face ball.");
-			facingCounter=0;
-		}else{
+			facingCounter = 0;
+		} else {
 			System.out.println("Desired angle");
 			facingCounter++;
+			System.out.println("Ball in zone " + RobotPlanner.inZone(ballX));
+			System.out.println("Robot in zone " + RobotPlanner.inZone(robotX));
 		}
-	
-		// 2 - Go towards ball if it is in our attacker zone
-			if (facingCounter>20&&!RobotPlanner
-					.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)
-					&& !RobotPlanner.canCatchBall(robotX, robotY, ballX, ballY)) {
-				
-				RobotCommands.goStraight();
-				SimpleWorldState.previousOperation = Operation.NONE;
-				System.out.println("Moving towards ball.");
-		}else{
-			System.out.println("can catch");
+
+		// 2 - Go towards ball if it is in our zone
+		if (facingCounter > 20
+				&& !RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX,
+						ballY)
+				&& !RobotPlanner.canCatchBall(robotX, robotY, ballX, ballY)
+				&& (RobotPlanner.inZone(ballX) == RobotPlanner.inZone(robotX))) {
+
+			RobotCommands.goStraight();
+			SimpleWorldState.previousOperation = Operation.NONE;
+			System.out.println("Moving towards ball.");
 		}
-	// 3 - Catch ball
-			/*	if (!RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)
+		
+		// 3 - Catch ball
+		if (!RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)
 				&& isRobotFacingBall
 				&& RobotPlanner.canCatchBall(robotX, robotY, ballX, ballY)
 				&& !(SimpleWorldState.previousOperation == Operation.CATCH)) {
@@ -57,11 +62,10 @@ public class StrategyHelper extends GeneralStrategy {
 			SimpleWorldState.previousOperation = Operation.CATCH;
 			System.out.println("Catching ball.");
 		}
-		*/
+
 	}
 
-	 void rotateToDesiredAngle(double robotAngleDeg,
-			double desiredAngleDeg) {
+	void rotateToDesiredAngle(double robotAngleDeg, double desiredAngleDeg) {
 		double diffInHeadings = Math.abs(robotAngleDeg - desiredAngleDeg);
 		System.out.println("Difference in headings: " + diffInHeadings);
 		if ((diffInHeadings < allowedDegreeError)
@@ -71,15 +75,15 @@ public class StrategyHelper extends GeneralStrategy {
 			SimpleWorldState.previousOperation = Operation.NONE;
 
 		} else {
-				boolean shouldRotateRight = RobotPlanner.shouldRotateRight(
-						desiredAngleDeg, robotAngleDeg);
-				if (shouldRotateRight) {
-					RobotCommands.shortRotateRight();
-					SimpleWorldState.previousOperation = Operation.SHORT_RIGHT;
-				} else if (!shouldRotateRight) {
-					RobotCommands.shortRotateLeft();
-					SimpleWorldState.previousOperation = Operation.SHORT_LEFT;
-			} 
+			boolean shouldRotateRight = RobotPlanner.shouldRotateRight(
+					desiredAngleDeg, robotAngleDeg);
+			if (shouldRotateRight) {
+				RobotCommands.shortRotateRight();
+				SimpleWorldState.previousOperation = Operation.SHORT_RIGHT;
+			} else if (!shouldRotateRight) {
+				RobotCommands.shortRotateLeft();
+				SimpleWorldState.previousOperation = Operation.SHORT_LEFT;
+			}
 		}
 	}
 
