@@ -13,6 +13,8 @@ import com.sdp.world.WorldState;
  * 
  */
 public class StrategyHelper extends GeneralStrategy {
+	
+	int facingCounter = 0;
 
 	void acquireBall(WorldState worldState) {
 		//System.out.println("trying to acquire the ball");
@@ -29,32 +31,25 @@ public class StrategyHelper extends GeneralStrategy {
 				&& !isRobotFacingBall) {
 			rotateToDesiredAngle(robotAngleDeg, ballAngleDeg);
 			System.out.println("Rotating to face ball.");
+			facingCounter=0;
 		}else{
 			System.out.println("Desired angle");
+			facingCounter++;
 		}
-		/*
+	
 		// 2 - Go towards ball if it is in our attacker zone
-		if (worldState.weAreShootingRight) {
-			if (!RobotPlanner
+			if (facingCounter>20&&!RobotPlanner
 					.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)
-					&& isRobotFacingBall
 					&& !RobotPlanner.canCatchBall(robotX, robotY, ballX, ballY)) {
+				
 				RobotCommands.goStraight();
 				SimpleWorldState.previousOperation = Operation.NONE;
 				System.out.println("Moving towards ball.");
-			}
-		} else {
-			if (!RobotPlanner
-					.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)
-					&& isRobotFacingBall
-					&& !RobotPlanner.canCatchBall(robotX, robotY, ballX, ballY)) {
-				RobotCommands.goStraight();
-				SimpleWorldState.previousOperation = Operation.NONE;
-				System.out.println("Moving towards ball.");
-			}
+		}else{
+			System.out.println("can catch");
 		}
-		// 3 - Catch ball
-		if (!RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)
+	// 3 - Catch ball
+			/*	if (!RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)
 				&& isRobotFacingBall
 				&& RobotPlanner.canCatchBall(robotX, robotY, ballX, ballY)
 				&& !(SimpleWorldState.previousOperation == Operation.CATCH)) {

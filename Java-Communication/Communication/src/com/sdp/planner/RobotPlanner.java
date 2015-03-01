@@ -13,8 +13,8 @@ public class RobotPlanner {
 	}
 
 	// Distance the robot must be from the ball in order to catch it
-	private static final int MAX_CATCH_DIST = 200;
-	private static final int MIN_CATCH_DIST = 140;
+	private static final int MAX_CATCH_DIST = 50;
+	private static final int MIN_CATCH_DIST = 20;
 
 	private RobotPlanner() {
 

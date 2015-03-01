@@ -10,6 +10,7 @@ import com.sdp.world.WorldState;
  */
 public class PassingStrategy extends GeneralStrategy {
 	StrategyHelper sh;
+	int facingCounter = 0;
 
 	public PassingStrategy() {
 		sh = new StrategyHelper();
@@ -17,7 +18,8 @@ public class PassingStrategy extends GeneralStrategy {
 
 	public void sendWorldState(WorldState worldState) {
 		// TODO check if we have the ball if not get it
-		// sh.acquireBall(worldState);
+		sh.acquireBall(worldState);
+		/*
 		// TODO fix this??
 		initializeVars(worldState);
 		System.out.println("our position " + robotX + " " + robotY + " "
@@ -31,9 +33,13 @@ public class PassingStrategy extends GeneralStrategy {
 
 		if (facingAttacker) {
 			System.out.println("We are facing Attacker");
-			RobotCommands.passKick();
+			facingCounter++;
+			
+			if (facingCounter >= 20)
+				RobotCommands.passKick();
 
 		} else {
+			facingCounter = 0;
 			double desiredAngle = getAttackerAngle();
 			sh.rotateToDesiredAngle(robotAngleDeg, desiredAngle);
 		}
@@ -42,7 +48,7 @@ public class PassingStrategy extends GeneralStrategy {
 			System.out.println("Enemy is blocking");
 			// TODO do bounce pass
 		}
-	}
+	*/}
 
 	private boolean isEnemyBlocking() {
 		double enemyAttackerAngle = RobotPlanner.desiredAngle(robotX, robotY,

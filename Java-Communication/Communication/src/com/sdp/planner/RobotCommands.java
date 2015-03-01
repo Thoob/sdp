@@ -50,26 +50,22 @@ public class RobotCommands {
 	public static void goStraight() {
 		System.out.println("goStraight");
 		RobotCommunication.getInstance().move(65, 65);
-		// TODO fix by replacing motors!
 	}
 	
 	public static void goStraightFast() {
 		System.out.println("goStraightFast");
 		RobotCommunication.getInstance().move(100, 100);
-		// TODO fix by replacing motors!
 	}
 	
 	
 	public static void goStraightBackwardsFast() {
 		System.out.println("goStraightBackwardsFast");
 		RobotCommunication.getInstance().move(-100, -100);
-		// TODO fix by replacing motors!
 	}
 
 	public static void goStraightBackwards() {
 		System.out.println("goStraightBackwards");
 		RobotCommunication.getInstance().move(-70, -70);
-		// TODO fix by replacing motors!
 	}
 
 	public static void stop() {
