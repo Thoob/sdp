@@ -135,17 +135,17 @@ public class RobotPlanner {
 	// Returns the zone an object with a given X value is in
 	// I'm so sorry for all these magic numbers! - Theo
 	public static int inZone(double objX) {
-		System.out.println("Ball X: " + (objX));
-		if (objX < -324) {
-			return 0;
-		} else if (objX < 25) {
-			return 1;
-		} else if (objX < 374) {
-			return 2;
-		} else if (objX < 650) {
-			return 3;
-		} else {
-			return -1;
-		}
+//		if (objX < -324) {
+//			return 0;
+//		} else if (objX < 25) {
+//			return 1;
+//		} else if (objX < 374) {
+//			return 2;
+//		} else if (objX < 650) {
+//			return 3;
+//		} else {
+//			return -1;
+//		}
+		return 0;
 	}
 }

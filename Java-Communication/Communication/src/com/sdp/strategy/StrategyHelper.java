@@ -70,19 +70,42 @@ public class StrategyHelper extends GeneralStrategy {
 		System.out.println("Difference in headings: " + diffInHeadings);
 		if ((diffInHeadings < allowedDegreeError)
 				|| (diffInHeadings > 360 - allowedDegreeError)) {
+			System.out.println("Desired angle");
 			// stopping rotation but not other operations
-			RobotCommands.stop();
-			SimpleWorldState.previousOperation = Operation.NONE;
-
+			if (SimpleWorldState.previousOperation == Operation.RIGHT
+					|| SimpleWorldState.previousOperation == Operation.LEFT) {
+				RobotCommands.stop();
+				SimpleWorldState.previousOperation = Operation.NONE;
+			}
 		} else {
-			boolean shouldRotateRight = RobotPlanner.shouldRotateRight(
-					desiredAngleDeg, robotAngleDeg);
-			if (shouldRotateRight) {
-				RobotCommands.shortRotateRight();
-				SimpleWorldState.previousOperation = Operation.SHORT_RIGHT;
-			} else if (!shouldRotateRight) {
-				RobotCommands.shortRotateLeft();
-				SimpleWorldState.previousOperation = Operation.SHORT_LEFT;
+			System.out.println("Current robot heading:" + robotAngleDeg);
+			System.out.println("Angle to face:" + desiredAngleDeg);
+			if ((diffInHeadings < allowedDegreeError * 2)
+					|| (diffInHeadings > 360 - allowedDegreeError * 2)) {
+				RobotCommands.stop();
+				boolean shouldRotateRight = RobotPlanner.shouldRotateRight(
+						desiredAngleDeg, robotAngleDeg);
+				if (shouldRotateRight) {
+					RobotCommands.shortRotateRight();
+					SimpleWorldState.previousOperation = Operation.SHORT_RIGHT;
+				} else if (!shouldRotateRight) {
+					RobotCommands.shortRotateLeft();
+					SimpleWorldState.previousOperation = Operation.SHORT_LEFT;
+				}
+				return;
+			} else {
+				boolean shouldRotateRight = RobotPlanner.shouldRotateRight(
+						desiredAngleDeg, robotAngleDeg);
+				if (shouldRotateRight
+						&& SimpleWorldState.previousOperation != Operation.RIGHT) {
+					RobotCommands.rotateRight();
+					SimpleWorldState.previousOperation = Operation.NONE;
+				} else if (!shouldRotateRight
+						&& SimpleWorldState.previousOperation != Operation.LEFT) {
+					RobotCommands.rotateLeft();
+					SimpleWorldState.previousOperation = Operation.NONE;
+				}
+				return;
 			}
 		}
 	}
