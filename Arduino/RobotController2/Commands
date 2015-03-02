@@ -41,18 +41,15 @@ Runs the kicker motor forward for <time> milliseconds at
 *Script with delays, may ignore commands sent while this
 is executing*
 
-4. "CATCH"
-Uses the catcher to catch a ball by moving forwards and
-lifting the catcher.
-*Script with delays, may ignore commands sent while this
-is executing*
+4. "CATCHUP"
+Lifts the catcher to a cathing position and holds it 
+there. *may drain batteries too fast*
 
-5. "FSTOP"
+5. "CATCHDOWN"
+Stops the catcher from lifting to drop down on the ball.
+
+6. "FSTOP"
 Force stop. Stops all motors from moving.
-
-6. "RSTOP"
-Stops a rotation quickly by rotating the motors strongly
-in the opposite direction.
 
 7. "SROTL <time> <power>"
 Short rotate left, rotates the robot left for <time> at 
