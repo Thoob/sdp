@@ -39,17 +39,17 @@ public class RobotCommands {
 	
 	public static void rotateLeft() {
 		System.out.println("rotateLeft");
-		RobotCommunication.getInstance().move(-60, 60);
+		RobotCommunication.getInstance().move(-40, 40);
 	}
 
 	public static void rotateRight() {
 		System.out.println("rotateRight");
-		RobotCommunication.getInstance().move(60, -60);
+		RobotCommunication.getInstance().move(40, -40);
 	}
 
 	public static void goStraight() {
 		System.out.println("goStraight");
-		RobotCommunication.getInstance().move(65, 65);
+		RobotCommunication.getInstance().move(45, 45);
 	}
 	
 	public static void goStraightFast() {
@@ -65,7 +65,7 @@ public class RobotCommands {
 
 	public static void goStraightBackwards() {
 		System.out.println("goStraightBackwards");
-		RobotCommunication.getInstance().move(-70, -70);
+		RobotCommunication.getInstance().move(-45, -45);
 	}
 
 	public static void stop() {
@@ -77,6 +77,15 @@ public class RobotCommands {
 	public static void catchBall() {
 		System.out.println("catchBall");
 		RobotCommunication.getInstance().sendCatch();
+	}
+	
+	public static void catchUp(){
+		RobotCommunication.getInstance().catchUp();
+	}
+	
+	public static void catchDown(){
+		System.out.println("Catching!");
+		RobotCommunication.getInstance().catchDown();
 	}
 
 	public static void rotateStop() {

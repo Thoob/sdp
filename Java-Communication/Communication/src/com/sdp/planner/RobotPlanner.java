@@ -2,6 +2,9 @@ package com.sdp.planner;
 
 import java.awt.geom.Point2D;
 
+import sun.java2d.pipe.SpanShapeRenderer.Simple;
+
+import com.sdp.strategy.StrategyHelper;
 import com.sdp.world.DynamicWorldState.Robot;
 import com.sdp.world.SimpleWorldState;
 import com.sdp.world.SimpleWorldState.Operation;
@@ -67,6 +70,21 @@ public class RobotPlanner {
 			return false;
 		}
 	}
+	
+	public static boolean prepareCatch(double robotX, double robotY,
+			double ballX, double ballY) {
+		double deltaX = robotX - ballX;
+		double deltaY = robotY - ballY;
+
+		double deltaTotal = Math.abs(deltaX) + Math.abs(deltaY);
+		System.out.println("Distance from ball: " + deltaTotal);
+
+		if (deltaTotal < MAX_CATCH_DIST*2 && deltaTotal > MIN_CATCH_DIST) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 	public static boolean inCentreRange(Robot robot, Point2D centre) {
 		Point2D robotPos = robot.getCenter();
@@ -86,19 +104,29 @@ public class RobotPlanner {
 
 	public static boolean doesOurRobotHaveBall(double robotX, double robotY,
 			double ballX, double ballY) {
-		
+
 		double deltaX = robotX - ballX;
 		double deltaY = robotY - ballY;
 		double deltaTotal = Math.abs(deltaX) + Math.abs(deltaY);
 
-		if (deltaTotal < 90) {// TODO test and discuss precision needed
+//		if (deltaTotal < 30 && StrategyHelper.isRobotFacingBall
+//				&& SimpleWorldState.previousOperation == Operation.CATCH) {
+//			return true;
+//		} else {
+//			return false;
+//		}
+		
+		if (deltaTotal > 50){
+			return false;
+		} else if (SimpleWorldState.previousOperation == Operation.CATCH){
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	public static double desiredAngle(double robotX, double robotY, double targetX, double targetY) {
+	public static double desiredAngle(double robotX, double robotY,
+			double targetX, double targetY) {
 
 		double targetRad = Math.atan2(targetY - robotY, targetX - robotX);
 		double targetDeg = Math.toDegrees(targetRad);
@@ -135,17 +163,17 @@ public class RobotPlanner {
 	// Returns the zone an object with a given X value is in
 	// I'm so sorry for all these magic numbers! - Theo
 	public static int inZone(double objX) {
-//		if (objX < -324) {
-//			return 0;
-//		} else if (objX < 25) {
-//			return 1;
-//		} else if (objX < 374) {
-//			return 2;
-//		} else if (objX < 650) {
-//			return 3;
-//		} else {
-//			return -1;
-//		}
+		// if (objX < -324) {
+		// return 0;
+		// } else if (objX < 25) {
+		// return 1;
+		// } else if (objX < 374) {
+		// return 2;
+		// } else if (objX < 650) {
+		// return 3;
+		// } else {
+		// return -1;
+		// }
 		return 0;
 	}
 }

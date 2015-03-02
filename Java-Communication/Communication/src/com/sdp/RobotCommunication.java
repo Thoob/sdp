@@ -92,4 +92,14 @@ public class RobotCommunication {
 		String command = "SMOVB 150 40\n";
 		Communication.getInstance().sendCommandViaPort(command);		
 	}
+
+	public void catchUp() {
+		Communication.getInstance().sendCommandViaPort("CATCHUP\n");
+		
+	}
+	
+	public void catchDown() {
+		Communication.getInstance().sendCommandViaPort("CATCHDOWN\n");
+		
+	}
 }

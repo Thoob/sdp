@@ -37,6 +37,7 @@ public class PassingStrategy extends GeneralStrategy {
 //		System.out.println("desired angle "+desiredAngleA);
 //
 //		if (facingAttacker) {
+		/* Blocker is not is LoS */
 //			System.out.println("We are facing Attacker");
 //			facingCounter++;
 //			
@@ -44,16 +45,16 @@ public class PassingStrategy extends GeneralStrategy {
 //				RobotCommands.passKick();
 //
 //		} else {
-//			facingCounter = 0;
-//			double desiredAngle = Calculations.getBounceAngle(robotX, robotY, Math.toRadians(robotAngleDeg), attackerX, attackerY, enemyAttackerX, enemyAttackerY);
-//			System.out.println("desired angle "+desiredAngle);
-//			sh.rotateToDesiredAngle(robotAngleDeg, desiredAngle);
+//			/* Not facing so attempt bounce shot */
+//			if (enemyBlocking) {
+//				facingCounter = 0;
+//				double desiredAngle = Calculations.getBounceAngle(robotX, robotY, Math.toRadians(robotAngleDeg), attackerX, attackerY, enemyAttackerX, enemyAttackerY);
+//				System.out.println("desired angle "+desiredAngle);
+//				sh.rotateToDesiredAngle(robotAngleDeg, desiredAngle);
+//				}
 //		}
 //
-//		if (enemyBlocking) {
-//			System.out.println("Enemy is blocking");
-//			// TODO do bounce pass
-//		}
+
 	}
 
 	private boolean isEnemyBlocking() {

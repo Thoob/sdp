@@ -15,6 +15,7 @@ import com.sdp.world.WorldState;
 public class StrategyHelper extends GeneralStrategy {
 
 	int facingCounter = 0;
+	public boolean isRobotFacingBall = false;
 
 	void acquireBall(WorldState worldState) {
 		// System.out.println("trying to acquire the ball");
@@ -24,7 +25,7 @@ public class StrategyHelper extends GeneralStrategy {
 				ballX, ballY);
 		 double ballDiffInHeadings = Math.abs(robotAngleDeg - ballAngleDeg);
 		 // Robot is facing the ball if within this angle in degrees of the ball
-		 boolean isRobotFacingBall = (ballDiffInHeadings < allowedDegreeError || ballDiffInHeadings > 360 - allowedDegreeError);
+		 isRobotFacingBall = (ballDiffInHeadings < allowedDegreeError || ballDiffInHeadings > 360 - allowedDegreeError);
 		
 				 // 1 - Rotate to face ball
 		 if (!RobotPlanner.doesOurRobotHaveBall(robotX, robotY,
@@ -49,16 +50,23 @@ public class StrategyHelper extends GeneralStrategy {
 			System.out.println("Moving towards ball.");
 		}
 		
-		// 3 - Catch ball
+		// 3 - Prepare to catch ball
 		if (!RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)
-				&& isRobotFacingBall
-				&& RobotPlanner.canCatchBall(robotX, robotY, ballX, ballY)
+				&& RobotPlanner.prepareCatch(robotX, robotY, ballX, ballY)
 				&& !(SimpleWorldState.previousOperation == Operation.CATCH)) {
-			RobotCommands.catchBall();
-			SimpleWorldState.previousOperation = Operation.CATCH;
-			System.out.println("Catching ball.");
+			RobotCommands.catchUp();
+			System.out.println("Preparing to ball.");
 		}
 
+		// 4 - Catch ball
+				if (!RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)
+						&& isRobotFacingBall
+						&& RobotPlanner.canCatchBall(robotX, robotY, ballX, ballY)
+						&& !(SimpleWorldState.previousOperation == Operation.CATCH)) {
+					RobotCommands.catchDown();
+					SimpleWorldState.previousOperation = Operation.CATCH;
+					System.out.println("Catching ball.");
+				}
 	}
 
 	void rotateToDesiredAngle(double robotAngleDeg, double desiredAngleDeg) {
