@@ -36,7 +36,9 @@ public class StrategyHelper extends GeneralStrategy {
 		 
 		 
 		// 2 - Go towards ball if it is in our zone
-		if (facingCounter > 20
+		 /* Frame counter may be useful here later */
+		 
+		if (isRobotFacingBall
 				&& !RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX,
 						ballY)
 				&& !RobotPlanner.canCatchBall(robotX, robotY, ballX, ballY)
