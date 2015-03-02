@@ -203,7 +203,7 @@ void move_kick() {
 }
 
 
-// Catch script
+// Moves the catcher to a catching position
 void move_catchup() {
 
 
@@ -213,6 +213,7 @@ void move_catchup() {
 
 }
 
+// Stops lifting the catcher so it falls on the ball
 void move_catchdown() {
 
 
