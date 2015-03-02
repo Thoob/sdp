@@ -16,38 +16,82 @@ public class PassingStrategy extends GeneralStrategy {
 	public PassingStrategy() {
 		sh = new StrategyHelper();
 	}
-
+	double robotAngleRad;
+	public boolean flag = false;
+	public int framesPassed = 0;
+    
 	public void sendWorldState(WorldState worldState) {
+		initializeVars(worldState);
+	
+		int ballzone = RobotPlanner.inZone(ballX, worldState);
+		System.out.println("Ballzone is: " + ballzone);
+		if (RobotPlanner.inZone(ballX, worldState) != RobotPlanner.inZone(robotX, worldState)){
+			System.out.println("Not in same zone");
+			RobotCommands.stop();
+			return; 
+		}
 		
-		// TODO check if we have the ball if not get it
-		sh.acquireBall(worldState);
-//	
-//		// TODO fix this??
-//		initializeVars(worldState);
-//		System.out.println("our position " + robotX + " " + robotY + " "
-//				+ robotAngleDeg);
-//		System.out.println("attacker position " + attackerX + " " + attackerY
-//				+ " " + getAttackerAngle());
-//
-//		// STATE BOOLEANS //
-//		boolean facingAttacker = isFacingAttacker();
-//		boolean enemyBlocking = isEnemyBlocking();
-//		
-//		double desiredAngleA = Calculations.getBounceAngle(robotX, robotY, Math.toRadians(robotAngleDeg), attackerX, attackerY, enemyAttackerX, enemyAttackerY);
-//		System.out.println("desired angle "+desiredAngleA);
-//
-//		if (facingAttacker) {
+		robotAngleRad = Math.toRadians(robotAngleDeg);
+		if (robot == null || ball == null)
+			return;
+
+		if (flag == false){
+			framesPassed = 0;
+			sh.acquireBall(worldState);
+			if (RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)) {
+				flag = true;
+				System.out.println("Attempted Catch");
+				}	
+		} else{ 
+			passKick(worldState);
+		}
+			
+	}
+		
+	public void passKick(WorldState worldState){	
+
+		//TODO fix framesPassed incrementations
+		System.out.println("our position " + robotX + " " + robotY + " "
+				+ robotAngleDeg);
+		System.out.println("attacker position " + attackerX + " " + attackerY
+				+ " " + getAttackerAngle());
+
+		// STATE BOOLEANS //
+		boolean facingAttacker = isFacingAttacker();
+		if (facingAttacker == true /*&& RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX, ballY) */){
+			framesPassed++;
+			System.out.println("FRAMES PASSED" + framesPassed);
+		} else {
+		//	framesPassed = 0;
+		}
+		
+		boolean enemyBlocking = isEnemyBlocking();
+		
+		double AttAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
+				attackerX, attackerY);
+		double ballDist = Math.abs(ballX - robotX) + Math.abs(ballY - robotY);
+		//boolean Caught = ballDist < 15;
+		
 		/* Blocker is not is LoS */
-//			System.out.println("We are facing Attacker");
-//			facingCounter++;
-//			
-//			if (facingCounter >= 20)
-//				RobotCommands.passKick();
-//
+		if (facingAttacker && framesPassed > 20) {
+			System.out.println("We are facing Attacker, and have the ball");
+			System.out.println("FRAMES PASSED" + framesPassed);
+			RobotCommands.passKick();
+			flag = false;
+			
+		} else {
+			sh.rotateToDesiredAngle(robotAngleDeg, AttAngleDeg);			
+		}
+	}
+
+		
+	
+		
+	
+	/* BOUNCE PASS */
 //		} else {
 //			/* Not facing so attempt bounce shot */
 //			if (enemyBlocking) {
-//				facingCounter = 0;
 //				double desiredAngle = Calculations.getBounceAngle(robotX, robotY, Math.toRadians(robotAngleDeg), attackerX, attackerY, enemyAttackerX, enemyAttackerY);
 //				System.out.println("desired angle "+desiredAngle);
 //				sh.rotateToDesiredAngle(robotAngleDeg, desiredAngle);
@@ -55,7 +99,7 @@ public class PassingStrategy extends GeneralStrategy {
 //		}
 //
 
-	}
+
 
 	private boolean isEnemyBlocking() {
 		double enemyAttackerAngle = RobotPlanner.desiredAngle(robotX, robotY,

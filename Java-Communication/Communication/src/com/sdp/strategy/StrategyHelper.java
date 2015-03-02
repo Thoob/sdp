@@ -18,7 +18,7 @@ public class StrategyHelper extends GeneralStrategy {
 	public boolean isRobotFacingBall = false;
 
 	void acquireBall(WorldState worldState) {
-		// System.out.println("trying to acquire the ball");
+		 System.out.println("trying to acquire the ball");
 		initializeVars(worldState);
 		// Desired angle to face ball
 		double ballAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
@@ -43,7 +43,7 @@ public class StrategyHelper extends GeneralStrategy {
 				&& !RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX,
 						ballY)
 				&& !RobotPlanner.canCatchBall(robotX, robotY, ballX, ballY)
-				&& (RobotPlanner.inZone(ballX) == RobotPlanner.inZone(robotX))) {
+				&& (RobotPlanner.inZone(ballX, worldState) == RobotPlanner.inZone(robotX, worldState))) {
 
 			RobotCommands.goStraight();
 			SimpleWorldState.previousOperation = Operation.NONE;
