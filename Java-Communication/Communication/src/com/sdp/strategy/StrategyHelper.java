@@ -20,27 +20,21 @@ public class StrategyHelper extends GeneralStrategy {
 		// System.out.println("trying to acquire the ball");
 		initializeVars(worldState);
 		// Desired angle to face ball
-		double ballAngleDeg = RobotPlanner.desiredAngle(robotX, robotY, ballX,
-				ballY);
-		double ballDiffInHeadings = Math.abs(robotAngleDeg - ballAngleDeg);
-		// Robot is facing the ball if within this angle in degrees of the ball
-		boolean isRobotFacingBall = (ballDiffInHeadings < allowedDegreeError || ballDiffInHeadings > 360 - allowedDegreeError);
+		double ballAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
+				ballX, ballY);
+		 double ballDiffInHeadings = Math.abs(robotAngleDeg - ballAngleDeg);
+		 // Robot is facing the ball if within this angle in degrees of the ball
+		 boolean isRobotFacingBall = (ballDiffInHeadings < allowedDegreeError || ballDiffInHeadings > 360 - allowedDegreeError);
 		
-		// 1 - Rotate to face ball
-		System.out.println("Current robot heading:" + robotAngleDeg);
-		System.out.println("Angle to face:" + ballAngleDeg);
-		if (!RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)
-				&& !isRobotFacingBall) {
-			rotateToDesiredAngle(robotAngleDeg, ballAngleDeg);
-			System.out.println("Rotating to face ball.");
-			facingCounter = 0;
-		} else {
-			System.out.println("Desired angle");
-			facingCounter++;
-			System.out.println("Ball in zone " + RobotPlanner.inZone(ballX));
-			System.out.println("Robot in zone " + RobotPlanner.inZone(robotX));
-		}
-
+				 // 1 - Rotate to face ball
+		 if (!RobotPlanner.doesOurRobotHaveBall(robotX, robotY,
+				 ballX, ballY)
+			 && !isRobotFacingBall) {
+			 rotateToDesiredAngle(robotAngleDeg, ballAngleDeg);
+			 System.out.println("Rotating to face ball.");
+		 }
+		 
+		 
 		// 2 - Go towards ball if it is in our zone
 		if (facingCounter > 20
 				&& !RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX,
