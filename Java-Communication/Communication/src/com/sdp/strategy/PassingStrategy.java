@@ -20,6 +20,7 @@ public class PassingStrategy extends GeneralStrategy {
 	}
 	double robotAngleRad;
 	public boolean flag = false;
+	public boolean wePassed = true;
 	public int framesPassed = 0;
     
 	public void sendWorldState(WorldState worldState) {
@@ -59,8 +60,6 @@ public class PassingStrategy extends GeneralStrategy {
 		
 	public void passKick(WorldState worldState){	
 
-		//TODO fix framesPassed increments
-
 		System.out.println("FRAMES PASSED " + framesPassed);
 		boolean facingAttacker = isFacingAttacker();
 
@@ -72,14 +71,13 @@ public class PassingStrategy extends GeneralStrategy {
 				enemyAttackerX, enemyAttackerY );
 		
 		boolean doBounce = false;
-		
 
 		// TODO: Test
 		if (facingAttacker && RobotPlanner.inZone(ballX, worldState) ==
 			RobotPlanner.inZone(robotX, worldState)){
 			framesPassed++;
 			// When we've been facing the enemy for ~1/2 a second
-			if (framesPassed > 15 && 
+			if (framesPassed > 7 && 
 				SimpleWorldState.previousOperation != Operation.PASSKICK){
 				
 				// Discuss angle, and perhaps alternate detection method,
@@ -88,12 +86,15 @@ public class PassingStrategy extends GeneralStrategy {
 				
 				boolean enemyBlocking = diffInHeadings(robotAngleDeg, blockerAngleDeg) < 10;
 			//	if (enemyBlocking != true && doBounce == false){
+					System.out.println("Previous Op: " + SimpleWorldState.previousOperation );
+
 					System.out.println("We are facing Attacker, and have the ball");
 					RobotCommands.passKick();
 					SimpleWorldState.previousOperation = Operation.PASSKICK;
-					
+
 					// Setting flag to false allows us to acquire the ball again
 					// when necessary 
+					wePassed = true;
 					flag = false;
 					return;
 				//	}
@@ -101,22 +102,20 @@ public class PassingStrategy extends GeneralStrategy {
 			}
 
 		// Bounce pass is needed
-		else if (doBounce == true){
-			// sh.rotateToDesiredAngle(robotAngleDeg, BounceAngleDeg);
-			// RobotCommands.bouncePass();  May require more or less power
-			// SimpleWorldState.previousOperation = Operation.BOUNCEPASS;
-			}
+			else if (doBounce == true){
+				// sh.rotateToDesiredAngle(robotAngleDeg, BounceAngleDeg);
+				// RobotCommands.bouncePass();  May require more or less power
+				// SimpleWorldState.previousOperation = Operation.BOUNCEPASS;
+				}
 		
-		// if we havent been facing our team mate for >1/2 secs
+			}
+				
 		else {
 				framesPassed = 0;
 				sh.rotateToDesiredAngle(robotAngleDeg, AttAngleDeg);
 				return;
 				}
 			
-		}
-				
-				
 
 		
 		
