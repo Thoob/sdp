@@ -117,7 +117,7 @@ public class RobotPlanner {
 //			return false;
 //		}
 		
-		if (deltaTotal > 40){
+		if (deltaTotal > 35){
 			return false;
 		} else if (SimpleWorldState.previousOperation == Operation.CATCH){
 			return true;

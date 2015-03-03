@@ -55,7 +55,7 @@ public class StrategyHelper extends GeneralStrategy {
 				&& RobotPlanner.prepareCatch(robotX, robotY, ballX, ballY)
 				&& !(SimpleWorldState.previousOperation == Operation.CATCH)) {
 			RobotCommands.catchUp();
-			System.out.println("Preparing to ball.");
+			System.out.println("Preparing to catch ball.");
 		}
 
 		// 4 - Catch ball

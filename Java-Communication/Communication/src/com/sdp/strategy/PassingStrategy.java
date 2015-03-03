@@ -3,6 +3,8 @@ package com.sdp.strategy;
 import com.sdp.planner.RobotCommands;
 import com.sdp.planner.RobotPlanner;
 import com.sdp.prediction.Calculations;
+import com.sdp.world.SimpleWorldState;
+import com.sdp.world.SimpleWorldState.Operation;
 import com.sdp.world.WorldState;
 
 /**
@@ -23,6 +25,7 @@ public class PassingStrategy extends GeneralStrategy {
 	public void sendWorldState(WorldState worldState) {
 		initializeVars(worldState);
 	
+		/* Only act when the ball is in our zone. */
 		int ballzone = RobotPlanner.inZone(ballX, worldState);
 		System.out.println("Ballzone is: " + ballzone);
 		if (RobotPlanner.inZone(ballX, worldState) != RobotPlanner.inZone(robotX, worldState)){
@@ -35,6 +38,12 @@ public class PassingStrategy extends GeneralStrategy {
 		if (robot == null || ball == null)
 			return;
 
+		
+		/* 'flag' is used to signify if we have attempted a catch
+		 * 		- Works under assumption that we catch it everytime
+		 * 		- Set back to 'false' when we pass to the attacker 
+		 */
+		
 		if (flag == false){
 			framesPassed = 0;
 			sh.acquireBall(worldState);
@@ -42,7 +51,7 @@ public class PassingStrategy extends GeneralStrategy {
 				flag = true;
 				System.out.println("Attempted Catch");
 				}	
-		} else{ 
+		} else { 
 			passKick(worldState);
 		}
 			
@@ -50,37 +59,31 @@ public class PassingStrategy extends GeneralStrategy {
 		
 	public void passKick(WorldState worldState){	
 
-		//TODO fix framesPassed incrementations
-		System.out.println("our position " + robotX + " " + robotY + " "
-				+ robotAngleDeg);
-		System.out.println("attacker position " + attackerX + " " + attackerY
-				+ " " + getAttackerAngle());
+		//TODO fix framesPassed increments
 
-		// STATE BOOLEANS //
+		System.out.println("FRAMES PASSED " + framesPassed);
 		boolean facingAttacker = isFacingAttacker();
-		if (facingAttacker == true /*&& RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX, ballY) */){
-			framesPassed++;
-			System.out.println("FRAMES PASSED" + framesPassed);
-		} else {
-		//	framesPassed = 0;
-		}
-		
+
 		boolean enemyBlocking = isEnemyBlocking();
-		
 		double AttAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
 				attackerX, attackerY);
-		double ballDist = Math.abs(ballX - robotX) + Math.abs(ballY - robotY);
-		//boolean Caught = ballDist < 15;
 		
-		/* Blocker is not is LoS */
-		if (facingAttacker && framesPassed > 20) {
-			System.out.println("We are facing Attacker, and have the ball");
-			System.out.println("FRAMES PASSED" + framesPassed);
-			RobotCommands.passKick();
-			flag = false;
-			
-		} else {
-			sh.rotateToDesiredAngle(robotAngleDeg, AttAngleDeg);			
+		if (facingAttacker && RobotPlanner.inZone(ballX, worldState) ==
+				RobotPlanner.inZone(robotX, worldState)){
+			framesPassed++;
+			if (framesPassed > 15){  /* If we've been facing the attacker for ~1 sec */
+				System.out.println("We are facing Attacker, and have the ball");
+				//	System.out.println("FRAMES PASSED OVER " + framesPassed);
+				RobotCommands.passKick();
+				SimpleWorldState.previousOperation = Operation.PASSKICK;
+				flag = false;
+				return;
+			}
+		} 
+		else {
+			framesPassed = 0;
+			sh.rotateToDesiredAngle(robotAngleDeg, AttAngleDeg);
+			return;
 		}
 	}
 
