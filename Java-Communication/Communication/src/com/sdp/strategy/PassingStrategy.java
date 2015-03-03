@@ -64,27 +64,56 @@ public class PassingStrategy extends GeneralStrategy {
 		System.out.println("FRAMES PASSED " + framesPassed);
 		boolean facingAttacker = isFacingAttacker();
 
-		boolean enemyBlocking = isEnemyBlocking();
 		double AttAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
 				attackerX, attackerY);
+		double faceAttAngleDeg = diffInHeadings(robotAngleDeg, AttAngleDeg);
 		
+		double blockerAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
+				enemyAttackerX, enemyAttackerY );
+		
+		boolean doBounce = false;
+		
+
+		// TODO: Test
 		if (facingAttacker && RobotPlanner.inZone(ballX, worldState) ==
-				RobotPlanner.inZone(robotX, worldState)){
+			RobotPlanner.inZone(robotX, worldState)){
 			framesPassed++;
-			if (framesPassed > 15){  /* If we've been facing the attacker for ~1 sec */
-				System.out.println("We are facing Attacker, and have the ball");
-				//	System.out.println("FRAMES PASSED OVER " + framesPassed);
-				RobotCommands.passKick();
-				SimpleWorldState.previousOperation = Operation.PASSKICK;
-				flag = false;
-				return;
+			if (framesPassed > 10 && 
+				SimpleWorldState.previousOperation != Operation.PASSKICK){
+				
+				// Discuss angle, and perhaps alternate detection method
+				boolean enemyBlocking = diffInHeadings(robotAngleDeg, blockerAngleDeg) < 10;
+				if (enemyBlocking != true && doBounce == false){
+					System.out.println("We are facing Attacker, and have the ball");
+					RobotCommands.passKick();
+					SimpleWorldState.previousOperation = Operation.PASSKICK;
+					flag = false;
+					return;
+					}
+				else doBounce = true;
 			}
-		} 
-		else {
-			framesPassed = 0;
-			sh.rotateToDesiredAngle(robotAngleDeg, AttAngleDeg);
-			return;
-		}
+			else {
+				framesPassed = 0;
+				sh.rotateToDesiredAngle(robotAngleDeg, AttAngleDeg);
+				return;
+				}
+			}
+		
+		else if (doBounce == true){
+			// sh.rotateToDesiredAngle(robotAngleDeg, BounceAngleDeg);
+			// RobotCommands.bouncePass();  May require more or less power
+			// SimpleWorldState.previousOperation = Operation.BOUNCEPASS;
+			}
+		
+		
+		
+				
+				
+
+		
+		
+		
+		
 	}
 
 		
@@ -109,7 +138,7 @@ public class PassingStrategy extends GeneralStrategy {
 				enemyAttackerX, enemyAttackerY);
 		double attackerAngle = getAttackerAngle();
 
-		return diffInHeadings(enemyAttackerAngle, attackerAngle) < 20;
+		return diffInHeadings(enemyAttackerAngle, attackerAngle) < 10;
 	}
 
 	private boolean isFacingAttacker() {
