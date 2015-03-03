@@ -79,7 +79,7 @@ public class PassingStrategy extends GeneralStrategy {
 			RobotPlanner.inZone(robotX, worldState)){
 			framesPassed++;
 			// When we've been facing the enemy for ~1/2 a second
-			if (framesPassed > 10 && 
+			if (framesPassed > 15 && 
 				SimpleWorldState.previousOperation != Operation.PASSKICK){
 				
 				// Discuss angle, and perhaps alternate detection method,
@@ -87,7 +87,7 @@ public class PassingStrategy extends GeneralStrategy {
 				// to face the blocker is with in 10 degrees, we assume we are blocked
 				
 				boolean enemyBlocking = diffInHeadings(robotAngleDeg, blockerAngleDeg) < 10;
-				if (enemyBlocking != true && doBounce == false){
+			//	if (enemyBlocking != true && doBounce == false){
 					System.out.println("We are facing Attacker, and have the ball");
 					RobotCommands.passKick();
 					SimpleWorldState.previousOperation = Operation.PASSKICK;
@@ -96,17 +96,10 @@ public class PassingStrategy extends GeneralStrategy {
 					// when necessary 
 					flag = false;
 					return;
-					}
-				else doBounce = true;
+				//	}
+				//else doBounce = true;
 			}
-			// if we havent been facing our team mate for >1/2 secs
-			else {
-				framesPassed = 0;
-				sh.rotateToDesiredAngle(robotAngleDeg, AttAngleDeg);
-				return;
-				}
-			}
-		
+
 		// Bounce pass is needed
 		else if (doBounce == true){
 			// sh.rotateToDesiredAngle(robotAngleDeg, BounceAngleDeg);
@@ -114,8 +107,14 @@ public class PassingStrategy extends GeneralStrategy {
 			// SimpleWorldState.previousOperation = Operation.BOUNCEPASS;
 			}
 		
-		
-		
+		// if we havent been facing our team mate for >1/2 secs
+		else {
+				framesPassed = 0;
+				sh.rotateToDesiredAngle(robotAngleDeg, AttAngleDeg);
+				return;
+				}
+			
+		}
 				
 				
 
