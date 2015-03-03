@@ -83,7 +83,7 @@ public class GeneralStrategy {
 		enemyDefenderX = enemyDefender.x;
 		enemyDefenderY = enemyDefender.y;
 
-		MovingObject enemyAttacker = worldState.getEnemyDefenderRobot();
+		MovingObject enemyAttacker = worldState.getEnemyAttackerRobot();
 		enemyAttackerX = enemyAttacker.x;
 		enemyAttackerY = enemyAttacker.y;
 	}
