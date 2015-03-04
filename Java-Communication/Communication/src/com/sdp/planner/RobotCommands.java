@@ -39,12 +39,12 @@ public class RobotCommands {
 	
 	public static void rotateLeft() {
 		System.out.println("rotateLeft");
-		RobotCommunication.getInstance().move(-35, 35);
+		RobotCommunication.getInstance().move(-37, 37);
 	}
 
 	public static void rotateRight() {
 		System.out.println("rotateRight");
-		RobotCommunication.getInstance().move(30, -30);
+		RobotCommunication.getInstance().move(35, -35);
 	}
 
 	public static void goStraight() {
@@ -74,10 +74,10 @@ public class RobotCommands {
 
 	}
 
-	public static void catchBall() {
-		System.out.println("catchBall");
-		RobotCommunication.getInstance().sendCatch();
-	}
+//	public static void catchBall() {
+//		System.out.println("catchBall");
+//		RobotCommunication.getInstance().sendCatch();
+//	}
 	
 	public static void catchUp(){
 		RobotCommunication.getInstance().catchUp();
@@ -88,10 +88,12 @@ public class RobotCommands {
 		RobotCommunication.getInstance().catchDown();
 	}
 
-	public static void rotateStop() {
-		RobotCommunication.getInstance().rotateStop();
-	}
+//	*Not on Arduino*
+//	public static void rotateStop() {
+//		RobotCommunication.getInstance().rotateStop();
+//	}
 
+//	*Not on Arduino*
 	public static void shortMoveBackwards() {
 		RobotCommunication.getInstance().shortMoveBackwards();
 	}
