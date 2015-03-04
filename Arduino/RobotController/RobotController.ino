@@ -17,13 +17,15 @@ int rightspeed = 0;                          // Speed of right wheel
 int minspeed = 25;                           // Minimum speed at which wheels will move
 
 int KICKING = 0;                             // flag for kicking
+boolean function_running;
+unsigned long function_interval;
 
 
 void setup() {
   pinMode(arduinoLED, OUTPUT);               // Configure the onboard LED for output
   digitalWrite(arduinoLED, LOW);             // default to LED off
   
-  SDPsetup();
+//  SDPsetup();
   
   Serial.begin(115200);
 
@@ -31,6 +33,7 @@ void setup() {
   //Test commands
   sCmd.addCommand("ON",    LED_on);          // Turns LED on
   sCmd.addCommand("OFF",   LED_off);         // Turns LED off
+  sCmd.addCommand("BLINK", LED_blink());
   
   //Movement commands
   sCmd.addCommand("MOVE", run_engine);       // Runs wheel motors
@@ -51,31 +54,9 @@ void setup() {
 
 void loop() {
   
-  if(abs(leftspeed) < minspeed){
-    motorStop(left);
-  } else if(leftspeed < 0){
-    motorBackward(left, abs(leftspeed));
-  } else {
-    motorForward(left, leftspeed);
-  }
   
-  if(abs(rightspeed) < minspeed){
-    motorStop(right);
-  } else if(rightspeed < 0){
-    motorBackward(right, abs(rightspeed));
-  } else {
-    motorForward(right, rightspeed);
-  }
   
-  if( KICKING == 1 )
-  {
-    while(Serial.available())
-      Serial.read();
-  }else
-  {
-    sCmd.readSerial();                         // We don't do much, just process serial commands
-  }
-  
+  sCmd.readSerial();                         // We don't do much, just process serial commands
   
 }
 
@@ -89,6 +70,17 @@ void LED_off() {
   Serial.println("LED off");
   digitalWrite(arduinoLED, LOW);
 }
+
+void LED_blink() {
+  LED_on();
+  delay(1000);
+  LED_off();
+  delay(1000);
+  LED_on();
+  delay(1000);
+  LED_off();
+}
+
 
 
 

@@ -179,23 +179,24 @@ void move_kick() {
 
   arg2 = sCmd.next();
   power = atoi(arg2);
+  
+  leftStop();
+  rightStop();
 
   Serial.println("Kicking");
 
   motorBackward(catcher, 100);
-  motorForward(right, 100);
-  motorForward(left, 100);
-  delay(450);
-  leftStop();
-  rightStop();
+  delay(300);
 
   motorForward(kicker, power);
 
-  delay(time/2);
-  motorStop(catcher);
 
-  delay(time/2);
+  delay(time);
+  motorForward(catcher, 100);
   motorStop(kicker);
+  
+  delay(100);
+  motorStop(catcher);
 
 
   delay(1000);
