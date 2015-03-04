@@ -39,12 +39,12 @@ public class RobotCommands {
 	
 	public static void rotateLeft() {
 		System.out.println("rotateLeft");
-		RobotCommunication.getInstance().move(-40, 40);
+		RobotCommunication.getInstance().move(-35, 35);
 	}
 
 	public static void rotateRight() {
 		System.out.println("rotateRight");
-		RobotCommunication.getInstance().move(40, -40);
+		RobotCommunication.getInstance().move(30, -30);
 	}
 
 	public static void goStraight() {

@@ -21,7 +21,7 @@ public class RobotCommunication {
 	}
 
 	public void passKick() {
-		String command = String.format("KICK 400 60\n");
+		String command = String.format("KICK 400 70\n");
 		Communication.getInstance().sendCommandViaPort(command);
 	}
 
