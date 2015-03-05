@@ -43,6 +43,7 @@ void setup() {
 
     //Movement commands
   sCmd.addCommand("MOVE", run_engine);       // Runs wheel motors
+  sCmd.addCommand("BRAKE", brake_motor);
   sCmd.addCommand("FSTOP", force_stop);      // Force stops all motors
   sCmd.addCommand("KICK", move_kick);        // Runs kick script
   sCmd.addCommand("CATCHUP", move_catchup);      // Runs catch script
@@ -394,10 +395,7 @@ void unrecognized(const char *command) {
   Serial.println("I'm sorry, Dave. I'm afraid I can't do that.");
 }
 
-
-
-
-
-
-
-
+void brake_motor(){
+  motorBrake(left, 100);
+  motorStop(right);
+}

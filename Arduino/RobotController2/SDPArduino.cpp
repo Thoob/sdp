@@ -66,6 +66,25 @@ void motorBackward(int motorNum, int motorPower) { //Makes Motor motorNum go bac
   }
 }
 
+// ABANDON ALL HOPE, YE WHO ENTER HERE
+void motorBrake(int motorNum, int motorPower) { //Makes Motor motorNum brake at a power of motorPower
+  if (motorNum >= 0 and motorNum <= 5){
+    if (motorPower < 0){ //Lowest power possible = 0.
+      motorPower = 0;
+    }
+    if (motorPower > 100) {//Highest power possible = 100.
+      motorPower = 100;
+    }
+    int motorMode = 1; //Mode 1 is Brake ??
+    byte motor1 = motorNum<<5 | 24 | motorMode<<1 ;//Build Command Byte
+    byte motor2 = int(motorPower * 2.55);
+    uint8_t sender[2] = {motor1, motor2};
+    Wire.beginTransmission(MotorBoardI2CAddress); //open I2C communation to Motor Board.
+    Wire.write(sender,2);                    //send data. 
+    byte fred = Wire.endTransmission();		//end I2C communcation.
+  }
+}
+
 void motorStop(int motorNum) { // stop motor motorNum
   if (motorNum >= 0 and motorNum <= 5){
     int motorMode = 0;				   //Mode 0, floats the motor.
