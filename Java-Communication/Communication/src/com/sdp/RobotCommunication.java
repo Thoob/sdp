@@ -30,6 +30,7 @@ public class RobotCommunication {
 		Communication.getInstance().sendCommandViaPort(command);
 	}
 
+//	*Not on Arduino*
 	public void sendCatch() {
 		String command = "CATCH\n";
 		Communication.getInstance().sendCommandViaPort(command);
@@ -67,16 +68,18 @@ public class RobotCommunication {
 		Communication.getInstance().sendCommandViaPort(command);
 	}
 
-	public void catchReset() {
-		String command = String.format("CFRESET\n");
-		System.out.println(command);
-		Communication.getInstance().sendCommandViaPort(command);
-	}
+//	*Not on Arduino*
+//	public void catchReset() {
+//		String command = String.format("CFRESET\n");
+//		System.out.println(command);
+//		Communication.getInstance().sendCommandViaPort(command);
+//	}
 
-	public void rotateStop() {
-		String command = "RSTOP\n";
-		Communication.getInstance().sendCommandViaPort(command);
-	}
+//	*Not on Arduino*
+//	public void rotateStop() {
+//		String command = "RSTOP\n";
+//		Communication.getInstance().sendCommandViaPort(command);
+//	}
 
 	public void shortRotateLeft() {
 		String command = "SROTL 150 40\n"; // old power value 70, time 200
@@ -88,6 +91,7 @@ public class RobotCommunication {
 		Communication.getInstance().sendCommandViaPort(command);
 	}
 
+//	*Not on Arduino*
 	public void shortMoveBackwards() {
 		String command = "SMOVB 150 40\n";
 		Communication.getInstance().sendCommandViaPort(command);		
