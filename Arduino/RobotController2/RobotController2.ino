@@ -73,17 +73,8 @@ void loop() {
   case 0:
     break;
 
-    //Left short rotate
+    //Left/Right short rotate and brake function are stopped after interval
   case 1:
-    if (millis() > function_run_time + interval) {
-      leftStop();
-      rightStop();
-      function_running = 0;
-    }
-    break;
-
-    //Right short rotate
-  case 2:
     if (millis() > function_run_time + interval) {
       leftStop();
       rightStop();
@@ -97,6 +88,14 @@ void loop() {
 
   sCmd.readSerial();                         // Processes serial commands
 
+
+//  int sensor_data = 0;
+//  
+//  sensor_data = readAnalogSensorData(1);
+//  
+//  Serial.println(sensor_data);
+//  
+//  delay(100);
 }
 
 // Test Commands
@@ -353,7 +352,7 @@ void move_shortrotR() {
     motorForward(left, srot_power);
     motorBackward(right, srot_power);
 
-    function_running = 2;
+    function_running = 1;
     function_run_time = millis();
   }
 
@@ -396,6 +395,10 @@ void unrecognized(const char *command) {
 }
 
 void brake_motor(){
+  function_running = 1;
+  interval = 200;
+  function_run_time = millis();
+  
   motorBrake(left, 100);
-  motorStop(right);
+  motorBrake(right, 100);
 }
