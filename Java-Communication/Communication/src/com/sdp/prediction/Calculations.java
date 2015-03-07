@@ -3,7 +3,6 @@ package com.sdp.prediction;
 import java.util.ArrayList;
 
 import com.sdp.planner.RobotPlanner;
-import com.sdp.strategy.GeneralStrategy;
 import com.sdp.vision.PitchConstants;
 import com.sdp.world.Point2;
 
