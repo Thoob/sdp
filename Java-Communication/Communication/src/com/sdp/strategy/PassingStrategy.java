@@ -32,16 +32,6 @@ public class PassingStrategy extends GeneralStrategy {
 
 		System.out.println("Ball Pos is: " + ballY);
 
-		// Only act when the ball is in our zone.
-		int ballzone = RobotPlanner.inZone(ballX, worldState);
-		System.out.println("Ballzone is: " + ballzone);
-		if (RobotPlanner.inZone(ballX, worldState) != RobotPlanner.inZone(
-				robotX, worldState)) {
-			System.out.println("Not in same zone");
-			RobotCommands.stop();
-			return;
-		}
-
 		robotAngleRad = Math.toRadians(robotAngleDeg);
 		if (robot == null || ball == null)
 			return;
