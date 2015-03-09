@@ -18,62 +18,70 @@ public class Oracle {
 	private int boundaryBottom;
 	private int boundaryLeft;
 	private int boundaryRight;
-	
-	public Oracle(int top_b, int bottom_b, int left_b, int right_b){
+
+	public Oracle(int top_b, int bottom_b, int left_b, int right_b) {
 		this.boundaryBottom = bottom_b;
 		this.boundaryLeft = left_b;
 		this.boundaryRight = right_b;
-		this.boundaryTop = top_b;		
+		this.boundaryTop = top_b;
 	}
-	
+
 	/**
-	 * Returns the coordinates of the predicted state of a point.
-	 * Predictions several states forward will be more inaccurate.
-	 * TODO: Change frames_forward to time in ms
-	 * TODO: Implement boundary calculations and detections for the corners
-	 * TODO: Implement a check to see if a point is within the Pitch (use pitch.getBoundPolygon somehow?)
+	 * Returns the coordinates of the predicted state of a point. Predictions
+	 * several states forward will be more inaccurate. TODO: Change
+	 * frames_forward to time in ms TODO: Implement boundary calculations and
+	 * detections for the corners TODO: Implement a check to see if a point is
+	 * within the Pitch (use pitch.getBoundPolygon somehow?)
 	 * */
-	public Point2 predictState(ArrayList<Point2> history, int frames_forward){
-		if(frames_forward < 0)
-			throw new IllegalArgumentException("frames_forward cannot be a negative value: "+frames_forward);
-		else{
+	public Point2 predictState(ArrayList<Point2> history, int framesForward) {
+		if (framesForward < 0)
+			throw new IllegalArgumentException(
+					"framesForward cannot be a negative value: "
+							+ framesForward);
+		else {
 			Point2 prediction = null;
-			while(frames_forward > 0){
-				frames_forward--;
-				//get future point
+			while (framesForward > 0) {
+				framesForward--;
+				// get future point
 				prediction = Calculations.predictNextPoint(history);
-				//check for boundary violation
+				// check for boundary violation
 				boolean boundaryCheck = false;
-				
-				if(boundaryCheck){					
-					//TOP violation
-					if(prediction.getY() > boundaryTop)
-						prediction = Calculations.calculateBounceCoordinate(prediction, CorrectionType.TOP_OR_BOTTOM, boundaryTop);
-					//Bottom violation
-					else if(prediction.getY() < boundaryBottom)
-						prediction = Calculations.calculateBounceCoordinate(prediction, CorrectionType.TOP_OR_BOTTOM, boundaryBottom);
-					//LEFT violation
-					else if(prediction.getX() < boundaryLeft)
-						prediction = Calculations.calculateBounceCoordinate(prediction, CorrectionType.LEFT_OR_RIGHT, boundaryLeft);
-					//Right violation
-					else if(prediction.getY() > boundaryRight)
-						prediction = Calculations.calculateBounceCoordinate(prediction, CorrectionType.LEFT_OR_RIGHT, boundaryRight);
-					
+
+				if (boundaryCheck) {
+					// TOP violation
+					if (prediction.getY() > boundaryTop)
+						prediction = Calculations.calculateBounceCoordinate(
+								prediction, CorrectionType.TOP_OR_BOTTOM,
+								boundaryTop);
+					// Bottom violation
+					else if (prediction.getY() < boundaryBottom)
+						prediction = Calculations.calculateBounceCoordinate(
+								prediction, CorrectionType.TOP_OR_BOTTOM,
+								boundaryBottom);
+					// LEFT violation
+					else if (prediction.getX() < boundaryLeft)
+						prediction = Calculations.calculateBounceCoordinate(
+								prediction, CorrectionType.LEFT_OR_RIGHT,
+								boundaryLeft);
+					// Right violation
+					else if (prediction.getY() > boundaryRight)
+						prediction = Calculations.calculateBounceCoordinate(
+								prediction, CorrectionType.LEFT_OR_RIGHT,
+								boundaryRight);
+
 				}
-				//add to history
+				// add to history
 				history.add(prediction);
 			}
-			
+
 			return prediction;
 		}
 	}
-		
-		public void setBoundaries(int top, int bottom, int left, int right){
-			this.boundaryBottom = bottom;
-			this.boundaryLeft = left;
-			this.boundaryRight = right;
-			this.boundaryTop = top;		
-		}	
-	}
-	
 
+	public void setBoundaries(int top, int bottom, int left, int right) {
+		this.boundaryBottom = bottom;
+		this.boundaryLeft = left;
+		this.boundaryRight = right;
+		this.boundaryTop = top;
+	}
+}

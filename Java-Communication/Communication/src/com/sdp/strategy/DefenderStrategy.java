@@ -23,22 +23,19 @@ public class DefenderStrategy extends GeneralStrategy {
 		boolean movingTowardsUs = isBallMovingTowardsUs(worldState);
 		if (movingTowardsUs) {
 			System.out.println("moving towards us");
-
 			// Predicting ball's y coordinate
 			double collisionY = predictedYCoord(worldState);
 
 			// Checking if it is within goal range
-			boolean isInGoalRange = isInGoalRange(collisionY);
+			boolean isInGoalRange = isInGoalRange(collisionY, worldState);
 			if (isInGoalRange) {
 				System.out.println("ball moving towards the goal");
 				// Moving to this position
 				if (Math.abs(collisionY - robotY) > allowedDistError) {
 					if (shouldWeMoveForward(collisionY, robotY)) {
 						RobotCommands.goStraightFast();
-						System.out.println("GO FORWARD!");
 					} else if (shouldWeMoveBackward(collisionY, robotY)) {
 						RobotCommands.goStraightBackwardsFast();
-						System.out.println("GO BACKWARD!");
 					}
 				}
 			}
@@ -46,19 +43,21 @@ public class DefenderStrategy extends GeneralStrategy {
 			// Move to the center of the goal and stay there
 			double goalCenterY = (worldState.weAreShootingRight) ? worldState.leftGoal[1]
 					: worldState.rightGoal[1];
+			System.out
+					.println("Ball is not moving towards. Going to the center of the goal");
+			System.out.println("RobotY " + robotY + " goal center y "
+					+ goalCenterY);
 			if (Math.abs(goalCenterY - robotY) > allowedDistError) {
 				if (shouldWeMoveForward(goalCenterY, robotY)) {
 					RobotCommands.goStraightFast();
-					System.out.println("GO FORWARD!");
 				} else if (shouldWeMoveBackward(goalCenterY, robotY)) {
 					RobotCommands.goStraightBackwardsFast();
-					System.out.println("GO BACKWARD!");
 				}
 			}
 		}
 	}
 
-	private boolean isInGoalRange(double collisionY) {
+	private boolean isInGoalRange(double collisionY, WorldState worldState) {
 		if (worldState.weAreShootingRight) {
 			return collisionY - allowedDistError > worldState.leftGoal[0]
 					&& collisionY + allowedDistError < worldState.leftGoal[2];
@@ -68,6 +67,7 @@ public class DefenderStrategy extends GeneralStrategy {
 		}
 	}
 
+	// TODO change slope to vector or sth similar
 	private float getSlope(WorldState worldState) {
 		ArrayList<Point2> ballPositionHistory = worldState
 				.getBallPositionHistory();
@@ -82,7 +82,6 @@ public class DefenderStrategy extends GeneralStrategy {
 		if (Float.isInfinite(slope) || shaky) {
 			return 0;
 		} else {
-			System.out.println("Slope " + slope);
 			return slope;
 		}
 	}

@@ -140,8 +140,7 @@ public class Vision implements VideoReceiver {
 			passingStrategy.sendWorldState(this.worldState);
 
 		// update ball position history
-		Ball ball = dynamicWorldState.getBall();
-		worldState.updateBallPositionHistory(ball.getPoint());
+		worldState.updateBallPositionHistory(worldState.getBall().asPoint());
 	}
 
 	/**
