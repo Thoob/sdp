@@ -1,5 +1,9 @@
 package com.sdp;
 
+import javax.sql.rowset.serial.SerialRef;
+
+import com.sdp.planner.RobotCommands;
+
 import jssc.SerialPort;
 import jssc.SerialPortException;
 import jssc.SerialPortList;
@@ -34,28 +38,51 @@ public class Communication {
 	public void initializeSerialPort(String portName) {
 		serialPort = new SerialPort(portName);
 		isPortInitialized = true;
+		try {
+			serialPort.openPort();
+		} catch (SerialPortException e) {
+			e.printStackTrace();
+		}
 	}
 
 	void sendCommandViaPort(String command) {
 		try {
-			serialPort.openPort();
 			serialPort.writeString(command);
-			serialPort.closePort();
 		} catch (SerialPortException e) {
 			e.printStackTrace();
 		}
 	}
 
-	String readStringFromSerialPort() {
+	public String readStringFromSerialPort() {
 		String input = null;
 		try {
-			serialPort.openPort();
 			input = serialPort.readString();
-			System.out.println("String received via serial port" + input);
-
+			System.out.println("String received via serial port " + input);
 		} catch (SerialPortException e) {
 			e.printStackTrace();
 		}
 		return input;
+	}
+
+	public class ReadStringRunnable implements Runnable {
+		public ReadStringRunnable() {
+			System.out.println("Read String Runnable started ");
+		}
+
+		@Override
+		public void run() {
+			while (true) {
+				String input;
+				try {
+					input = serialPort.readString();
+					System.out.println("String received via serial port "
+							+ input);
+					Thread.sleep(100);
+				} catch (SerialPortException | InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
 	}
 }
