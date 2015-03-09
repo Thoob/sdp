@@ -44,6 +44,17 @@ public class DefenderStrategy extends GeneralStrategy {
 			}
 		} else {
 			// Move to the center of the goal and stay there
+			double goalCenterY = (worldState.weAreShootingRight) ? worldState.leftGoal[1]
+					: worldState.rightGoal[1];
+			if (Math.abs(goalCenterY - robotY) > allowedDistError) {
+				if (shouldWeMoveForward(goalCenterY, robotY)) {
+					RobotCommands.goStraightFast();
+					System.out.println("GO FORWARD!");
+				} else if (shouldWeMoveBackward(goalCenterY, robotY)) {
+					RobotCommands.goStraightBackwardsFast();
+					System.out.println("GO BACKWARD!");
+				}
+			}
 		}
 	}
 
