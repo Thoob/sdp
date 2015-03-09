@@ -16,40 +16,40 @@ public class StrategyHelper extends GeneralStrategy {
 
 	int facingCounter = 0;
 	public boolean isRobotFacingBall = false;
+	public boolean isRobotFacingTarget = false;
 
 	void acquireBall(WorldState worldState) {
-		 System.out.println("trying to acquire the ball");
+		System.out.println("trying to acquire the ball");
 		initializeVars(worldState);
 		// Desired angle to face ball
-		double ballAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
-				ballX, ballY);
-		 double ballDiffInHeadings = Math.abs(robotAngleDeg - ballAngleDeg);
-		 // Robot is facing the ball if within this angle in degrees of the ball
-		 isRobotFacingBall = (ballDiffInHeadings < allowedDegreeError || ballDiffInHeadings > 360 - allowedDegreeError);
-		
-				 // 1 - Rotate to face ball
-		 if (!RobotPlanner.doesOurRobotHaveBall(robotX, robotY,
-				 ballX, ballY)
-			 && !isRobotFacingBall) {
-			 rotateToDesiredAngle(robotAngleDeg, ballAngleDeg);
-			 System.out.println("Rotating to face ball.");
-		 }
-		 
-		 
+		double ballAngleDeg = RobotPlanner.desiredAngle(robotX, robotY, ballX,
+				ballY);
+		double ballDiffInHeadings = Math.abs(robotAngleDeg - ballAngleDeg);
+		// Robot is facing the ball if within this angle in degrees of the ball
+		isRobotFacingBall = (ballDiffInHeadings < allowedDegreeError || ballDiffInHeadings > 360 - allowedDegreeError);
+
+		// 1 - Rotate to face ball
+		if (!RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)
+				&& !isRobotFacingBall) {
+			rotateToDesiredAngle(robotAngleDeg, ballAngleDeg);
+			System.out.println("Rotating to face ball.");
+		}
+
 		// 2 - Go towards ball if it is in our zone
-		 /* Frame counter may be useful here later */
-		 
+		/* Frame counter may be useful here later */
+
 		if (isRobotFacingBall
 				&& !RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX,
 						ballY)
 				&& !RobotPlanner.canCatchBall(robotX, robotY, ballX, ballY)
-				&& (RobotPlanner.inZone(ballX, worldState) == RobotPlanner.inZone(robotX, worldState))) {
+				&& (RobotPlanner.inZone(ballX, worldState) == RobotPlanner
+						.inZone(robotX, worldState))) {
 
 			RobotCommands.goStraight();
 			SimpleWorldState.previousOperation = Operation.NONE;
 			System.out.println("Moving towards ball.");
 		}
-		
+
 		// 3 - Prepare to catch ball
 		if (!RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)
 				&& RobotPlanner.prepareCatch(robotX, robotY, ballX, ballY)
@@ -59,14 +59,14 @@ public class StrategyHelper extends GeneralStrategy {
 		}
 
 		// 4 - Catch ball
-				if (!RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)
-						&& isRobotFacingBall
-						&& RobotPlanner.canCatchBall(robotX, robotY, ballX, ballY)
-						&& !(SimpleWorldState.previousOperation == Operation.CATCH)) {
-					RobotCommands.catchDown();
-					SimpleWorldState.previousOperation = Operation.CATCH;
-					System.out.println("Catching ball.");
-				}
+		if (!RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)
+				&& isRobotFacingBall
+				&& RobotPlanner.canCatchBall(robotX, robotY, ballX, ballY)
+				&& !(SimpleWorldState.previousOperation == Operation.CATCH)) {
+			RobotCommands.catchDown();
+			SimpleWorldState.previousOperation = Operation.CATCH;
+			System.out.println("Catching ball.");
+		}
 	}
 
 	void rotateToDesiredAngle(double robotAngleDeg, double desiredAngleDeg) {
@@ -112,6 +112,43 @@ public class StrategyHelper extends GeneralStrategy {
 				return;
 			}
 		}
+	}
+
+	void goTo(double targetX, double targetY, WorldState worldState) {
+		System.out.println("Moving to point " + targetX + ", " + targetY);
+		initializeVars(worldState);
+		// Desired angle to face target
+		double targetAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
+				targetX, targetY);
+		double targetDiffInHeadings = Math.abs(robotAngleDeg - targetAngleDeg);
+		// Robot is facing the target if within this angle in allowedDegreeError
+		// of the target
+		isRobotFacingTarget = (targetDiffInHeadings < allowedDegreeError || targetDiffInHeadings > 360 - allowedDegreeError);
+
+		// 1 - Rotate to face target
+		if (!isRobotFacingTarget) {
+			rotateToDesiredAngle(robotAngleDeg, targetAngleDeg);
+			System.out.println("Rotating to face target.");
+		}
+
+		// 2 - Go towards target if it is in our zone
+		if (isRobotFacingTarget
+				&& (RobotPlanner.inZone(targetX, worldState) == RobotPlanner
+						.inZone(robotX, worldState))
+				&& !(RobotPlanner
+						.prepareCatch(robotX, robotY, targetX, targetY))) {
+			RobotCommands.goStraightFast();
+			SimpleWorldState.previousOperation = Operation.NONE;
+			System.out.println("Moving towards target.");
+		}
+
+		// 3 - Stop once we've reached target and rotate to neutral defender
+		// position, which is 90 degrees (facing south)
+		// Uses prepareCatch because this checks that points are close enough
+		if (RobotPlanner.prepareCatch(robotX, robotY, targetX, targetY)) {
+			rotateToDesiredAngle(robotAngleDeg, 90);
+		}
+
 	}
 
 }
