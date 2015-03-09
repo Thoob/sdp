@@ -86,6 +86,21 @@ public class RobotPlanner {
 			return false;
 		}
 	}
+	
+	public static boolean nearTarget(double robotX, double robotY,
+			double targetX, double targetY) {
+		double deltaX = robotX - targetX;
+		double deltaY = robotY - targetY;
+
+		double deltaTotal = Math.abs(deltaX) + Math.abs(deltaY);
+		System.out.println("Distance from target: " + deltaTotal);
+
+		if (deltaTotal < MAX_CATCH_DIST*2 && deltaTotal > MIN_CATCH_DIST) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 	public static boolean inCentreRange(Robot robot, Point2D centre) {
 		Point2D robotPos = robot.getCenter();
