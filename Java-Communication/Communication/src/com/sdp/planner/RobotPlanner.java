@@ -71,8 +71,8 @@ public class RobotPlanner {
 			return false;
 		}
 	}
-	
-	public static boolean prepareCatch(double robotX, double robotY,
+
+	public static boolean isCloseEnough(double robotX, double robotY,
 			double ballX, double ballY) {
 		double deltaX = robotX - ballX;
 		double deltaY = robotY - ballY;
@@ -80,7 +80,7 @@ public class RobotPlanner {
 		double deltaTotal = Math.abs(deltaX) + Math.abs(deltaY);
 		System.out.println("Distance from ball: " + deltaTotal);
 
-		if (deltaTotal < MAX_CATCH_DIST*2 && deltaTotal > MIN_CATCH_DIST) {
+		if (deltaTotal < MAX_CATCH_DIST * 2 && deltaTotal > MIN_CATCH_DIST) {
 			return true;
 		} else {
 			return false;
@@ -110,16 +110,16 @@ public class RobotPlanner {
 		double deltaY = robotY - ballY;
 		double deltaTotal = Math.abs(deltaX) + Math.abs(deltaY);
 
-//		if (deltaTotal < 30 && StrategyHelper.isRobotFacingBall
-//				&& SimpleWorldState.previousOperation == Operation.CATCH) {
-//			return true;
-//		} else {
-//			return false;
-//		}
-		
-		if (deltaTotal > 35){
+		// if (deltaTotal < 30 && StrategyHelper.isRobotFacingBall
+		// && SimpleWorldState.previousOperation == Operation.CATCH) {
+		// return true;
+		// } else {
+		// return false;
+		// }
+
+		if (deltaTotal > 35) {
 			return false;
-		} else if (SimpleWorldState.previousOperation == Operation.CATCH){
+		} else if (SimpleWorldState.previousOperation == Operation.CATCH) {
 			return true;
 		} else {
 			return false;
@@ -161,17 +161,15 @@ public class RobotPlanner {
 		return 4;
 	}
 
-	// Returns the zone an object with a given X value is in
-	// I'm so sorry for all these magic numbers! - Theo
 	public static int inZone(double objX, WorldState worldState) {
 		if (objX < worldState.dividers[0]) {
-		 return 0;
-		 } else if (objX < worldState.dividers[1]) {
-		 return 1;
-		 } else if (objX < worldState.dividers[2]) {
-		 return 2;
-		 } else {
-		 return 3;
-		 }
+			return 0;
+		} else if (objX < worldState.dividers[1]) {
+			return 1;
+		} else if (objX < worldState.dividers[2]) {
+			return 2;
+		} else {
+			return 3;
+		}
 	}
 }

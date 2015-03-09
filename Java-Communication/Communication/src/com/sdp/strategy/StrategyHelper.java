@@ -52,7 +52,7 @@ public class StrategyHelper extends GeneralStrategy {
 
 		// 3 - Prepare to catch ball
 		if (!RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)
-				&& RobotPlanner.prepareCatch(robotX, robotY, ballX, ballY)
+				&& RobotPlanner.isCloseEnough(robotX, robotY, ballX, ballY)
 				&& !(SimpleWorldState.previousOperation == Operation.CATCH)) {
 			RobotCommands.catchUp();
 			System.out.println("Preparing to catch ball.");
@@ -136,7 +136,7 @@ public class StrategyHelper extends GeneralStrategy {
 				&& (RobotPlanner.inZone(targetX, worldState) == RobotPlanner
 						.inZone(robotX, worldState))
 				&& !(RobotPlanner
-						.prepareCatch(robotX, robotY, targetX, targetY))) {
+						.isCloseEnough(robotX, robotY, targetX, targetY))) {
 			RobotCommands.goStraightFast();
 			SimpleWorldState.previousOperation = Operation.NONE;
 			System.out.println("Moving towards target.");
@@ -145,10 +145,8 @@ public class StrategyHelper extends GeneralStrategy {
 		// 3 - Stop once we've reached target and rotate to neutral defender
 		// position, which is 90 degrees (facing south)
 		// Uses prepareCatch because this checks that points are close enough
-		if (RobotPlanner.prepareCatch(robotX, robotY, targetX, targetY)) {
+		if (RobotPlanner.isCloseEnough(robotX, robotY, targetX, targetY)) {
 			rotateToDesiredAngle(robotAngleDeg, 90);
 		}
-
 	}
-
 }
