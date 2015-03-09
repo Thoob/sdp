@@ -67,7 +67,6 @@ public class DefenderStrategy extends GeneralStrategy {
 		}
 	}
 
-	// TODO change slope to vector or sth similar
 	private float getSlope(WorldState worldState) {
 		ArrayList<Point2> ballPositionHistory = worldState
 				.getBallPositionHistory();
@@ -94,11 +93,13 @@ public class DefenderStrategy extends GeneralStrategy {
 		if (!predictionIsGenerated)
 			return false;
 		else {
-			float slope = getSlope(worldState);
-			if (slope != 0)
-				System.out.println("slope " + slope);
-			if (worldState.weAreShootingRight && slope > 0
-					|| !worldState.weAreShootingRight && slope < 0) {
+			Point2 predictedPos = this.predictor.predictState(
+					ballPositionHistory, framesForward);
+
+			if (worldState.weAreShootingRight
+					&& predictedPos.getX() - ballX > 2
+					|| !worldState.weAreShootingRight
+					&& predictedPos.getX() - ballX < -2) {
 				return true;
 			}
 			return false;
@@ -109,7 +110,7 @@ public class DefenderStrategy extends GeneralStrategy {
 		float slope = getSlope(worldState);
 
 		double collisionX = robotX;
-		double collisionY = 50;
+		double collisionY = -1;
 		if (slope * collisionX > leftGoalY[2]) {
 			collisionY = leftGoalY[2];
 		} else if (slope * collisionX < leftGoalY[0]) {

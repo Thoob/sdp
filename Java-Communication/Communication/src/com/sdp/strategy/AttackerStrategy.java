@@ -15,9 +15,11 @@ public class AttackerStrategy extends GeneralStrategy {
 	}
 
 	public void sendWorldState(WorldState worldState) {
+		initializeVars(worldState);
 		robotAngleRad = Math.toRadians(robotAngleDeg);
 		if (robot == null || ball == null)
 			return;
+		
 		sh.acquireBall(worldState);
 
 		// 4 - Face goal and kick ball (hopefully into the goal!)
@@ -29,10 +31,6 @@ public class AttackerStrategy extends GeneralStrategy {
 
 	private void scoreGoal(WorldState worldState) {
 		boolean facingGoal = false;
-
-		System.out.println("goal " + leftGoalX + " " + leftGoalY);
-		System.out.println("robot " + robotX + " " + robotY);
-		System.out.println("ball " + ballX + " " + ballY);
 
 		double desiredAngleDegb = RobotPlanner.desiredAngle(robotX, robotY,
 				ballX, ballY);
