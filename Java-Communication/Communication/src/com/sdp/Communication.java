@@ -42,7 +42,20 @@ public class Communication {
 			serialPort.writeString(command);
 			serialPort.closePort();
 		} catch (SerialPortException e) {
-			// e.printStackTrace();
+			e.printStackTrace();
 		}
+	}
+
+	String readStringFromSerialPort() {
+		String input = null;
+		try {
+			serialPort.openPort();
+			input = serialPort.readString();
+			System.out.println("String received via serial port" + input);
+
+		} catch (SerialPortException e) {
+			e.printStackTrace();
+		}
+		return input;
 	}
 }
