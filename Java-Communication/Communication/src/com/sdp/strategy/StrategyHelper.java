@@ -2,6 +2,7 @@ package com.sdp.strategy;
 
 import com.sdp.planner.RobotCommands;
 import com.sdp.planner.RobotPlanner;
+import com.sdp.vision.PitchConstants;
 import com.sdp.world.SimpleWorldState;
 import com.sdp.world.SimpleWorldState.Operation;
 import com.sdp.world.WorldState;
@@ -17,6 +18,7 @@ public class StrategyHelper extends GeneralStrategy {
 	int facingCounter = 0;
 	public boolean isRobotFacingBall = false;
 	public boolean isRobotFacingTarget = false;
+	public boolean isRobotFacingAwayFromTarget = false;
 
 	void acquireBall(WorldState worldState) {
 		System.out.println("trying to acquire the ball");
@@ -27,7 +29,7 @@ public class StrategyHelper extends GeneralStrategy {
 		double ballDiffInHeadings = Math.abs(robotAngleDeg - ballAngleDeg);
 		// Robot is facing the ball if within this angle in degrees of the ball
 		isRobotFacingBall = (ballDiffInHeadings < allowedDegreeError || ballDiffInHeadings > 360 - allowedDegreeError);
-
+		
 		// 1 - Rotate to face ball
 		if (!RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)
 				&& !isRobotFacingBall) {
@@ -52,7 +54,7 @@ public class StrategyHelper extends GeneralStrategy {
 
 		// 3 - Prepare to catch ball
 		if (!RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)
-				&& RobotPlanner.isCloseEnough(robotX, robotY, ballX, ballY)
+				&& RobotPlanner.nearTarget(robotX, robotY, ballX, ballY)
 				&& !(SimpleWorldState.previousOperation == Operation.CATCH)) {
 			RobotCommands.catchUp();
 			System.out.println("Preparing to catch ball.");
@@ -67,12 +69,6 @@ public class StrategyHelper extends GeneralStrategy {
 			SimpleWorldState.previousOperation = Operation.CATCH;
 			System.out.println("Catching ball.");
 		}
-	}
-
-	double getOppositeDesiredAngle(double desiredAngleDeg) {
-		if (desiredAngleDeg > 180)
-			return desiredAngleDeg - 180;
-		return desiredAngleDeg + 180;
 	}
 
 	void rotateToDesiredAngle(double robotAngleDeg, double desiredAngleDeg) {
@@ -130,6 +126,7 @@ public class StrategyHelper extends GeneralStrategy {
 		// Robot is facing the target if within this angle in allowedDegreeError
 		// of the target
 		isRobotFacingTarget = (targetDiffInHeadings < allowedDegreeError || targetDiffInHeadings > 360 - allowedDegreeError);
+		isRobotFacingAwayFromTarget = (targetDiffInHeadings < 180 + allowedDegreeError || targetDiffInHeadings > 180 - allowedDegreeError);
 
 		// 1 - Rotate to face target
 		if (!isRobotFacingTarget) {
@@ -138,12 +135,23 @@ public class StrategyHelper extends GeneralStrategy {
 		}
 
 		// 2 - Go towards target if it is in our zone
+		// Go forwards or backwards depending on which side of the pitch we are
+		// on
 		if (isRobotFacingTarget
 				&& (RobotPlanner.inZone(targetX, worldState) == RobotPlanner
 						.inZone(robotX, worldState))
-				&& !(RobotPlanner.isCloseEnough(robotX, robotY, targetX,
-						targetY))) {
-			RobotCommands.goStraightFast();
+				&& !(RobotPlanner.nearTarget(robotX, robotY, targetX, targetY))
+				&& (robotY < (Math.abs(topOfPitch - botOfPitch) / 2))) {
+			RobotCommands.goStraight();
+			SimpleWorldState.previousOperation = Operation.NONE;
+			System.out.println("Moving towards target.");
+		}
+		if (isRobotFacingAwayFromTarget
+				&& (RobotPlanner.inZone(targetX, worldState) == RobotPlanner
+						.inZone(robotX, worldState))
+				&& !(RobotPlanner.nearTarget(robotX, robotY, targetX, targetY))
+				&& (robotY > (Math.abs(topOfPitch - botOfPitch) / 2))) {
+			RobotCommands.goStraightBackwards();
 			SimpleWorldState.previousOperation = Operation.NONE;
 			System.out.println("Moving towards target.");
 		}
@@ -151,7 +159,7 @@ public class StrategyHelper extends GeneralStrategy {
 		// 3 - Stop once we've reached target and rotate to neutral defender
 		// position, which is 90 degrees (facing south)
 		// Uses prepareCatch because this checks that points are close enough
-		if (RobotPlanner.isCloseEnough(robotX, robotY, targetX, targetY)) {
+		if (RobotPlanner.nearTarget(robotX, robotY, targetX, targetY)) {
 			rotateToDesiredAngle(robotAngleDeg, 90);
 		}
 	}
