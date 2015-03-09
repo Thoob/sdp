@@ -1,9 +1,5 @@
 package com.sdp;
 
-import javax.sql.rowset.serial.SerialRef;
-
-import com.sdp.planner.RobotCommands;
-
 import jssc.SerialPort;
 import jssc.SerialPortException;
 import jssc.SerialPortList;

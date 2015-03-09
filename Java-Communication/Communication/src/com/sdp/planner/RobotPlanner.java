@@ -2,9 +2,6 @@ package com.sdp.planner;
 
 import java.awt.geom.Point2D;
 
-import sun.java2d.pipe.SpanShapeRenderer.Simple;
-
-import com.sdp.strategy.StrategyHelper;
 import com.sdp.world.DynamicWorldState.Robot;
 import com.sdp.world.SimpleWorldState;
 import com.sdp.world.SimpleWorldState.Operation;
