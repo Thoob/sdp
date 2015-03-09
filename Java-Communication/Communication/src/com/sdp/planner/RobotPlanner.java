@@ -62,10 +62,6 @@ public class RobotPlanner {
 		if (deltaTotal < MAX_CATCH_DIST && deltaTotal > MIN_CATCH_DIST) {
 			return true;
 		} else if (deltaTotal < MIN_CATCH_DIST && deltaTotal > 95) {
-			if (SimpleWorldState.previousOperation != Operation.SHORT_BACK) {
-				RobotCommands.shortMoveBackwards();
-			}
-			SimpleWorldState.previousOperation = Operation.SHORT_BACK;
 			return false;
 		} else {
 			return false;

@@ -11,10 +11,11 @@ import com.sdp.world.WorldState;
 public class DefenderStrategy extends GeneralStrategy {
 	private Oracle predictor = null;
 	final int framesForward = 20;
-	private final int defaultAngleDeg = 90;
+	StrategyHelper sh;
 
 	public DefenderStrategy() {
 		this.predictor = new Oracle(300, 300, 600, 600);
+		sh = new StrategyHelper();
 	}
 
 	public void sendWorldState(WorldState worldState) {
@@ -45,9 +46,7 @@ public class DefenderStrategy extends GeneralStrategy {
 			double goalCenterY = (worldState.weAreShootingRight) ? worldState.leftGoal[1]
 					: worldState.rightGoal[1];
 			System.out
-					.println("Ball is not moving towards. Going to the center of the goal");
-			System.out.println("RobotY " + robotY + " goal center y "
-					+ goalCenterY);
+					.println("Ball's not moving towards. Going to the center of the goal");
 			if (Math.abs(goalCenterY - robotY) > allowedDistError) {
 				if (shouldWeMoveForward(goalCenterY, robotY)) {
 					RobotCommands.goStraightFast();
