@@ -11,6 +11,7 @@ import com.sdp.world.WorldState;
 public class DefenderStrategy extends GeneralStrategy {
 	private Oracle predictor = null;
 	final int framesForward = 20;
+	private final int defaultAngleDeg = 90;
 
 	public DefenderStrategy() {
 		this.predictor = new Oracle(300, 300, 600, 600);
@@ -40,7 +41,7 @@ public class DefenderStrategy extends GeneralStrategy {
 				}
 			}
 		} else {
-			// Move to the center of the goal and stay there
+			// Move to the center of the goal and head straight
 			double goalCenterY = (worldState.weAreShootingRight) ? worldState.leftGoal[1]
 					: worldState.rightGoal[1];
 			System.out
@@ -143,4 +144,5 @@ public class DefenderStrategy extends GeneralStrategy {
 	private boolean shouldWeMoveBackward(double collisionY, double robotY) {
 		return collisionY > robotY && robotY < 220;
 	}
+
 }
