@@ -69,6 +69,12 @@ public class StrategyHelper extends GeneralStrategy {
 		}
 	}
 
+	double getOppositeDesiredAngle(double desiredAngleDeg) {
+		if (desiredAngleDeg > 180)
+			return desiredAngleDeg - 180;
+		return desiredAngleDeg + 180;
+	}
+
 	void rotateToDesiredAngle(double robotAngleDeg, double desiredAngleDeg) {
 		double diffInHeadings = Math.abs(robotAngleDeg - desiredAngleDeg);
 		System.out.println("Difference in headings: " + diffInHeadings);
@@ -135,8 +141,8 @@ public class StrategyHelper extends GeneralStrategy {
 		if (isRobotFacingTarget
 				&& (RobotPlanner.inZone(targetX, worldState) == RobotPlanner
 						.inZone(robotX, worldState))
-				&& !(RobotPlanner
-						.isCloseEnough(robotX, robotY, targetX, targetY))) {
+				&& !(RobotPlanner.isCloseEnough(robotX, robotY, targetX,
+						targetY))) {
 			RobotCommands.goStraightFast();
 			SimpleWorldState.previousOperation = Operation.NONE;
 			System.out.println("Moving towards target.");

@@ -71,10 +71,12 @@ public class Communication {
 				String input;
 				try {
 					input = serialPort.readString();
-					System.out.println("String received via serial port "
-							+ input);
-					Thread.sleep(100);
-				} catch (SerialPortException | InterruptedException e) {
+					if (input != null) {
+						System.out.println("String received via serial port "
+								+ input);
+						break;
+					}
+				} catch (SerialPortException e) {
 					e.printStackTrace();
 				}
 			}
