@@ -21,6 +21,7 @@ SerialCommand sCmd;                          // The SerialCommand object
 //Global powers for both movement motors
 int left_power = 0;                           // Speed of left wheel
 int right_power = 0;                          // Speed of right wheel
+int stop_flag = 0;
 
 //These global variables are used to keep track of the short rotate function
 int srot_power = default_power;             // Power on motor in short rotate
@@ -43,7 +44,7 @@ void setup() {
 
     //Movement commands
   sCmd.addCommand("MOVE", run_engine);       // Runs wheel motors
-  sCmd.addCommand("BRAKE", brake_motor);
+  sCmd.addCommand("BRAKE", brake_motors);
   sCmd.addCommand("FSTOP", force_stop);      // Force stops all motors
   sCmd.addCommand("KICK", move_kick);        // Runs kick script
   sCmd.addCommand("CATCHUP", move_catchup);      // Runs catch script
@@ -79,6 +80,15 @@ void loop() {
       leftStop();
       rightStop();
       function_running = 0;
+      stop_flag = 0;
+    }
+    break;
+  case 2:
+    if (millis() > function_run_time + interval) {
+      leftStop();
+      rightStop();
+      function_running = 0;
+      stop_flag = 0;
     }
     break;
 
@@ -114,8 +124,6 @@ void LED_off() {
 // Movement with argument commands
 void run_engine() {
 
-  function_running = 0;   //Non scripted function, takes priority over scripted rotates
-
   //This is how arguments are tokenised with SerialCommand. Extra can be added
   //by repeating this.
   char *arg1;
@@ -131,18 +139,25 @@ void run_engine() {
 
 
   //Stops the motors when the signal given is 0
-  if(new_left_power == 0){
-    motorStop(left);
+  if(new_left_power == 0 && new_right_power == 0){
+    left_power = 0;
+    right_power = 0;
+    if(!stop_flag) {
+      brake_motors();
+      stop_flag = 1;
+    }
+  } 
+  else
+  {
+    function_running = 0;
   }
-  if(new_right_power == 0){
-    motorStop(right);
-  }
+    
 
 
   //Checks if the given speed is less than the minimum speed. If it is, 
   //it sets the given power to the minimum power. Left motor.
   if ((new_left_power != 0) && (abs(new_left_power) < minpower)) {
-    new_left_power = 1.4*minpower * (new_left_power/abs(new_left_power));
+    new_left_power = 1.4*minpower * (new_left_power/abs(new_left_power)); // ooooh
   }
 
   if ((new_right_power != 0) && (abs(new_right_power) < minpower)) {
@@ -352,7 +367,7 @@ void move_shortrotR() {
     motorForward(left, srot_power);
     motorBackward(right, srot_power);
 
-    function_running = 1;
+    function_running = 2;
     function_run_time = millis();
   }
 
@@ -394,9 +409,9 @@ void unrecognized(const char *command) {
   Serial.println("I'm sorry, Dave. I'm afraid I can't do that.");
 }
 
-void brake_motor(){
+void brake_motors(){
   function_running = 1;
-  interval = 200;
+  interval = 100;
   function_run_time = millis();
   
   motorBrake(left, 100);
