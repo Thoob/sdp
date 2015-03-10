@@ -108,6 +108,36 @@ public class PitchConstants extends Observable {
 		return pitchOutline;
 	}
 	
+	
+	/* These may need to be changed */
+	public static int[] getPitchOutlineTR(){
+		int[] TL = new int[2];
+		TL[0] = (int) pitchOutline[2].getX();
+		TL[1] = (int) pitchOutline[2].getY();
+		return  TL;
+	}
+	
+	public static int[] getPitchOutlineBR(){
+		int[] TL = new int[2];
+		TL[0] = (int) pitchOutline[4].getX();
+		TL[1] = (int) pitchOutline[4].getY();
+		return  TL;
+	}
+	
+	public static int[] getPitchOutlineTL(){
+		int[] TL = new int[2];
+		TL[0] = (int) pitchOutline[0].getX();
+		TL[1] = (int) pitchOutline[0].getY();
+		return  TL;
+	}
+	
+	public static int[] getPitchOutlineBL(){
+		int[] TL = new int[2];
+		TL[0] = (int) pitchOutline[6].getX();
+		TL[1] = (int) pitchOutline[6].getY();
+		return  TL;
+	}
+	
 	public static int getPitchOutlineTop(){
 		return (int) (( pitchOutline[0].getY() + (pitchOutline[1]).getY()) / 2);
 	}

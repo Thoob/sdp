@@ -3,6 +3,7 @@ package com.sdp.strategy;
 import com.sdp.planner.RobotCommands;
 import com.sdp.planner.RobotPlanner;
 import com.sdp.prediction.Calculations;
+import com.sdp.vision.PitchConstants;
 import com.sdp.world.SimpleWorldState;
 import com.sdp.world.SimpleWorldState.Operation;
 import com.sdp.world.WorldState;
@@ -30,14 +31,18 @@ public class PassingStrategy extends GeneralStrategy {
 	public void sendWorldState(WorldState worldState) {
 		initializeVars(worldState);
 
+		//10 seems to be good distance
+
 		System.out.println("Ball Pos is: " + ballY);
+		System.out.println("TL corner X is: "  + TLCorner[0] + ", X is: " + TLCorner[1]);
+
 
 		robotAngleRad = Math.toRadians(robotAngleDeg);
 		if (robot == null || ball == null)
 			return;
 
 		/*
-		 * 'flag' is used to signify if we have attempted a catch - Works under
+		 * 'flag' is used to signify if we have attempted a catch - Works underl
 		 * assumption that we catch it everytime - Set back to 'false' when we
 		 * pass to the attacker
 		 */
@@ -251,4 +256,56 @@ public class PassingStrategy extends GeneralStrategy {
 		}
 
 	}
+	
+	public boolean boundaryHelper(double robotY, double robotX, WorldState worldState){
+		
+		boolean awayFromTop = Math.abs(robotY - topOfPitch) > 10;
+		boolean awayFromBot = Math.abs(robotY - botOfPitch) > 10;
+		
+		int[] TRCorner = PitchConstants.getPitchOutlineTR();
+		int[] BRCorner = PitchConstants.getPitchOutlineBR();
+		int[] TLCorner = PitchConstants.getPitchOutlineTL();
+		int[] BLCorner = PitchConstants.getPitchOutlineBL();
+		boolean awayFromCornerTop;
+		boolean awayFromCornerBot;
+		boolean awayFromGoal;
+		
+		
+		if (worldState.weAreShootingRight){
+			
+			awayFromCornerTop = Math.abs(robotX - TRCorner[0]) +
+								Math.abs(robotY - TRCorner[1])
+								> 20;
+			
+			awayFromCornerBot = Math.abs(robotX - BRCorner[0]) +
+								Math.abs(robotY - BRCorner[1])
+								> 20;		
+			
+			// RESTRAINT FOR GOAL
+			// awayFromGoal = Math.abs(robotX -leftGoalX) < 10;
+					
+		} else {
+			
+			awayFromCornerTop = Math.abs(robotX - TLCorner[0]) +
+								Math.abs(robotY - TLCorner[1])
+								> 20;
+
+			awayFromCornerBot = Math.abs(robotX - BLCorner[0]) +
+								Math.abs(robotY - BLCorner[1])
+								> 20;	
+			
+			// RESTRAINT FOR GOAL
+			// awayFromGoal = Math.abs(robotX -leftGoalX) < 10
+		}
+		
+		if (awayFromBot && awayFromTop &&
+			awayFromCornerTop && awayFromCornerBot){
+			return true;
+		} else {
+			System.out.println("We are at a boundary, adjusting...");
+			return false;
+		}
+		
+	}
+		
 }

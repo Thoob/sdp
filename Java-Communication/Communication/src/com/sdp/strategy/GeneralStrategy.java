@@ -13,6 +13,10 @@ public class GeneralStrategy {
 
 	protected int topOfPitch;
 	protected int botOfPitch;
+	protected int[] TLCorner;
+	protected int[] BLCorner;
+	protected int[] TRCorner;
+	protected int[] BRCorner;
 
 	protected MovingObject robot;
 	protected MovingObject ball;
@@ -39,15 +43,6 @@ public class GeneralStrategy {
 	public void sendWorldState(WorldState worldState) {
 		this.worldState = worldState;
 		initializeVars(worldState);
-		
-		topOfPitch = PitchConstants.getPitchOutlineTop();
-		botOfPitch = PitchConstants.getPitchOutlineBottom();
-
-		leftGoalX = PitchConstants.getPitchOutline()[7].getX();
-		leftGoalY = worldState.leftGoal;
-
-		rightGoalX = PitchConstants.getPitchOutline()[3].getX();
-		rightGoalY = worldState.rightGoal;
 	}
 
 	public static double calculateAngle(double robotX, double robotY,
@@ -86,6 +81,22 @@ public class GeneralStrategy {
 		MovingObject enemyAttacker = worldState.getEnemyAttackerRobot();
 		enemyAttackerX = enemyAttacker.x;
 		enemyAttackerY = enemyAttacker.y;
+		
+		topOfPitch = PitchConstants.getPitchOutlineTop();
+		botOfPitch = PitchConstants.getPitchOutlineBottom();
+
+		leftGoalX = PitchConstants.getPitchOutline()[7].getX();
+		leftGoalY = worldState.leftGoal;
+
+		rightGoalX = PitchConstants.getPitchOutline()[3].getX();
+		rightGoalY = worldState.rightGoal;
+		
+		TLCorner = PitchConstants.getPitchOutlineTL();
+		TRCorner = PitchConstants.getPitchOutlineTR();
+		BLCorner = PitchConstants.getPitchOutlineBL();
+		BRCorner = PitchConstants.getPitchOutlineBR();
+
+
 	}
 
 }
