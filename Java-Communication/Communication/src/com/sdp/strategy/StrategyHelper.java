@@ -14,7 +14,6 @@ import com.sdp.world.WorldState;
  */
 public class StrategyHelper extends GeneralStrategy {
 
-	private int facingCounter = 0;
 	private boolean isRobotFacingBall = false;
 	private boolean isRobotFacingTarget = false;
 	// private boolean isRobotFacingAwayFromTarget = false;
@@ -106,14 +105,12 @@ public class StrategyHelper extends GeneralStrategy {
 						desiredAngleDeg, robotAngleDeg);
 				if (shouldRotateRight
 						&& SimpleWorldState.previousOperation != Operation.RIGHT) {
-					// RobotCommands.rotateRight();
-					RobotCommands.shortRotateRight();
-					SimpleWorldState.previousOperation = Operation.NONE;
+					RobotCommands.rotateRight();
+					SimpleWorldState.previousOperation = Operation.RIGHT;
 				} else if (!shouldRotateRight
 						&& SimpleWorldState.previousOperation != Operation.LEFT) {
-					// RobotCommands.rotateLeft();
-					RobotCommands.shortRotateLeft();
-					SimpleWorldState.previousOperation = Operation.NONE;
+					RobotCommands.rotateLeft();
+					SimpleWorldState.previousOperation = Operation.LEFT;
 				}
 				return;
 			}
