@@ -29,7 +29,7 @@ public class StrategyHelper extends GeneralStrategy {
 		double ballDiffInHeadings = Math.abs(robotAngleDeg - ballAngleDeg);
 		// Robot is facing the ball if within this angle in degrees of the ball
 		isRobotFacingBall = (ballDiffInHeadings < allowedDegreeError || ballDiffInHeadings > 360 - allowedDegreeError);
-		
+
 		// 1 - Rotate to face ball
 		if (!RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)
 				&& !isRobotFacingBall) {
@@ -137,36 +137,36 @@ public class StrategyHelper extends GeneralStrategy {
 		// 2 - Go towards target if it is in our zone
 		// Go forwards or backwards depending on which side of the pitch we are
 		// on
-		if (isRobotFacingTarget
-				&& (RobotPlanner.inZone(targetX, worldState) == RobotPlanner
-						.inZone(robotX, worldState))
-				&& !(RobotPlanner.nearTarget(robotX, robotY, targetX, targetY))
-				&& (robotY < (Math.abs(topOfPitch - botOfPitch) / 2))) {
+		if (shouldMoveForward(targetX, targetY)) {
 			RobotCommands.goStraight();
 			SimpleWorldState.previousOperation = Operation.NONE;
 			System.out.println("Moving towards target.");
-		}
-		if (isRobotFacingAwayFromTarget
-				&& (RobotPlanner.inZone(targetX, worldState) == RobotPlanner
-						.inZone(robotX, worldState))
-				&& !(RobotPlanner.nearTarget(robotX, robotY, targetX, targetY))
-				&& (robotY > (Math.abs(topOfPitch - botOfPitch) / 2))) {
+		} else if (shouldMoveBackward(targetX, targetY)) {
 			RobotCommands.goStraightBackwards();
 			SimpleWorldState.previousOperation = Operation.NONE;
 			System.out.println("Moving towards target.");
-		}
-
-		// 3 - Stop once we've reached target and rotate to neutral defender
-		// position, which is 90 degrees (facing south)
-		// Uses prepareCatch because this checks that points are close enough
-		if (RobotPlanner.nearTarget(robotX, robotY, targetX, targetY)) {
+		} else if (RobotPlanner.nearTarget(robotX, robotY, targetX, targetY)) {
+			// 3 - Stop once we've reached target and rotate to neutral defender
+			// position, which is 90 degrees (facing south)
+			// Uses prepareCatch because this checks that points are close
+			// enough
 			rotateToDesiredAngle(robotAngleDeg, 90);
 		}
 	}
-	
-	
-		
-	
-	
-	
+
+	private boolean shouldMoveBackward(double targetX, double targetY) {
+		return isRobotFacingAwayFromTarget
+				&& (RobotPlanner.inZone(targetX, worldState) == RobotPlanner
+						.inZone(robotX, worldState))
+				&& !(RobotPlanner.nearTarget(robotX, robotY, targetX, targetY))
+				&& (robotY > (Math.abs(topOfPitch - botOfPitch) / 2));
+	}
+
+	private boolean shouldMoveForward(double targetX, double targetY) {
+		return isRobotFacingTarget
+				&& (RobotPlanner.inZone(targetX, worldState) == RobotPlanner
+						.inZone(robotX, worldState))
+				&& !(RobotPlanner.nearTarget(robotX, robotY, targetX, targetY))
+				&& (robotY < (Math.abs(topOfPitch - botOfPitch) / 2));
+	}
 }
