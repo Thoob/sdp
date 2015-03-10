@@ -31,35 +31,31 @@ public class PassingStrategy extends GeneralStrategy {
 	public void sendWorldState(WorldState worldState) {
 		initializeVars(worldState);
 
-		//10 seems to be good distance
+		// 10 seems to be good distance
 
-		System.out.println("Ball Pos is: " + ballY);
-		System.out.println("TL corner X is: "  + TLCorner[0] + ", X is: " + TLCorner[1]);
-
+		// System.out.println("Ball Pos is: " + ballY);
+		// System.out.println("TL corner X is: " + TLCorner[0] + ", X is: "
+		// + TLCorner[1]);
 
 		robotAngleRad = Math.toRadians(robotAngleDeg);
 		if (robot == null || ball == null)
 			return;
 
+		boolean atBondary = boundaryHelper(robotX, robotY, worldState);
+
 		/*
 		 * 'flag' is used to signify if we have attempted a catch - Works underl
 		 * assumption that we catch it everytime - Set back to 'false' when we
 		 * pass to the attacker
+		 * 
+		 * 
+		 * if (flag == false) { framesPassed = 0; sh.acquireBall(worldState); if
+		 * (RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX, ballY) &&
+		 * RobotPlanner.inZone(ballX, worldState) == RobotPlanner
+		 * .inZone(robotX, worldState)) { flag = true;
+		 * System.out.println("Attempted Catch"); return; } } else if (flag ==
+		 * true) { passKick(worldState); }
 		 */
-
-		if (flag == false) {
-			framesPassed = 0;
-			sh.acquireBall(worldState);
-			if (RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)
-					&& RobotPlanner.inZone(ballX, worldState) == RobotPlanner
-							.inZone(robotX, worldState)) {
-				flag = true;
-				System.out.println("Attempted Catch");
-				return;
-			}
-		} else if (flag == true) {
-			passKick(worldState);
-		}
 
 	}
 
@@ -256,56 +252,63 @@ public class PassingStrategy extends GeneralStrategy {
 		}
 
 	}
-	
-	public boolean boundaryHelper(double robotY, double robotX, WorldState worldState){
-		
+
+	// Jordan! The problem was you had (double robotY, double robotX, ...)
+	// instead of the other way around; (x, y). - Theo
+	public boolean boundaryHelper(double robotX, double robotY,
+			WorldState worldState) {
+
 		boolean awayFromTop = Math.abs(robotY - topOfPitch) > 10;
 		boolean awayFromBot = Math.abs(robotY - botOfPitch) > 10;
-		
+
 		int[] TRCorner = PitchConstants.getPitchOutlineTR();
 		int[] BRCorner = PitchConstants.getPitchOutlineBR();
 		int[] TLCorner = PitchConstants.getPitchOutlineTL();
+
 		int[] BLCorner = PitchConstants.getPitchOutlineBL();
 		boolean awayFromCornerTop;
 		boolean awayFromCornerBot;
 		boolean awayFromGoal;
-		
-		
-		if (worldState.weAreShootingRight){
-			
-			awayFromCornerTop = Math.abs(robotX - TRCorner[0]) +
-								Math.abs(robotY - TRCorner[1])
-								> 20;
-			
-			awayFromCornerBot = Math.abs(robotX - BRCorner[0]) +
-								Math.abs(robotY - BRCorner[1])
-								> 20;		
-			
+
+		if (worldState.weAreShootingRight) {
+
+			awayFromCornerTop = Math.abs(robotX - TRCorner[0])
+					+ Math.abs(robotY - TRCorner[1]) > 50;
+
+			awayFromCornerBot = Math.abs(robotX - BRCorner[0])
+					+ Math.abs(robotY - BRCorner[1]) > 50;
+
 			// RESTRAINT FOR GOAL
 			// awayFromGoal = Math.abs(robotX -leftGoalX) < 10;
-					
-		} else {
-			
-			awayFromCornerTop = Math.abs(robotX - TLCorner[0]) +
-								Math.abs(robotY - TLCorner[1])
-								> 20;
 
-			awayFromCornerBot = Math.abs(robotX - BLCorner[0]) +
-								Math.abs(robotY - BLCorner[1])
-								> 20;	
-			
+		} else {
+
+			awayFromCornerTop = Math.abs(robotX - TLCorner[0])
+					+ Math.abs(robotY - TLCorner[1]) > 50;
+
+			awayFromCornerBot = Math.abs(robotX - BLCorner[0])
+					+ Math.abs(robotY - BLCorner[1]) > 50;
+
 			// RESTRAINT FOR GOAL
 			// awayFromGoal = Math.abs(robotX -leftGoalX) < 10
 		}
 		
-		if (awayFromBot && awayFromTop &&
-			awayFromCornerTop && awayFromCornerBot){
+		System.out.println("Distance from Top is: " + Math.abs(robotY - topOfPitch));
+		System.out.println("Distance from Bottom is: " + Math.abs(robotY - botOfPitch));
+		System.out.println("Distance from Top CORNER is: " + 
+				(Math.abs(robotX - TLCorner[0]) + Math.abs(robotY - TLCorner[1])));
+		System.out.println("Distance from Bottom CORNER is: " + 
+				(Math.abs(robotX - BLCorner[0]) + Math.abs(robotY - BLCorner[1])));
+
+
+		if (awayFromBot && awayFromTop && awayFromCornerTop
+				&& awayFromCornerBot) {
 			return true;
 		} else {
 			System.out.println("We are at a boundary, adjusting...");
 			return false;
 		}
-		
+
 	}
-		
+
 }
