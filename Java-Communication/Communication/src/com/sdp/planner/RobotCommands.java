@@ -6,7 +6,7 @@ import com.sdp.RobotCommunication;
  * Higher-level robot commands
  */
 public class RobotCommands {
-	
+
 	public static void passKick() {
 		System.out.println("passKick");
 		RobotCommunication.getInstance().passKick();
@@ -26,7 +26,7 @@ public class RobotCommands {
 		System.out.println("shortRotateRight");
 		RobotCommunication.getInstance().shortRotateRight();
 	}
-	
+
 	public static void rotateLeft() {
 		System.out.println("rotateLeft");
 		RobotCommunication.getInstance().move(-37, 37);
@@ -41,13 +41,22 @@ public class RobotCommands {
 		System.out.println("goStraight");
 		RobotCommunication.getInstance().move(45, 45);
 	}
-	
+
+	public static void goStraight(double fromX, double fromY, double toX,
+			double toY) {
+		System.out.println("goStraightSmart");
+		double deltaTotal = RobotPlanner.getDeltaTotal(fromX, fromY, toX, toY);
+		if (deltaTotal > 70)
+			goStraightFast();
+		else
+			goStraight();
+	}
+
 	public static void goStraightFast() {
 		System.out.println("goStraightFast");
 		RobotCommunication.getInstance().move(100, 100);
 	}
-	
-	
+
 	public static void goStraightBackwardsFast() {
 		System.out.println("goStraightBackwardsFast");
 		RobotCommunication.getInstance().move(-100, -100);
@@ -63,12 +72,12 @@ public class RobotCommands {
 		RobotCommunication.getInstance().stop();
 
 	}
-	
-	public static void catchUp(){
+
+	public static void catchUp() {
 		RobotCommunication.getInstance().catchUp();
 	}
-	
-	public static void catchDown(){
+
+	public static void catchDown() {
 		System.out.println("Catching!");
 		RobotCommunication.getInstance().catchDown();
 	}

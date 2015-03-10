@@ -50,10 +50,8 @@ public class RobotPlanner {
 
 	public static boolean canCatchBall(double robotX, double robotY,
 			double ballX, double ballY) {
-		double deltaX = robotX - ballX;
-		double deltaY = robotY - ballY;
 
-		double deltaTotal = Math.abs(deltaX) + Math.abs(deltaY);
+		double deltaTotal = getDeltaTotal(robotX, robotY, ballX, ballY);
 		System.out.println("Distance from ball: " + deltaTotal);
 
 		if (deltaTotal < MAX_CATCH_DIST && deltaTotal > MIN_CATCH_DIST) {
@@ -65,6 +63,14 @@ public class RobotPlanner {
 		}
 	}
 
+	public static double getDeltaTotal(double aX, double aY, double bX,
+			double bY) {
+
+		double deltaX = aX - bX;
+		double deltaY = aY - bY;
+		return Math.abs(deltaX) + Math.abs(deltaY);
+	}
+
 	public static boolean isCloseEnough(double robotX, double robotY,
 			double ballX, double ballY) {
 		double deltaX = robotX - ballX;
@@ -73,22 +79,21 @@ public class RobotPlanner {
 		double deltaTotal = Math.abs(deltaX) + Math.abs(deltaY);
 		System.out.println("Distance from ball: " + deltaTotal);
 
-		if (deltaTotal < MAX_CATCH_DIST * 2 && deltaTotal > MIN_CATCH_DIST) {
+		if (deltaTotal < MAX_CATCH_DIST && deltaTotal > MIN_CATCH_DIST) {
 			return true;
 		} else {
 			return false;
 		}
 	}
-	
+
 	public static boolean nearTarget(double robotX, double robotY,
 			double targetX, double targetY) {
 		double deltaX = robotX - targetX;
 		double deltaY = robotY - targetY;
 
 		double deltaTotal = Math.abs(deltaX) + Math.abs(deltaY);
-		System.out.println("Distance from target: " + deltaTotal);
 
-		if (deltaTotal < MAX_CATCH_DIST*2 && deltaTotal > MIN_CATCH_DIST) {
+		if (deltaTotal < MAX_CATCH_DIST) {
 			return true;
 		} else {
 			return false;
@@ -167,6 +172,12 @@ public class RobotPlanner {
 		if (angle > 90)
 			return 3;
 		return 4;
+	}
+
+	public static double getOppositeAngle(double angle) {
+		if (angle > 180)
+			return angle - 180;
+		return angle + 180;
 	}
 
 	public static int inZone(double objX, WorldState worldState) {
