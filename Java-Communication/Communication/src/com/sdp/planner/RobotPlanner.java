@@ -93,7 +93,7 @@ public class RobotPlanner {
 
 		double deltaTotal = Math.abs(deltaX) + Math.abs(deltaY);
 
-		if (deltaTotal < MAX_CATCH_DIST) {
+		if (deltaTotal < 30) {
 			return true;
 		} else {
 			return false;

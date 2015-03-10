@@ -124,7 +124,7 @@ public class StrategyHelper extends GeneralStrategy {
 		// Desired angle to face target
 		double targetAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
 				targetX, targetY);
-		// if (isInTopHalf(robotY, topOfPitch, botOfPitch))
+		// if (!isInTopHalf(robotY, topOfPitch, botOfPitch))
 		// targetAngleDeg = RobotPlanner.getOppositeAngle(targetAngleDeg);
 		double targetDiffInHeadings = Math.abs(robotAngleDeg - targetAngleDeg);
 		// Robot is facing the target if within this angle in allowedDegreeError
@@ -139,16 +139,21 @@ public class StrategyHelper extends GeneralStrategy {
 		// 2 - Go towards target if it is in our zone
 		// Go forwards or backwards depending on which side of the pitch we are
 		if (shouldMoveForward(targetX, targetY, worldState)) {
-			System.out.println("Moving towards target.");
+			System.out.println("Moving forward towards target.");
 			RobotCommands.goStraight(robotX, robotY, targetX, targetY);
+			SimpleWorldState.previousOperation = Operation.FORWARD;
 			// } else if (shouldMoveBackward(targetX, targetY, worldState)) {
 			// RobotCommands.goStraightBackwards();
-			// System.out.println("Moving towards target.");
+			// System.out.println("Moving backwards towards target.");
 		} else if (RobotPlanner.nearTarget(robotX, robotY, targetX, targetY)) {
+			if (SimpleWorldState.previousOperation == Operation.FORWARD)
+				RobotCommands.stop();
 			// 3 - Stop once we've reached target and rotate to neutral defender
 			// position, which is (facing south)
 			System.out.println("Rotating to the default angle");
 			rotateToDesiredAngle(robotAngleDeg, 90);
+		} else {
+			System.out.println("default point");
 		}
 	}
 
@@ -166,10 +171,12 @@ public class StrategyHelper extends GeneralStrategy {
 	private boolean shouldMoveForward(double targetX, double targetY,
 			WorldState worldState) {
 		return isRobotFacingTarget && isSameZone(robotX, targetX, worldState)
-				&& !isNearTarget && isInTopHalf(robotY, topOfPitch, botOfPitch);
+				&& !isNearTarget;
 	}
 
 	private boolean isInTopHalf(double robotY, int topOfPitch, int botOfPitch) {
+		System.out.println("robot Y " + robotY + " "
+				+ Math.abs(topOfPitch - botOfPitch) / 2);
 		return robotY > (Math.abs(topOfPitch - botOfPitch) / 2);
 	}
 

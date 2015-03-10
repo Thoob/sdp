@@ -24,7 +24,7 @@ public class DefenderStrategy extends GeneralStrategy {
 
 		// Determine if the ball is moving towards us
 		boolean movingTowardsUs = isBallMovingTowardsUs(worldState);
-		if (movingTowardsUs) {
+		if (false) {
 			System.out.println("moving towards us");
 			// Predicting ball's y coordinate
 			double collisionY = predictedYCoord(worldState);
