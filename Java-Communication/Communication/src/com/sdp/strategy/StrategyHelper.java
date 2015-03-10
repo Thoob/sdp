@@ -88,7 +88,10 @@ public class StrategyHelper extends GeneralStrategy {
 			System.out.println("Angle to face:" + desiredAngleDeg);
 			if ((diffInHeadings < allowedDegreeError * 2)
 					|| (diffInHeadings > 360 - allowedDegreeError * 2)) {
-				RobotCommands.stop();
+				if (SimpleWorldState.previousOperation == Operation.RIGHT
+						|| SimpleWorldState.previousOperation == Operation.LEFT) {
+					RobotCommands.stop();
+				}
 				boolean shouldRotateRight = RobotPlanner.shouldRotateRight(
 						desiredAngleDeg, robotAngleDeg);
 				if (shouldRotateRight) {
@@ -104,11 +107,13 @@ public class StrategyHelper extends GeneralStrategy {
 						desiredAngleDeg, robotAngleDeg);
 				if (shouldRotateRight
 						&& SimpleWorldState.previousOperation != Operation.RIGHT) {
-					RobotCommands.rotateRight();
+					//RobotCommands.rotateRight();
+					RobotCommands.shortRotateRight();
 					SimpleWorldState.previousOperation = Operation.NONE;
 				} else if (!shouldRotateRight
 						&& SimpleWorldState.previousOperation != Operation.LEFT) {
-					RobotCommands.rotateLeft();
+					//RobotCommands.rotateLeft();
+					RobotCommands.shortRotateLeft();
 					SimpleWorldState.previousOperation = Operation.NONE;
 				}
 				return;
@@ -132,7 +137,8 @@ public class StrategyHelper extends GeneralStrategy {
 		if (!isRobotFacingTarget) {
 			rotateToDesiredAngle(robotAngleDeg, targetAngleDeg);
 			System.out.println("Rotating to face target.");
-		}
+		}else
+			
 
 		// 2 - Go towards target if it is in our zone
 		// Go forwards or backwards depending on which side of the pitch we are

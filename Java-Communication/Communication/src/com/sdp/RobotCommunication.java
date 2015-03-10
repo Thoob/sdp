@@ -68,12 +68,12 @@ public class RobotCommunication {
 	}
 
 	public void shortRotateLeft() {
-		String command = "SROTL 150 40\n"; // old power value 70, time 200
+		String command = "SROTL 200 60\n"; // old power value 70, time 200
 		Communication.getInstance().sendCommandViaPort(command);
 	}
 
 	public void shortRotateRight() {
-		String command = "SROTR 150 40\n"; // old power value 60, time 200
+		String command = "SROTR 200 60\n"; // old power value 60, time 200
 		Communication.getInstance().sendCommandViaPort(command);
 	}
 
