@@ -6,8 +6,8 @@ import com.sdp.world.WorldState;
 
 public class GeneralStrategy {
 
-	protected float leftGoalX;
-	protected float rightGoalX;
+	protected static float leftGoalX;
+	protected static float rightGoalX;
 	protected float[] leftGoalY = new float[3];
 	protected float[] rightGoalY = new float[3];
 
@@ -43,6 +43,12 @@ public class GeneralStrategy {
 	public void sendWorldState(WorldState worldState) {
 		this.worldState = worldState;
 		initializeVars(worldState);
+	}
+
+	public static double getOurGoalX(WorldState worldState) {
+		double ourGoalX = worldState.weAreShootingRight ? leftGoalX
+				: rightGoalX;
+		return ourGoalX;
 	}
 
 	public static double calculateAngle(double robotX, double robotY,
@@ -81,7 +87,7 @@ public class GeneralStrategy {
 		MovingObject enemyAttacker = worldState.getEnemyAttackerRobot();
 		enemyAttackerX = enemyAttacker.x;
 		enemyAttackerY = enemyAttacker.y;
-		
+
 		topOfPitch = PitchConstants.getPitchOutlineTop();
 		botOfPitch = PitchConstants.getPitchOutlineBottom();
 
@@ -90,12 +96,11 @@ public class GeneralStrategy {
 
 		rightGoalX = PitchConstants.getPitchOutline()[3].getX();
 		rightGoalY = worldState.rightGoal;
-		
+
 		TLCorner = PitchConstants.getPitchOutlineTL();
 		TRCorner = PitchConstants.getPitchOutlineTR();
 		BLCorner = PitchConstants.getPitchOutlineBL();
 		BRCorner = PitchConstants.getPitchOutlineBR();
-
 
 	}
 

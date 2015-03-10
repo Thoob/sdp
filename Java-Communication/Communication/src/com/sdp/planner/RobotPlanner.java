@@ -3,6 +3,7 @@ package com.sdp.planner;
 import java.awt.geom.Point2D;
 
 import com.sdp.world.DynamicWorldState.Robot;
+import com.sdp.world.MovingObject;
 import com.sdp.world.SimpleWorldState;
 import com.sdp.world.SimpleWorldState.Operation;
 import com.sdp.world.WorldState;
@@ -123,13 +124,6 @@ public class RobotPlanner {
 		double deltaY = robotY - ballY;
 		double deltaTotal = Math.abs(deltaX) + Math.abs(deltaY);
 
-		// if (deltaTotal < 30 && StrategyHelper.isRobotFacingBall
-		// && SimpleWorldState.previousOperation == Operation.CATCH) {
-		// return true;
-		// } else {
-		// return false;
-		// }
-
 		if (deltaTotal > 35) {
 			return false;
 		} else if (SimpleWorldState.previousOperation == Operation.CATCH) {
@@ -189,6 +183,14 @@ public class RobotPlanner {
 			return 2;
 		} else {
 			return 3;
+		}
+	}
+
+	public static double getAngleFromZero(double heading) {
+		if (heading > 270) {
+			return heading - 360;
+		} else {
+			return heading;
 		}
 	}
 }

@@ -3,8 +3,10 @@ package com.sdp.strategy;
 import java.util.ArrayList;
 
 import com.sdp.planner.RobotCommands;
+import com.sdp.planner.RobotPlanner;
 import com.sdp.prediction.Calculations;
 import com.sdp.prediction.Oracle;
+import com.sdp.world.MovingObject;
 import com.sdp.world.Point2;
 import com.sdp.world.WorldState;
 
@@ -21,10 +23,14 @@ public class DefenderStrategy extends GeneralStrategy {
 
 	public void sendWorldState(WorldState worldState) {
 		initializeVars(worldState);
-
-		// Determine if the ball is moving towards us
+		// TODO check if enemyAttackerHasBall?
+		boolean enemyAttackerHasBall = true;
 		boolean movingTowardsUs = isBallMovingTowardsUs(worldState);
-		if (false) {
+
+		if (enemyAttackerHasBall) {
+			double predictedY = getEnemyAttackerHeadingY(worldState);
+			System.out.println("predicted y " + predictedY);
+		} else if (movingTowardsUs) {
 			System.out.println("moving towards us");
 			// Predicting ball's y coordinate
 			double collisionY = predictedYCoord(worldState);
@@ -139,4 +145,17 @@ public class DefenderStrategy extends GeneralStrategy {
 		return collisionY > robotY && robotY < 220;
 	}
 
+	public static double getEnemyAttackerHeadingY(WorldState worldState) {
+		MovingObject enemyAttacker = worldState.getEnemyAttackerRobot();
+		double heading = enemyAttacker.orientationAngle;
+		if (heading < 70 || heading > 290) {
+			double angle = RobotPlanner.getAngleFromZero(heading);
+			double deltaX = Math.abs(enemyAttacker.x - getOurGoalX(worldState));
+			double deltaY = deltaX * Math.tan(Math.toRadians(angle));
+			double predictedY = enemyAttacker.y - deltaY;
+			return predictedY;
+		} else {
+			return -1;
+		}
+	}
 }
