@@ -30,6 +30,24 @@ public class DefenderStrategy extends GeneralStrategy {
 		if (enemyAttackerHasBall) {
 			double predictedY = getEnemyAttackerHeadingY(worldState);
 			System.out.println("predicted y " + predictedY);
+			if (robotY > predictedY){
+				if (robotY > predictedY + 20){
+					RobotCommands.goStraightBackwardsFast();
+				} else if (robotY > predictedY + 10){
+					RobotCommands.goStraightBackwards();
+				} else {
+					RobotCommands.stop();
+				}
+			} else if (robotY <= predictedY){
+				if (robotY <= predictedY - 20){
+					RobotCommands.goStraightFast();		
+				} else if (robotY < predictedY - 10){
+					RobotCommands.goStraight();
+				} else {
+					RobotCommands.stop();
+				}
+			
+			}
 		} else if (movingTowardsUs) {
 			System.out.println("moving towards us");
 			// Predicting ball's y coordinate
