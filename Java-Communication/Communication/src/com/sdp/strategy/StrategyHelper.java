@@ -137,11 +137,11 @@ public class StrategyHelper extends GeneralStrategy {
 		// 2 - Go towards target if it is in our zone
 		// Go forwards or backwards depending on which side of the pitch we are
 		// on
-		if (shouldMoveForward(targetX, targetY)) {
+		if (shouldMoveForward(targetX, targetY, worldState)) {
 			RobotCommands.goStraight();
 			SimpleWorldState.previousOperation = Operation.NONE;
 			System.out.println("Moving towards target.");
-		} else if (shouldMoveBackward(targetX, targetY)) {
+		} else if (shouldMoveBackward(targetX, targetY, worldState)) {
 			RobotCommands.goStraightBackwards();
 			SimpleWorldState.previousOperation = Operation.NONE;
 			System.out.println("Moving towards target.");
@@ -154,7 +154,8 @@ public class StrategyHelper extends GeneralStrategy {
 		}
 	}
 
-	private boolean shouldMoveBackward(double targetX, double targetY) {
+	private boolean shouldMoveBackward(double targetX, double targetY,
+			WorldState worldState) {
 		return isRobotFacingAwayFromTarget
 				&& (RobotPlanner.inZone(targetX, worldState) == RobotPlanner
 						.inZone(robotX, worldState))
@@ -162,7 +163,8 @@ public class StrategyHelper extends GeneralStrategy {
 				&& (robotY > (Math.abs(topOfPitch - botOfPitch) / 2));
 	}
 
-	private boolean shouldMoveForward(double targetX, double targetY) {
+	private boolean shouldMoveForward(double targetX, double targetY,
+			WorldState worldState) {
 		return isRobotFacingTarget
 				&& (RobotPlanner.inZone(targetX, worldState) == RobotPlanner
 						.inZone(robotX, worldState))
