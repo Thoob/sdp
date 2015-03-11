@@ -139,7 +139,7 @@ public class RobotPlanner {
 		double deltaY = robotY - ballY;
 		double deltaTotal = Math.abs(deltaX) + Math.abs(deltaY);
 
-		if (deltaTotal > 35) {
+		if (deltaTotal > 40) {
 			return false;
 		} else if (SimpleWorldState.previousOperation == Operation.CATCH && deltaTotal < 45) {
 			return true;

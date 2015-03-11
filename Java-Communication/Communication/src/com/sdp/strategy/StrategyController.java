@@ -65,8 +65,7 @@ public class StrategyController implements WorldStateReceiver {
 				break;
 			default:
 				// TODO this is just for passing dev
-				changeToStrategy(StrategyType.PASSING);
-				//changeToStrategy(StrategyType.DEFENDING);
+				changeToStrategy(StrategyType.DEFENDING);
 				break;
 			}
 			System.out.println("strategy " + currentStrategy.toString()

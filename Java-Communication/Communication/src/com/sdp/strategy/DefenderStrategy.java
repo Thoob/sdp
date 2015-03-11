@@ -6,6 +6,7 @@ import com.sdp.planner.RobotCommands;
 import com.sdp.planner.RobotPlanner;
 import com.sdp.prediction.Calculations;
 import com.sdp.prediction.Oracle;
+import com.sdp.strategy.StrategyController.StrategyType;
 import com.sdp.world.MovingObject;
 import com.sdp.world.Point2;
 import com.sdp.world.WorldState;
@@ -24,30 +25,46 @@ public class DefenderStrategy extends GeneralStrategy {
 	public void sendWorldState(WorldState worldState) {
 		initializeVars(worldState);
 		// TODO check if enemyAttackerHasBall?
-		boolean enemyAttackerHasBall = true;
+		boolean enemyAttackerHasBall = false;
 		boolean movingTowardsUs = isBallMovingTowardsUs(worldState);
+		
+		if (RobotPlanner.inZone(robotX, worldState) == RobotPlanner.inZone(ballX, worldState)){
+			enemyAttackerHasBall = false;
+		} else {
+			enemyAttackerHasBall = true;
+		}
 
 		if (enemyAttackerHasBall) {
 			double predictedY = getEnemyAttackerHeadingY(worldState);
 			System.out.println("predicted y " + predictedY);
-			if (robotY > predictedY) {
-				if (robotY > predictedY + 20) {
-					RobotCommands.goStraightBackwardsFast();
-				} else if (robotY > predictedY + 10) {
-					RobotCommands.goStraightBackwards();
-				} else {
-					RobotCommands.stop();
+			if (!(robotAngleDeg > 85 && robotAngleDeg < 95)) {
+				// Move to the center of the goal and head straight
+				double goalCenterY = (worldState.weAreShootingRight) ? worldState.leftGoal[1]
+						: worldState.rightGoal[1];
+				double goalCenterX = (worldState.weAreShootingRight) ? leftGoalX
+						+ defaultDistFromGoal
+						: rightGoalX - defaultDistFromGoal;
+				sh.goTo(goalCenterX, goalCenterY, worldState);
+			} else {
+				if (robotY > predictedY) {
+					if (robotY > predictedY + 20) {
+						RobotCommands.goStraightBackwardsFast();
+					} else if (robotY > predictedY + 10) {
+						RobotCommands.goStraightBackwards();
+					} else {
+						RobotCommands.stop();
+					}
+				} else if (robotY <= predictedY) {
+					if (robotY <= predictedY - 20) {
+						RobotCommands.goStraightFast();
+					} else if (robotY < predictedY - 10) {
+						RobotCommands.goStraight();
+					} else {
+						RobotCommands.stop();
+					}
 				}
-			} else if (robotY <= predictedY) {
-				if (robotY <= predictedY - 20) {
-					RobotCommands.goStraightFast();
-				} else if (robotY < predictedY - 10) {
-					RobotCommands.goStraight();
-				} else {
-					RobotCommands.stop();
-				}
-
 			}
+
 		} else if (movingTowardsUs) {
 			System.out.println("moving towards us");
 			// Predicting ball's y coordinate
