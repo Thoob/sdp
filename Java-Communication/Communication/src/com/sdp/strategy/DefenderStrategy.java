@@ -6,7 +6,6 @@ import com.sdp.planner.RobotCommands;
 import com.sdp.planner.RobotPlanner;
 import com.sdp.prediction.Calculations;
 import com.sdp.prediction.Oracle;
-import com.sdp.strategy.StrategyController.StrategyType;
 import com.sdp.world.MovingObject;
 import com.sdp.world.Point2;
 import com.sdp.world.WorldState;
@@ -14,7 +13,6 @@ import com.sdp.world.WorldState;
 public class DefenderStrategy extends GeneralStrategy {
 	private Oracle predictor = null;
 	private final int framesForward = 20;
-	private final int defaultDistFromGoal = 50;
 	StrategyHelper sh;
 
 	public DefenderStrategy() {
@@ -27,23 +25,21 @@ public class DefenderStrategy extends GeneralStrategy {
 		// TODO check if enemyAttackerHasBall?
 		boolean enemyAttackerHasBall = false;
 		boolean movingTowardsUs = isBallMovingTowardsUs(worldState);
-		
-		if (RobotPlanner.inZone(robotX, worldState) == RobotPlanner.inZone(ballX, worldState)){
+
+		if (RobotPlanner.inZone(robotX, worldState) == RobotPlanner.inZone(
+				ballX, worldState)) {
 			enemyAttackerHasBall = false;
 		} else {
 			enemyAttackerHasBall = true;
 		}
-
-		if (enemyAttackerHasBall) {
-			double predictedY = getEnemyAttackerHeadingY(worldState);
+		double predictedY = getEnemyAttackerHeadingY(worldState);
+		//if (enemyAttackerHasBall && predictedY != -1) {
+		if(false){
 			System.out.println("predicted y " + predictedY);
 			if (!(robotAngleDeg > 85 && robotAngleDeg < 95)) {
 				// Move to the center of the goal and head straight
-				double goalCenterY = (worldState.weAreShootingRight) ? worldState.leftGoal[1]
-						: worldState.rightGoal[1];
-				double goalCenterX = (worldState.weAreShootingRight) ? leftGoalX
-						+ defaultDistFromGoal
-						: rightGoalX - defaultDistFromGoal;
+				double goalCenterY = getOurGoalX(worldState);
+				double goalCenterX = getOurGoalY(worldState);
 				sh.goTo(goalCenterX, goalCenterY, worldState);
 			} else {
 				if (robotY > predictedY) {
@@ -65,32 +61,35 @@ public class DefenderStrategy extends GeneralStrategy {
 				}
 			}
 
-		} else if (movingTowardsUs) {
-			System.out.println("moving towards us");
-			// Predicting ball's y coordinate
-			double collisionY = predictedYCoord(worldState);
-
-			// Checking if it is within goal range
-			boolean isInGoalRange = isInGoalRange(collisionY, worldState);
-			if (isInGoalRange) {
-				System.out.println("ball moving towards the goal");
-				// Moving to this position
-				if (Math.abs(collisionY - robotY) > allowedDistError) {
-					if (shouldWeMoveForward(collisionY, robotY)) {
-						RobotCommands.goStraightFast();
-					} else if (shouldWeMoveBackward(collisionY, robotY)) {
-						RobotCommands.goStraightBackwardsFast();
-					}
-				}
-			}
+			// } else if (movingTowardsUs) {
+			// defendMovingBall(worldState);
 		} else {
 			// Move to the center of the goal and head straight
-			double goalCenterY = (worldState.weAreShootingRight) ? worldState.leftGoal[1]
-					: worldState.rightGoal[1];
-			double goalCenterX = (worldState.weAreShootingRight) ? leftGoalX
-					+ defaultDistFromGoal : rightGoalX - defaultDistFromGoal;
+			double goalCenterY = getOurGoalY(worldState);
+			double goalCenterX = getOurGoalX(worldState);
 			sh.goTo(goalCenterX, goalCenterY, worldState);
 		}
+	}
+
+	private void defendMovingBall(WorldState worldState) {
+		System.out.println("moving towards us");
+		// Predicting ball's y coordinate
+		double collisionY = predictedYCoord(worldState);
+
+		// Checking if it is within goal range
+		boolean isInGoalRange = isInGoalRange(collisionY, worldState);
+		if (isInGoalRange) {
+			System.out.println("ball moving towards the goal");
+			// Moving to this position
+			if (Math.abs(collisionY - robotY) > allowedDistError) {
+				if (shouldWeMoveForward(collisionY, robotY)) {
+					RobotCommands.goStraightFast();
+				} else if (shouldWeMoveBackward(collisionY, robotY)) {
+					RobotCommands.goStraightBackwardsFast();
+				}
+			}
+		}
+
 	}
 
 	private boolean isInGoalRange(double collisionY, WorldState worldState) {
@@ -184,6 +183,8 @@ public class DefenderStrategy extends GeneralStrategy {
 		MovingObject enemyAttacker = worldState.getEnemyAttackerRobot();
 		double heading = enemyAttacker.orientationAngle;
 		double angle = RobotPlanner.getAngleFromZero(heading);
+		if (Math.abs(angle) > 90)
+			return -1;
 		double deltaX = Math.abs(enemyAttacker.x - getOurGoalX(worldState));
 		double deltaY = deltaX * Math.tan(Math.toRadians(angle));
 		double predictedY = enemyAttacker.y - deltaY;

@@ -3,7 +3,6 @@ package com.sdp.planner;
 import java.awt.geom.Point2D;
 
 import com.sdp.world.DynamicWorldState.Robot;
-import com.sdp.world.MovingObject;
 import com.sdp.world.SimpleWorldState;
 import com.sdp.world.SimpleWorldState.Operation;
 import com.sdp.world.WorldState;

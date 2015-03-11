@@ -39,6 +39,7 @@ public class GeneralStrategy {
 	protected final int allowedDegreeError = 15;
 	protected final int allowedDistError = 20;
 	protected WorldState worldState;
+	private final static int defaultDistFromGoal = 50;
 
 	public void sendWorldState(WorldState worldState) {
 		this.worldState = worldState;
@@ -47,8 +48,13 @@ public class GeneralStrategy {
 
 	public static double getOurGoalX(WorldState worldState) {
 		double ourGoalX = worldState.weAreShootingRight ? leftGoalX
-				: rightGoalX;
+				+ defaultDistFromGoal : rightGoalX - defaultDistFromGoal;
 		return ourGoalX;
+	}
+
+	public static double getOurGoalY(WorldState worldState) {
+		return (worldState.weAreShootingRight) ? worldState.leftGoal[1]
+				: worldState.rightGoal[1];
 	}
 
 	public static double calculateAngle(double robotX, double robotY,

@@ -106,7 +106,7 @@ public class PassingStrategy extends GeneralStrategy {
 			}
 			// When we've been facing the enemy for ~1/2 a second
 			if (SimpleWorldState.previousOperation != Operation.PASSKICK 
-					&& framesPassed > 8) {
+					&& framesPassed > 4) {
 
 				// Discuss angle, and perhaps alternate detection method,
 				// we rotate and face our team mate, and if the needed rotation

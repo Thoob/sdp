@@ -1,5 +1,6 @@
 package com.sdp.strategy;
 
+import com.sdp.planner.RobotCommands;
 import com.sdp.vision.interfaces.WorldStateReceiver;
 import com.sdp.world.WorldState;
 
@@ -64,7 +65,7 @@ public class StrategyController implements WorldStateReceiver {
 				changeToStrategy(StrategyType.PASSING);
 				break;
 			default:
-				// TODO this is just for passing dev
+				RobotCommands.stop();
 				changeToStrategy(StrategyType.DEFENDING);
 				break;
 			}
