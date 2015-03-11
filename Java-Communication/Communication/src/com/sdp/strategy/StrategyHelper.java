@@ -134,6 +134,7 @@ public class StrategyHelper extends GeneralStrategy {
 		if (!isRobotFacingTarget && !isNearTarget) {
 			rotateToDesiredAngle(robotAngleDeg, targetAngleDeg);
 			System.out.println("Rotating to face target.");
+			return;
 		}
 
 		// 2 - Go towards target if it is in our zone
