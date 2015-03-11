@@ -63,6 +63,21 @@ public class RobotPlanner {
 			return false;
 		}
 	}
+	
+	public static boolean prepareCatch(double robotX, double robotY,
+			double ballX, double ballY) {
+		double deltaX = robotX - ballX;
+		double deltaY = robotY - ballY;
+
+		double deltaTotal = Math.abs(deltaX) + Math.abs(deltaY);
+		System.out.println("Distance from ball: " + deltaTotal);
+
+		if (deltaTotal < MAX_CATCH_DIST*2 && deltaTotal > MIN_CATCH_DIST) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 	public static double getDeltaTotal(double aX, double aY, double bX,
 			double bY) {
@@ -126,7 +141,7 @@ public class RobotPlanner {
 
 		if (deltaTotal > 35) {
 			return false;
-		} else if (SimpleWorldState.previousOperation == Operation.CATCH) {
+		} else if (SimpleWorldState.previousOperation == Operation.CATCH && deltaTotal < 45) {
 			return true;
 		} else {
 			return false;

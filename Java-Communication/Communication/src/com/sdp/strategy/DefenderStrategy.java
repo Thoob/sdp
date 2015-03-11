@@ -30,23 +30,23 @@ public class DefenderStrategy extends GeneralStrategy {
 		if (enemyAttackerHasBall) {
 			double predictedY = getEnemyAttackerHeadingY(worldState);
 			System.out.println("predicted y " + predictedY);
-			if (robotY > predictedY){
-				if (robotY > predictedY + 20){
+			if (robotY > predictedY) {
+				if (robotY > predictedY + 20) {
 					RobotCommands.goStraightBackwardsFast();
-				} else if (robotY > predictedY + 10){
+				} else if (robotY > predictedY + 10) {
 					RobotCommands.goStraightBackwards();
 				} else {
 					RobotCommands.stop();
 				}
-			} else if (robotY <= predictedY){
-				if (robotY <= predictedY - 20){
-					RobotCommands.goStraightFast();		
-				} else if (robotY < predictedY - 10){
+			} else if (robotY <= predictedY) {
+				if (robotY <= predictedY - 20) {
+					RobotCommands.goStraightFast();
+				} else if (robotY < predictedY - 10) {
 					RobotCommands.goStraight();
 				} else {
 					RobotCommands.stop();
 				}
-			
+
 			}
 		} else if (movingTowardsUs) {
 			System.out.println("moving towards us");
@@ -166,14 +166,11 @@ public class DefenderStrategy extends GeneralStrategy {
 	public static double getEnemyAttackerHeadingY(WorldState worldState) {
 		MovingObject enemyAttacker = worldState.getEnemyAttackerRobot();
 		double heading = enemyAttacker.orientationAngle;
-		if (heading < 70 || heading > 290) {
-			double angle = RobotPlanner.getAngleFromZero(heading);
-			double deltaX = Math.abs(enemyAttacker.x - getOurGoalX(worldState));
-			double deltaY = deltaX * Math.tan(Math.toRadians(angle));
-			double predictedY = enemyAttacker.y - deltaY;
-			return predictedY;
-		} else {
-			return -1;
-		}
+		double angle = RobotPlanner.getAngleFromZero(heading);
+		double deltaX = Math.abs(enemyAttacker.x - getOurGoalX(worldState));
+		double deltaY = deltaX * Math.tan(Math.toRadians(angle));
+		double predictedY = enemyAttacker.y - deltaY;
+		return predictedY;
+
 	}
 }
