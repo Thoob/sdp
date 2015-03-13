@@ -62,7 +62,7 @@ public class RobotPlanner {
 			return false;
 		}
 	}
-	
+
 	public static boolean prepareCatch(double robotX, double robotY,
 			double ballX, double ballY) {
 		double deltaX = robotX - ballX;
@@ -71,7 +71,7 @@ public class RobotPlanner {
 		double deltaTotal = Math.abs(deltaX) + Math.abs(deltaY);
 		System.out.println("Distance from ball: " + deltaTotal);
 
-		if (deltaTotal < MAX_CATCH_DIST*2 && deltaTotal > MIN_CATCH_DIST) {
+		if (deltaTotal < MAX_CATCH_DIST * 2 && deltaTotal > MIN_CATCH_DIST) {
 			return true;
 		} else {
 			return false;
@@ -140,7 +140,8 @@ public class RobotPlanner {
 
 		if (deltaTotal > 40) {
 			return false;
-		} else if (SimpleWorldState.previousOperation == Operation.CATCH && deltaTotal < 45) {
+		} else if (SimpleWorldState.previousOperation == Operation.CATCH
+				&& deltaTotal < 45) {
 			return true;
 		} else {
 			return false;
@@ -205,6 +206,17 @@ public class RobotPlanner {
 			return heading - 360;
 		} else {
 			return heading;
+		}
+	}
+
+	// TODO implement
+	public static boolean doesEnemyAttackerHaveBall(WorldState worldState,
+			double robotX, double ballX) {
+		if (RobotPlanner.inZone(robotX, worldState) == RobotPlanner.inZone(
+				ballX, worldState)) {
+			return false;
+		} else {
+			return true;
 		}
 	}
 }

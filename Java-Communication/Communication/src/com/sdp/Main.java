@@ -13,7 +13,7 @@ public class Main {
 		thread.start();
 
 		RobotCommands.kick();
-//		GUI gui = new GUI();
-//		gui.setVisible(true);
+		GUI gui = new GUI();
+		gui.setVisible(true);
 	}
 }

@@ -23,48 +23,38 @@ public class DefenderStrategy extends GeneralStrategy {
 	public void sendWorldState(WorldState worldState) {
 		initializeVars(worldState);
 		// TODO check if enemyAttackerHasBall?
-		boolean enemyAttackerHasBall = false;
+
 		boolean movingTowardsUs = isBallMovingTowardsUs(worldState);
 
-		if (RobotPlanner.inZone(robotX, worldState) == RobotPlanner.inZone(
-				ballX, worldState)) {
-			enemyAttackerHasBall = false;
-		} else {
-			enemyAttackerHasBall = true;
-		}
-		double predictedY = getEnemyAttackerHeadingY(worldState);
-		//if (enemyAttackerHasBall && predictedY != -1) {
-		if(false){
-			System.out.println("predicted y " + predictedY);
-			if (!(robotAngleDeg > 85 && robotAngleDeg < 95)) {
-				// Move to the center of the goal and head straight
-				double goalCenterY = getOurGoalX(worldState);
-				double goalCenterX = getOurGoalY(worldState);
-				sh.goTo(goalCenterX, goalCenterY, worldState);
-			} else {
-				if (robotY > predictedY) {
-					if (robotY > predictedY + 20) {
-						RobotCommands.goStraightBackwardsFast();
-					} else if (robotY > predictedY + 10) {
-						RobotCommands.goStraightBackwards();
-					} else {
-						RobotCommands.stop();
-					}
-				} else if (robotY <= predictedY) {
-					if (robotY <= predictedY - 20) {
-						RobotCommands.goStraightFast();
-					} else if (robotY < predictedY - 10) {
-						RobotCommands.goStraight();
-					} else {
-						RobotCommands.stop();
-					}
-				}
-			}
+		boolean enemyAttackerHasBall = RobotPlanner.doesEnemyAttackerHaveBall(
+				worldState, robotX, ballX);
 
+		double predictedY = getEnemyAttackerHeadingY(worldState);
+		if (enemyAttackerHasBall && predictedY != -1) {
+			System.out.println("predicted y " + predictedY);
+			if (robotY > predictedY) {
+				if (robotY > predictedY + 20) {
+					RobotCommands.goStraightBackwardsFast();
+				} else if (robotY > predictedY + 10) {
+					RobotCommands.goStraightBackwards();
+				} else {
+					RobotCommands.stop();
+				}
+			} else if (robotY <= predictedY) {
+				if (robotY <= predictedY - 20) {
+					RobotCommands.goStraightFast();
+				} else if (robotY < predictedY - 10) {
+					RobotCommands.goStraight();
+				} else {
+					RobotCommands.stop();
+				}
+
+			}
 			// } else if (movingTowardsUs) {
 			// defendMovingBall(worldState);
 		} else {
 			// Move to the center of the goal and head straight
+			System.out.println("going to default position");
 			double goalCenterY = getOurGoalY(worldState);
 			double goalCenterX = getOurGoalX(worldState);
 			sh.goTo(goalCenterX, goalCenterY, worldState);
@@ -183,7 +173,9 @@ public class DefenderStrategy extends GeneralStrategy {
 		MovingObject enemyAttacker = worldState.getEnemyAttackerRobot();
 		double heading = enemyAttacker.orientationAngle;
 		double angle = RobotPlanner.getAngleFromZero(heading);
-		if (Math.abs(angle) > 90)
+		System.out.println("angle from zero " + angle);
+		if ((Math.abs(angle) > 90 && !worldState.weAreShootingRight)
+				|| ((Math.abs(angle) > 225 || Math.abs(angle) < 155) && worldState.weAreShootingRight))
 			return -1;
 		double deltaX = Math.abs(enemyAttacker.x - getOurGoalX(worldState));
 		double deltaY = deltaX * Math.tan(Math.toRadians(angle));
