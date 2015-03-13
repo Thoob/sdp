@@ -66,6 +66,16 @@ public class RobotCommands {
 		System.out.println("goStraightBackwards");
 		RobotCommunication.getInstance().move(-45, -45);
 	}
+	
+	public static void goStraightBackwards(double fromX, double fromY, double toX,
+			double toY) {
+		System.out.println("goStraightSmart");
+		double deltaTotal = RobotPlanner.getDeltaTotal(fromX, fromY, toX, toY);
+		if (deltaTotal > 70)
+			goStraightBackwardsFast();
+		else
+			goStraightBackwards();
+	}
 
 	public static void stop() {
 		System.out.println("stop");

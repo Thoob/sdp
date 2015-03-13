@@ -25,38 +25,22 @@ public class DefenderStrategy extends GeneralStrategy {
 		// TODO check if enemyAttackerHasBall?
 
 		boolean movingTowardsUs = isBallMovingTowardsUs(worldState);
-
+		double goalCenterX = getOurGoalX(worldState);
 		boolean enemyAttackerHasBall = RobotPlanner.doesEnemyAttackerHaveBall(
 				worldState, robotX, ballX);
 
 		double predictedY = getEnemyAttackerHeadingY(worldState);
 		if (enemyAttackerHasBall && predictedY != -1) {
-			System.out.println("predicted y " + predictedY);
-			if (robotY > predictedY) {
-				if (robotY > predictedY + 20) {
-					RobotCommands.goStraightBackwardsFast();
-				} else if (robotY > predictedY + 10) {
-					RobotCommands.goStraightBackwards();
-				} else {
-					RobotCommands.stop();
-				}
-			} else if (robotY <= predictedY) {
-				if (robotY <= predictedY - 20) {
-					RobotCommands.goStraightFast();
-				} else if (robotY < predictedY - 10) {
-					RobotCommands.goStraight();
-				} else {
-					RobotCommands.stop();
-				}
-
-			}
+			System.out
+					.println("predicted y " + predictedY + " our y " + robotY);
+			sh.goTo(goalCenterX, predictedY, worldState);
 			// } else if (movingTowardsUs) {
 			// defendMovingBall(worldState);
 		} else {
 			// Move to the center of the goal and head straight
 			System.out.println("going to default position");
 			double goalCenterY = getOurGoalY(worldState);
-			double goalCenterX = getOurGoalX(worldState);
+
 			sh.goTo(goalCenterX, goalCenterY, worldState);
 		}
 	}
@@ -174,8 +158,8 @@ public class DefenderStrategy extends GeneralStrategy {
 		double heading = enemyAttacker.orientationAngle;
 		double angle = RobotPlanner.getAngleFromZero(heading);
 		System.out.println("angle from zero " + angle);
-		if ((Math.abs(angle) > 90 && !worldState.weAreShootingRight)
-				|| ((Math.abs(angle) > 225 || Math.abs(angle) < 155) && worldState.weAreShootingRight))
+		if ((Math.abs(angle) > 50 && !worldState.weAreShootingRight)
+				|| ((Math.abs(angle) > 230 || Math.abs(angle) < 150) && worldState.weAreShootingRight))
 			return -1;
 		double deltaX = Math.abs(enemyAttacker.x - getOurGoalX(worldState));
 		double deltaY = deltaX * Math.tan(Math.toRadians(angle));

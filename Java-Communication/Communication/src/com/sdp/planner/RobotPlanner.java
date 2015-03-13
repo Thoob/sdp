@@ -219,4 +219,11 @@ public class RobotPlanner {
 			return true;
 		}
 	}
+
+	public static boolean shouldMoveBackwards(double robotAngleDeg,
+			double targetAngleDeg) {
+		if (Math.abs(robotAngleDeg - targetAngleDeg) > 90)
+			return true;
+		return false;
+	}
 }

@@ -124,8 +124,12 @@ public class StrategyHelper extends GeneralStrategy {
 		// Desired angle to face target
 		double targetAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
 				targetX, targetY);
-		// if (!isInTopHalf(robotY, topOfPitch, botOfPitch))
-		// targetAngleDeg = RobotPlanner.getOppositeAngle(targetAngleDeg);
+
+		boolean shouldMoveBackwards = RobotPlanner.shouldMoveBackwards(
+				robotAngleDeg, targetAngleDeg);
+		if (shouldMoveBackwards)
+			targetAngleDeg = RobotPlanner.getOppositeAngle(targetAngleDeg);
+
 		double targetDiffInHeadings = Math.abs(robotAngleDeg - targetAngleDeg);
 		// Robot is facing the target if within this angle in allowedDegreeError
 		// of the target
@@ -139,15 +143,19 @@ public class StrategyHelper extends GeneralStrategy {
 
 		// 2 - Go towards target if it is in our zone
 		// Go forwards or backwards depending on which side of the pitch we are
-		if (shouldMoveForward(targetX, targetY, worldState)) {
+		if (shouldMoveForward(targetX, targetY, worldState)
+				&& !shouldMoveBackwards) {
 			System.out.println("Moving forward towards target.");
 			RobotCommands.goStraight(robotX, robotY, targetX, targetY);
 			SimpleWorldState.previousOperation = Operation.FORWARD;
-			// } else if (shouldMoveBackward(targetX, targetY, worldState)) {
-			// RobotCommands.goStraightBackwards();
-			// System.out.println("Moving backwards towards target.");
+		} else if (shouldMoveBackward(targetX, targetY, worldState)
+				&& shouldMoveBackwards) {
+			RobotCommands.goStraightBackwards(robotX, robotY, targetX, targetY);
+			System.out.println("Moving backwards towards target.");
+			SimpleWorldState.previousOperation = Operation.BACKWARD;
 		} else if (RobotPlanner.nearTarget(robotX, robotY, targetX, targetY)) {
-			if (SimpleWorldState.previousOperation == Operation.FORWARD)
+			if (SimpleWorldState.previousOperation == Operation.FORWARD
+					|| SimpleWorldState.previousOperation == Operation.BACKWARD)
 				RobotCommands.stop();
 			// 3 - Stop once we've reached target and rotate to neutral defender
 			// position, which is (facing south)
@@ -160,25 +168,14 @@ public class StrategyHelper extends GeneralStrategy {
 
 	private boolean shouldMoveBackward(double targetX, double targetY,
 			WorldState worldState) {
-		System.out.println(isRobotFacingTarget + " "
-				+ isSameZone(robotX, targetX, worldState) + " " + !isNearTarget
-				+ " " + isInTopHalf(robotY, topOfPitch, botOfPitch));
-
 		return isRobotFacingTarget && isSameZone(robotX, targetX, worldState)
-				&& !isNearTarget
-				&& !isInTopHalf(robotY, topOfPitch, botOfPitch);
+				&& !isNearTarget;
 	}
 
 	private boolean shouldMoveForward(double targetX, double targetY,
 			WorldState worldState) {
 		return isRobotFacingTarget && isSameZone(robotX, targetX, worldState)
 				&& !isNearTarget;
-	}
-
-	private boolean isInTopHalf(double robotY, int topOfPitch, int botOfPitch) {
-		System.out.println("robot Y " + robotY + " "
-				+ Math.abs(topOfPitch - botOfPitch) / 2);
-		return robotY > (Math.abs(topOfPitch - botOfPitch) / 2);
 	}
 
 	private boolean isSameZone(double robotX, double targetX,
