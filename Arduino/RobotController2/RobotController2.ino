@@ -16,6 +16,10 @@
 #define minpower 30                          // Minimum Speed of the motors in power%
 #define default_power 50                     // If no power argument is given, this is the default
 
+#define sensorAddr 0x39  // Sensor physical address on the power board - 0x39
+#define ch0        0x43  // Read ADC for channel 0 - 0x43
+#define ch1        0x83  // Read ADC for channel 1 - 0x83
+
 SerialCommand sCmd;                          // The SerialCommand object
 
 //Global powers for both movement motors
@@ -98,14 +102,41 @@ void loop() {
 
   sCmd.readSerial();                         // Processes serial commands
 
+  Serial.print("Channel 0 : ");
+  readI2C(sensorAddr, ch0);
+  
+ /* Serial.print("Channel 1 : ");
+  readI2C(sensorAddr, ch1);
+  
+  Serial.println();
+  */
+  delay(1000);
 
-//  int sensor_data = 0;
-//  
-//  sensor_data = readAnalogSensorData(1);
-//  
-//  Serial.println(sensor_data);
-//  
-//  delay(100);
+}
+
+//Read data from light sensor method
+void readI2C(int portAddress, int channelAddr){
+  
+  Wire.beginTransmission(portAddress); 
+  Wire.write(byte(0x18)); // Write command to assert extended range mode - 0x1D
+  delay(40);              // Write command to reset or return to standard range mode - 0x18
+  
+  Wire.write(byte(0x03)); // Power-up state/Read command register
+  Wire.endTransmission(); // stop transmitting 
+  delay(70);
+  
+  Wire.beginTransmission(portAddress);             
+  Wire.write(byte(channelAddr)); // Read ADC channel 0 - 0x43 || Read ADC channel 1 - 0x83
+  Wire.endTransmission();        // stop transmitting
+  
+  Wire.requestFrom(portAddress, 1);
+  int byte_in;
+  
+  while(Wire.available())    // slave may send less than requested
+  { 
+    byte_in = Wire.read();    // receive a byte as character
+    Serial.println(byte_in);         // print the character
+  }
 }
 
 // Test Commands
