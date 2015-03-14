@@ -133,15 +133,13 @@ public class RobotPlanner {
 
 	public static boolean doesOurRobotHaveBall(double robotX, double robotY,
 			double ballX, double ballY) {
-
+		int diffInPos = 30;
 		double deltaX = robotX - ballX;
 		double deltaY = robotY - ballY;
 		double deltaTotal = Math.abs(deltaX) + Math.abs(deltaY);
 
-		if (deltaTotal > 40) {
-			return false;
-		} else if (SimpleWorldState.previousOperation == Operation.CATCH
-				&& deltaTotal < 45) {
+		if (SimpleWorldState.previousOperation == Operation.CATCH
+				&& deltaTotal < diffInPos || ballX == 0 && ballY == 0) {
 			return true;
 		} else {
 			return false;

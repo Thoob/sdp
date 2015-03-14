@@ -1,11 +1,7 @@
 package com.sdp.strategy;
 
-import java.awt.geom.Point2D;
-
 import com.sdp.planner.RobotCommands;
 import com.sdp.planner.RobotPlanner;
-import com.sdp.prediction.Calculations;
-import com.sdp.strategy.StrategyController.StrategyType;
 import com.sdp.world.SimpleWorldState;
 import com.sdp.world.SimpleWorldState.Operation;
 import com.sdp.world.WorldState;
@@ -30,15 +26,13 @@ public class PassingStrategy extends GeneralStrategy {
 	public boolean weHaveMoved = false;
 	public int framesPassed = 0;
 
-	
 	public void sendWorldState(WorldState worldState) {
 		initializeVars(worldState);
+		boolean doWeHaveBall = RobotPlanner.doesOurRobotHaveBall(robotX,
+				robotY, ballX, ballY);
 
-		System.out.println("Ball Pos is: " + ballY);
+		System.out.println("we have ball " + doWeHaveBall);
 
-		// Only act when the ball is in our zone. 
-		int ballzone = RobotPlanner.inZone(ballX, worldState);
-		System.out.println("Ballzone is: " + ballzone);
 		if (RobotPlanner.inZone(ballX, worldState) != RobotPlanner.inZone(
 				robotX, worldState)) {
 			return;
@@ -64,48 +58,43 @@ public class PassingStrategy extends GeneralStrategy {
 				System.out.println("Attempted Catch");
 				return;
 			}
-		} else if  (flag == true) {
+		} else if (flag == true) {
 			passKick(worldState);
-		} 
+		}
 
 	}
 
 	public void passKick(WorldState worldState) {
 
-		
 		System.out.println("FRAMES PASSED " + framesPassed);
-		
+
 		boolean facingAttacker = isFacingAttacker();
-		
+
 		double AttAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
 				attackerX, attackerY);
 		double AttDiffInHeadings = Math.abs(robotAngleDeg - AttAngleDeg);
-		boolean isFacingAttacker = (AttDiffInHeadings < allowedDegreeError ||
-				 			AttDiffInHeadings > 360 - allowedDegreeError);
-		boolean stoppedRotating = (AttDiffInHeadings < 8 ||
-	 			AttDiffInHeadings > 360 - 8);
-	
-		
+		boolean isFacingAttacker = (AttDiffInHeadings < allowedDegreeError || AttDiffInHeadings > 360 - allowedDegreeError);
+		boolean stoppedRotating = (AttDiffInHeadings < 8 || AttDiffInHeadings > 360 - 8);
+
 		double blockerAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
 				enemyAttackerX, enemyAttackerY);
-		enemyBlocking = Math.abs((diffInHeadings(robotAngleDeg,
-						blockerAngleDeg) - diffInHeadings(robotAngleDeg,
-						AttAngleDeg)))  < 10;
+		enemyBlocking = Math
+				.abs((diffInHeadings(robotAngleDeg, blockerAngleDeg) - diffInHeadings(
+						robotAngleDeg, AttAngleDeg))) < 10;
 
-		double out = Math.abs((diffInHeadings(robotAngleDeg,
-				blockerAngleDeg) - diffInHeadings(robotAngleDeg,
-				AttAngleDeg)));
-				
+		double out = Math
+				.abs((diffInHeadings(robotAngleDeg, blockerAngleDeg) - diffInHeadings(
+						robotAngleDeg, AttAngleDeg)));
+
 		// TODO: Test
 		if (isFacingAttacker
 				&& RobotPlanner.inZone(ballX, worldState) == RobotPlanner
-					.inZone(robotX, worldState		)
-				  && enemyBlocking == false) {
-			if (stoppedRotating){
+						.inZone(robotX, worldState) && enemyBlocking == false) {
+			if (stoppedRotating) {
 				framesPassed++;
 			}
 			// When we've been facing the enemy for ~1/2 a second
-			if (SimpleWorldState.previousOperation != Operation.PASSKICK 
+			if (SimpleWorldState.previousOperation != Operation.PASSKICK
 					&& framesPassed > 4) {
 
 				// Discuss angle, and perhaps alternate detection method,
@@ -125,16 +114,16 @@ public class PassingStrategy extends GeneralStrategy {
 					// when necessary
 					flag = false;
 					return;
-				} 
+				}
 			}
 		}
 
-			// Bounce pass is needed
+		// Bounce pass is needed
 		else if (enemyBlocking == true) {
 			moveToPassingPos(worldState);
-			}
+		}
 
-		else  {
+		else {
 			framesPassed = 0;
 			sh.rotateToDesiredAngle(robotAngleDeg, AttAngleDeg);
 			return;
@@ -189,105 +178,97 @@ public class PassingStrategy extends GeneralStrategy {
 		return Math.min(Math.abs(diffAngleA - diffAngleB),
 				Math.abs(diffAngleB - diffAngleA));
 	}
-	
-	private void moveToPassingPos(WorldState worldState){
-		
+
+	private void moveToPassingPos(WorldState worldState) {
+
 		double attackerPosY = worldState.getAttackerRobot().y;
 		double blockerPosY = worldState.getEnemyAttackerRobot().y;
-		
+
 		double PassingAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
 				robotX, attackerPosY);
 		double ballDiffInHeadings = Math.abs(robotAngleDeg - PassingAngleDeg);
 
-		boolean isRobotFacingTarget = (ballDiffInHeadings < allowedDegreeError ||
-				 			ballDiffInHeadings > 360 - allowedDegreeError);
-		 
+		boolean isRobotFacingTarget = (ballDiffInHeadings < allowedDegreeError || ballDiffInHeadings > 360 - allowedDegreeError);
 
 		// move down or up
-		System.out.println("Difference is: " + Math.abs(attackerPosY - blockerPosY) );
+		System.out.println("Difference is: "
+				+ Math.abs(attackerPosY - blockerPosY));
 
-		
-		if (Math.abs(attackerPosY - blockerPosY) > 35){
-		 // Rotate to target Point
-			
+		if (Math.abs(attackerPosY - blockerPosY) > 35) {
+			// Rotate to target Point
+
 			if (isRobotFacingTarget == false) {
 				sh.rotateToDesiredAngle(robotAngleDeg, PassingAngleDeg);
 				System.out.println("Rotating to face AttackerY");
 			}
-			
-			if (isRobotFacingTarget && weHaveArrived == false){
+
+			if (isRobotFacingTarget && weHaveArrived == false) {
 				RobotCommands.goStraight();
 				SimpleWorldState.previousOperation = Operation.NONE;
 				System.out.println("Moving towards AttackerY.");
 			}
-			
+
 			double deltaY = robotY - attackerPosY;
 			double deltaTotal = Math.abs(deltaY);
 			weHaveArrived = deltaTotal < 8;
-		
 
 		}
 
-		
 		// in a row
-		 if (Math.abs(attackerPosY - blockerPosY) <= 35){
-			if (attackerPosY > 225){
-				
-				 PassingAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
+		if (Math.abs(attackerPosY - blockerPosY) <= 35) {
+			if (attackerPosY > 225) {
+
+				PassingAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
 						robotX, 180);
 				ballDiffInHeadings = Math.abs(robotAngleDeg - PassingAngleDeg);
 
-				isRobotFacingTarget = (ballDiffInHeadings < allowedDegreeError ||
-						 			ballDiffInHeadings > 360 - allowedDegreeError);
-				 
+				isRobotFacingTarget = (ballDiffInHeadings < allowedDegreeError || ballDiffInHeadings > 360 - allowedDegreeError);
+
 				if (isRobotFacingTarget == false) {
 					sh.rotateToDesiredAngle(robotAngleDeg, PassingAngleDeg);
 					System.out.println("Rotating to face 180");
 				}
-				
-				if (isRobotFacingTarget && weHaveArrived == false){
+
+				if (isRobotFacingTarget && weHaveArrived == false) {
 					RobotCommands.goStraight();
 					SimpleWorldState.previousOperation = Operation.NONE;
 					System.out.println("Moving towards 180.");
 				}
-				
+
 				double deltaY = robotY - 180;
 				double deltaTotal = Math.abs(deltaY);
 				weHaveArrived = deltaTotal < 20;
-				
 
 			}
-			
+
 			else {
-				 PassingAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
+				PassingAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
 						robotX, 300);
 				ballDiffInHeadings = Math.abs(robotAngleDeg - PassingAngleDeg);
 
-				isRobotFacingTarget = (ballDiffInHeadings < allowedDegreeError ||
-						 			ballDiffInHeadings > 360 - allowedDegreeError);
-				 
+				isRobotFacingTarget = (ballDiffInHeadings < allowedDegreeError || ballDiffInHeadings > 360 - allowedDegreeError);
+
 				if (isRobotFacingTarget == false) {
 					sh.rotateToDesiredAngle(robotAngleDeg, PassingAngleDeg);
-					System.out.println("Rotating to face target: 300" );
+					System.out.println("Rotating to face target: 300");
 				}
-				
-				if (isRobotFacingTarget && weHaveArrived == false){
+
+				if (isRobotFacingTarget && weHaveArrived == false) {
 					RobotCommands.goStraight();
 					SimpleWorldState.previousOperation = Operation.NONE;
 					System.out.println("Moving towards 300.");
 				}
-				
+
 				double deltaY = robotY - 300;
 				double deltaTotal = Math.abs(deltaY);
 				weHaveArrived = deltaTotal < 20;
 
-			}	
-			
+			}
 
 		}
-					
+
 		// Once we reach our destination
-		if (weHaveArrived){
+		if (weHaveArrived) {
 			System.out.println("We have arrived");
 			enemyBlocking = false;
 		}
