@@ -21,6 +21,27 @@ public class RobotPlanner {
 
 	}
 
+	public static double robotCenterX(double robotX, double robotHeading) {
+		robotHeading = Math.abs(getAngleFromZero(robotHeading));
+		if (robotHeading < 10) {
+			return robotX + 10;
+		} else if (Math.abs(robotHeading - 180) < 10) {
+			return robotX - 10;
+		} else {
+			return robotX;
+		}
+	}
+
+	public static double robotCenterY(double robotY, double robotHeading) {
+		if (Math.abs(robotHeading - 90) < 10) {
+			return robotY - 10;
+		} else if (Math.abs(robotHeading - 270) < 10) {
+			return robotY + 10;
+		} else {
+			return robotY;
+		}
+	}
+
 	/*
 	 * TODO: Make more general functions, ones compatible with an abstract
 	 * objects we may need to rotate toward / move to
