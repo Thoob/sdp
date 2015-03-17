@@ -2,7 +2,9 @@ package com.sdp.strategy;
 
 import com.sdp.planner.RobotCommands;
 import com.sdp.vision.interfaces.WorldStateReceiver;
+import com.sdp.world.SimpleWorldState;
 import com.sdp.world.WorldState;
+import com.sdp.world.SimpleWorldState.Operation;
 
 public class StrategyController implements WorldStateReceiver {
 
@@ -45,6 +47,7 @@ public class StrategyController implements WorldStateReceiver {
 			break;
 		}
 		currentStrategy = type;
+		SimpleWorldState.previousOperation = Operation.NONE;
 	}
 
 	@Override

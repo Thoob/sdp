@@ -119,6 +119,7 @@ public class StrategyHelper extends GeneralStrategy {
 
 	void goTo(double targetX, double targetY, WorldState worldState) {
 		initializeVars(worldState);
+		
 		isNearTarget = (RobotPlanner.nearTarget(robotX, robotY, targetX,
 				targetY));
 		// Desired angle to face target

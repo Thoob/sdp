@@ -22,10 +22,10 @@ public class DefenderStrategy extends GeneralStrategy {
 
 	public void sendWorldState(WorldState worldState) {
 		initializeVars(worldState);
-		// TODO check if enemyAttackerHasBall?
-
+		
 		boolean movingTowardsUs = isBallMovingTowardsUs(worldState);
 		double goalCenterX = getOurGoalX(worldState);
+		// TODO check if enemyAttackerHasBall?
 		boolean enemyAttackerHasBall = RobotPlanner.doesEnemyAttackerHaveBall(
 				worldState, robotX, ballX);
 
