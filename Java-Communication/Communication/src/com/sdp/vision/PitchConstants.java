@@ -112,31 +112,59 @@ public class PitchConstants extends Observable {
 	/* These may need to be changed */
 	public static int[] getPitchOutlineTR(){
 		int[] TL = new int[2];
-		TL[0] = (int) ((pitchOutline[1].getX() + pitchOutline[2].getX()) / 2);
-		TL[1] = (int) ((pitchOutline[1].getY() + pitchOutline[2].getY()) / 2);
+		TL[0] = (int) pitchOutline[1].getX();
+		TL[1] = (int)pitchOutline[1].getY();
 		return  TL;
 	}
 	
+	public static int[] getPitchOutlineLowerTR(){
+		int[] TL = new int[2];
+		TL[0] = (int) pitchOutline[2].getX();
+		TL[1] = (int) pitchOutline[2].getY();
+		return  TL;
+	}
+	
+	public static int[] getPitchOutlineUpperBR(){
+		int[] TL = new int[2];
+		TL[0] = (int) pitchOutline[3].getX();
+		TL[1] = (int) pitchOutline[3].getY();
+		return  TL;
+	}
 	public static int[] getPitchOutlineBR(){
 		int[] TL = new int[2];
-		TL[0] = (int) ((pitchOutline[3].getX() + pitchOutline[4].getX()) / 2);;
-		TL[1] = (int) ((pitchOutline[3].getY() + pitchOutline[4].getY()) / 2);
+		TL[0] = (int) pitchOutline[4].getX();
+		TL[1] = (int) pitchOutline[4].getY();
 		return  TL;
 	}
 	
 	public static int[] getPitchOutlineTL(){
 		int[] TL = new int[2];
-		TL[0] = (int) ((pitchOutline[7].getX() + pitchOutline[0].getX()) / 2);
-		TL[1] = (int) ((pitchOutline[7].getY() + pitchOutline[0].getY()) / 2);
+		TL[0] = (int) pitchOutline[0].getX();
+		TL[1] = (int) pitchOutline[0].getY();
 		return  TL;
 	}
 	
-	public static int[] getPitchOutlineBL(){
+	public static int[] getPitchOutlineLowerTL(){
 		int[] TL = new int[2];
-		TL[0] = (int) ((pitchOutline[5].getX() + pitchOutline[6].getX()) / 2);
-		TL[1] = (int) ((pitchOutline[5].getY() + pitchOutline[6].getY()) / 2);
+		TL[0] = (int) pitchOutline[7].getX();
+		TL[1] = (int) pitchOutline[7].getY();
 		return  TL;
 	}
+	
+	public static int[] getPitchOutlineUpperBL(){
+		int[] TL = new int[2];
+		TL[0] = (int) pitchOutline[6].getX();
+		TL[1] = (int) pitchOutline[6].getY();
+		return  TL;
+	}
+	public static int[] getPitchOutlineBL(){
+		int[] TL = new int[2];
+		TL[0] = (int) pitchOutline[5].getX();
+		TL[1] = (int) pitchOutline[5].getY();
+		return  TL;
+	}
+	
+	
 	
 	public static int getPitchOutlineTop(){
 		return (int) (( pitchOutline[0].getY() + (pitchOutline[1]).getY()) / 2);
