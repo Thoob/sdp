@@ -71,10 +71,8 @@ public class StrategyHelper extends GeneralStrategy {
 
 	void rotateToDesiredAngle(double robotAngleDeg, double desiredAngleDeg) {
 		double diffInHeadings = Math.abs(robotAngleDeg - desiredAngleDeg);
-		System.out.println("Difference in headings: " + diffInHeadings);
 		if ((diffInHeadings < allowedDegreeError)
 				|| (diffInHeadings > 360 - allowedDegreeError)) {
-			System.out.println("Desired angle");
 			// stopping rotation but not other operations
 			if (SimpleWorldState.previousOperation == Operation.RIGHT
 					|| SimpleWorldState.previousOperation == Operation.LEFT) {
@@ -82,8 +80,6 @@ public class StrategyHelper extends GeneralStrategy {
 				SimpleWorldState.previousOperation = Operation.NONE;
 			}
 		} else {
-			System.out.println("Current robot heading:" + robotAngleDeg);
-			System.out.println("Angle to face:" + desiredAngleDeg);
 			if ((diffInHeadings < allowedDegreeError * 2)
 					|| (diffInHeadings > 360 - allowedDegreeError * 2)) {
 				if (SimpleWorldState.previousOperation == Operation.RIGHT
@@ -138,7 +134,6 @@ public class StrategyHelper extends GeneralStrategy {
 		// 1 - Rotate to face target
 		if (!isRobotFacingTarget && !isNearTarget) {
 			rotateToDesiredAngle(robotAngleDeg, targetAngleDeg);
-			System.out.println("Rotating to face target.");
 			return;
 		}
 
@@ -146,13 +141,11 @@ public class StrategyHelper extends GeneralStrategy {
 		// Go forwards or backwards depending on which side of the pitch we are
 		if (shouldMoveForward(targetX, targetY, worldState)
 				&& !shouldMoveBackwards) {
-			System.out.println("Moving forward towards target.");
 			RobotCommands.goStraight(robotX, robotY, targetX, targetY);
 			SimpleWorldState.previousOperation = Operation.FORWARD;
 		} else if (shouldMoveBackward(targetX, targetY, worldState)
 				&& shouldMoveBackwards) {
 			RobotCommands.goStraightBackwards(robotX, robotY, targetX, targetY);
-			System.out.println("Moving backwards towards target.");
 			SimpleWorldState.previousOperation = Operation.BACKWARD;
 		} else if (RobotPlanner.nearTarget(robotX, robotY, targetX, targetY)) {
 			if (SimpleWorldState.previousOperation == Operation.FORWARD
@@ -160,10 +153,7 @@ public class StrategyHelper extends GeneralStrategy {
 				RobotCommands.stop();
 			// 3 - Stop once we've reached target and rotate to neutral defender
 			// position, which is (facing south)
-			System.out.println("Rotating to the default angle");
 			rotateToDesiredAngle(robotAngleDeg, 90);
-		} else {
-			System.out.println("default point");
 		}
 	}
 
