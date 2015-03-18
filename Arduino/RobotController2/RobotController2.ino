@@ -33,6 +33,10 @@ int interval = 300;                         // Defines the interval between comm
 unsigned long function_run_time;            // Used in the Short Rotate Functions to measure time they have been running
 int function_running = 0;                   // Used to determine if there is a function running and which function it is
 
+//For the sensor function
+unsigned long time_since_last_run = 0;
+int sensor_state = 0;
+
 void setup() {
   pinMode(arduinoLED, OUTPUT);               // Configure the onboard LED for output
   digitalWrite(arduinoLED, LOW);             // default to LED off
@@ -102,41 +106,63 @@ void loop() {
 
   sCmd.readSerial();                         // Processes serial commands
 
-  Serial.print("Channel 0 : ");
-  readI2C(sensorAddr, ch0);
-  
- /* Serial.print("Channel 1 : ");
-  readI2C(sensorAddr, ch1);
-  
-  Serial.println();
-  */
-  delay(1000);
+
+  //Makes the sensor code run once per second. Change the int for different values
+  if(millis() > time_since_last_run + 1000) {
+    switch(sensor_state) {
+      case(0):
+       readI2C(sensorAddr, ch0);
+       time_since_last_run = time_since_last_run + 40;
+       break;
+      case(1):
+       readI2C(sensorAddr, ch0);
+       time_since_last_run = time_since_last_run + 70;
+       break;
+      case(2):
+       Serial.print("Channel 0 : ");
+       readI2C(sensorAddr, ch0);
+       time_since_last_run = millis();
+       break;
+    }
+  }
 
 }
 
 //Read data from light sensor method
 void readI2C(int portAddress, int channelAddr){
   
-  Wire.beginTransmission(portAddress); 
-  Wire.write(byte(0x18)); // Write command to assert extended range mode - 0x1D
-  delay(40);              // Write command to reset or return to standard range mode - 0x18
   
-  Wire.write(byte(0x03)); // Power-up state/Read command register
-  Wire.endTransmission(); // stop transmitting 
-  delay(70);
-  
-  Wire.beginTransmission(portAddress);             
-  Wire.write(byte(channelAddr)); // Read ADC channel 0 - 0x43 || Read ADC channel 1 - 0x83
-  Wire.endTransmission();        // stop transmitting
-  
-  Wire.requestFrom(portAddress, 1);
-  int byte_in;
-  
-  while(Wire.available())    // slave may send less than requested
-  { 
-    byte_in = Wire.read();    // receive a byte as character
-    Serial.println(byte_in);         // print the character
+  switch(sensor_state) {
+    case (0):
+      Wire.beginTransmission(portAddress); 
+      Wire.write(byte(0x18)); // Write command to assert extended range mode - 0x1D
+      //delay(40);              // Write command to reset or return to standard range mode - 0x18
+      sensor_state = 1;
+      break;
+    case(1):
+      Wire.write(byte(0x03)); // Power-up state/Read command register
+      Wire.endTransmission(); // stop transmitting 
+      //delay(70);
+      sensor_state = 2;
+      break;
+    case(2):
+      Wire.beginTransmission(portAddress);             
+      Wire.write(byte(channelAddr)); // Read ADC channel 0 - 0x43 || Read ADC channel 1 - 0x83
+      Wire.endTransmission();        // stop transmitting
+      
+      Wire.requestFrom(portAddress, 1);
+      int byte_in;
+      
+      while(Wire.available())    // slave may send less than requested
+      { 
+        byte_in = Wire.read();    // receive a byte as character
+        Serial.println(byte_in);         // print the character
+      }
+      
+      sensor_state = 0;
+      break;
   }
+  
 }
 
 // Test Commands
