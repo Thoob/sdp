@@ -129,7 +129,7 @@ public class RobotPlanner {
 
 		double deltaTotal = Math.abs(deltaX) + Math.abs(deltaY);
 
-		if (deltaTotal < 30) {
+		if (deltaTotal < 20) {
 			return true;
 		} else {
 			return false;

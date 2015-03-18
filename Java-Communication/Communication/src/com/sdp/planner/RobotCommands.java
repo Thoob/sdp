@@ -12,6 +12,11 @@ public class RobotCommands {
 		RobotCommunication.getInstance().passKick();
 	}
 
+	public static void brakeStop() {
+		System.out.println("brakeStop");
+		RobotCommunication.getInstance().move(0, 0);
+	}
+
 	public static void kick() {
 		System.out.println("kick");
 		RobotCommunication.getInstance().sendKick(400);
@@ -66,9 +71,9 @@ public class RobotCommands {
 		System.out.println("goStraightBackwards");
 		RobotCommunication.getInstance().move(-45, -45);
 	}
-	
-	public static void goStraightBackwards(double fromX, double fromY, double toX,
-			double toY) {
+
+	public static void goStraightBackwards(double fromX, double fromY,
+			double toX, double toY) {
 		System.out.println("goStraightSmart");
 		double deltaTotal = RobotPlanner.getDeltaTotal(fromX, fromY, toX, toY);
 		if (deltaTotal > 70)
@@ -80,6 +85,7 @@ public class RobotCommands {
 	public static void stop() {
 		System.out.println("stop");
 		RobotCommunication.getInstance().stop();
+		brakeStop();
 
 	}
 
