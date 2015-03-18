@@ -245,4 +245,18 @@ public class RobotPlanner {
 			return true;
 		return false;
 	}
+
+	public static boolean isInGoalRange(float[] leftGoalY, float[] rightGoalY,
+			double predictedY, boolean weAreShootingRight) {
+		System.out.println("predictedY " + predictedY + " " + leftGoalY[2]);
+		if (weAreShootingRight && leftGoalY[0] <= predictedY
+				&& leftGoalY[2] >= predictedY) {
+			return true;
+		} else if (!weAreShootingRight && rightGoalY[0] <= predictedY
+				&& rightGoalY[2] >= predictedY) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }
