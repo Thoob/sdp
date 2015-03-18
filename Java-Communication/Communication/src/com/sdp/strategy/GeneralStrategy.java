@@ -53,8 +53,9 @@ public class GeneralStrategy {
 	}
 
 	public static double getOurGoalY(WorldState worldState) {
-		return (worldState.weAreShootingRight) ? worldState.leftGoal[1]
+		double ourGoalY = (worldState.weAreShootingRight) ? worldState.leftGoal[1]
 				: worldState.rightGoal[1];
+		return ourGoalY - 20;
 	}
 
 	public static double calculateAngle(double robotX, double robotY,

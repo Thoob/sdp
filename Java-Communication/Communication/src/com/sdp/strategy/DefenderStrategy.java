@@ -2,6 +2,7 @@ package com.sdp.strategy;
 
 import java.util.ArrayList;
 
+import com.sdp.Debug;
 import com.sdp.planner.RobotCommands;
 import com.sdp.planner.RobotPlanner;
 import com.sdp.prediction.Calculations;
@@ -14,6 +15,7 @@ public class DefenderStrategy extends GeneralStrategy {
 	private Oracle predictor = null;
 	private final int framesForward = 20;
 	StrategyHelper sh;
+	boolean debug = true;
 
 	public DefenderStrategy() {
 		this.predictor = new Oracle(300, 300, 600, 600);
@@ -22,20 +24,20 @@ public class DefenderStrategy extends GeneralStrategy {
 
 	public void sendWorldState(WorldState worldState) {
 		initializeVars(worldState);
-		
+
 		boolean movingTowardsUs = isBallMovingTowardsUs(worldState);
 		double goalCenterX = getOurGoalX(worldState);
 		// TODO check if enemyAttackerHasBall?
 		boolean enemyAttackerHasBall = RobotPlanner.doesEnemyAttackerHaveBall(
 				worldState, robotX, ballX);
-		
+
 		double predictedY = getEnemyAttackerHeadingY(worldState);
 		if (enemyAttackerHasBall && predictedY != -1) {
+			Debug.out("Going to attacker heading. Go to y ", predictedY);
+
 			sh.goTo(goalCenterX, predictedY, worldState);
-			// } else if (movingTowardsUs) {
-			// defendMovingBall(worldState);
 		} else {
-			// Move to the center of the goal and head straight
+			Debug.out("Going to default position.", null);
 			double goalCenterY = getOurGoalY(worldState);
 			sh.goTo(goalCenterX, goalCenterY, worldState);
 		}
@@ -149,6 +151,8 @@ public class DefenderStrategy extends GeneralStrategy {
 
 	public static double getEnemyAttackerHeadingY(WorldState worldState) {
 		MovingObject enemyAttacker = worldState.getEnemyAttackerRobot();
+		if (enemyAttacker.x == 0 && enemyAttacker.y == 0)
+			return -1;
 		double heading = enemyAttacker.orientationAngle;
 		double angle = RobotPlanner.getAngleFromZero(heading);
 		if ((Math.abs(angle) > 50 && !worldState.weAreShootingRight)
