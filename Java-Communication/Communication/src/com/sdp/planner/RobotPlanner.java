@@ -259,4 +259,16 @@ public class RobotPlanner {
 			return false;
 		}
 	}
+
+	public static boolean isHeadingDown(double robotAngleDeg) {
+		return robotAngleDeg < 180;
+	}
+
+	public static boolean isHeadingVertically(double robotAngleDeg) {
+		if (Math.abs(robotAngleDeg - 90) < 25
+				|| Math.abs(robotAngleDeg - 270) < 25) {
+			return true;
+		}
+		return false;
+	}
 }

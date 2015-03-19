@@ -26,7 +26,6 @@ public class DefenderStrategy extends GeneralStrategy {
 		initializeVars(worldState);
 
 		boolean movingTowardsUs = isBallMovingTowardsUs(worldState);
-
 		double goalCenterX = getOurGoalX(worldState);
 		// TODO check if enemyAttackerHasBall?
 		boolean enemyAttackerHasBall = RobotPlanner.doesEnemyAttackerHaveBall(
@@ -37,41 +36,49 @@ public class DefenderStrategy extends GeneralStrategy {
 				&& RobotPlanner.isInGoalRange(leftGoalY, rightGoalY,
 						predictedY, worldState.weAreShootingRight)) {
 			Debug.out("Going to attacker heading. Go to y ", predictedY);
-
 			sh.goTo(goalCenterX, predictedY, worldState);
+		} else if (movingTowardsUs) {
+			Debug.out("Going to ball moving. Go to y ", ballY);
+			defendMovingBall(worldState);
 		} else {
-			Debug.out("Going to default position.", null);
+			Debug.out("Going to default position.");
 			double goalCenterY = getOurGoalY(worldState);
 			sh.goTo(goalCenterX, goalCenterY, worldState);
 		}
+
 	}
 
 	private void defendMovingBall(WorldState worldState) {
-		// Predicting ball's y coordinate
-		double collisionY = predictedYCoord(worldState);
-
-		// Checking if it is within goal range
+		double collisionY = ballY;
+		double goalCenterX = getOurGoalX(worldState);
 		boolean isInGoalRange = isInGoalRange(collisionY, worldState);
-		if (isInGoalRange) {
-			// Moving to this position
-			if (Math.abs(collisionY - robotY) > allowedDistError) {
-				if (shouldWeMoveForward(collisionY, robotY)) {
-					RobotCommands.goStraightFast();
-				} else if (shouldWeMoveBackward(collisionY, robotY)) {
-					RobotCommands.goStraightBackwardsFast();
-				}
-			}
-		}
 
+		if (isInGoalRange) {
+			if (RobotPlanner.isHeadingVertically(robotAngleDeg)) {
+				if (shouldWeMoveForward(collisionY, robotY, robotAngleDeg,
+						worldState)) {
+					RobotCommands.goStraightFast();
+				} else if (shouldWeMoveBackward(collisionY, robotY,
+						robotAngleDeg, worldState)) {
+					RobotCommands.goStraightBackwardsFast();
+				} else {
+					RobotCommands.brakeStop();
+				}
+			} else {
+				sh.goTo(goalCenterX, collisionY, worldState);
+			}
+		} else {
+			Debug.out("Ball is not in goal range");
+		}
 	}
 
 	private boolean isInGoalRange(double collisionY, WorldState worldState) {
 		if (worldState.weAreShootingRight) {
-			return collisionY - allowedDistError > worldState.leftGoal[0]
-					&& collisionY + allowedDistError < worldState.leftGoal[2];
+			return collisionY > worldState.leftGoal[0] - 10
+					&& collisionY < worldState.leftGoal[2] + 10;
 		} else {
-			return collisionY - allowedDistError > worldState.rightGoal[0]
-					&& collisionY + allowedDistError < worldState.rightGoal[2];
+			return collisionY > worldState.rightGoal[0] - 10
+					&& collisionY < worldState.rightGoal[2] + 10;
 		}
 	}
 
@@ -144,12 +151,25 @@ public class DefenderStrategy extends GeneralStrategy {
 		return true;
 	}
 
-	private boolean shouldWeMoveForward(double collisionY, double robotY) {
-		return collisionY < robotY && robotY > -120;
+	private boolean shouldWeMoveForward(double collisionY, double robotY,
+			double robotAngleDeg, WorldState worldState) {
+		if (Math.abs(robotY - collisionY) < 10) {
+			return false;
+		}
+		return ((collisionY > robotY && RobotPlanner
+				.isHeadingDown(robotAngleDeg)) || (collisionY < robotY && !RobotPlanner
+				.isHeadingDown(robotAngleDeg)));
 	}
 
-	private boolean shouldWeMoveBackward(double collisionY, double robotY) {
-		return collisionY > robotY && robotY < 220;
+	private boolean shouldWeMoveBackward(double collisionY, double robotY,
+			double robotAngleDeg, WorldState worldState) {
+		if (Math.abs(robotY - collisionY) < 10) {
+			return false;
+		}
+		return (collisionY < robotY && RobotPlanner
+				.isHeadingDown(robotAngleDeg))
+				|| collisionY > robotY
+				&& !RobotPlanner.isHeadingDown(robotAngleDeg);
 	}
 
 	public static double getEnemyAttackerHeadingY(WorldState worldState) {
