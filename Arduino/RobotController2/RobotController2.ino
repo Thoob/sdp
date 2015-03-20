@@ -36,6 +36,9 @@ int function_running = 0;                   // Used to determine if there is a f
 //For the sensor function
 unsigned long time_since_last_run = 0;
 int sensor_state = 0;
+boolean do_we_have_ball;
+int initial_light_value = 0;
+boolean initial_has_been_set = false;
 
 void setup() {
   pinMode(arduinoLED, OUTPUT);               // Configure the onboard LED for output
@@ -52,12 +55,14 @@ void setup() {
 
     //Movement commands
   sCmd.addCommand("MOVE", run_engine);       // Runs wheel motors
-  sCmd.addCommand("BRAKE", brake_motors);
   sCmd.addCommand("FSTOP", force_stop);      // Force stops all motors
   sCmd.addCommand("KICK", move_kick);        // Runs kick script
   sCmd.addCommand("CATCHUP", move_catchup);      // Runs catch script
   sCmd.addCommand("CATCHDOWN", move_catchdown);      // Runs catch script
 
+  sCmd.addCommand("HAVEBALL", have_ball);    //Checks if we have the ball
+  sCmd.addCommand("RESETHB", reset_have_ball); //Resets the intial value of the inital light sensor value
+  
   sCmd.addCommand("SROTL", move_shortrotL);
   sCmd.addCommand("SROTR", move_shortrotR);
 
@@ -157,12 +162,27 @@ void readI2C(int portAddress, int channelAddr){
       { 
         byte_in = Wire.read();    // receive a byte as character
         Serial.println(byte_in);         // print the character
+        
+        if(initial_has_been_set != true) {
+          initial_light_value = byte_in;
+          initial_has_been_set = true;
+        }
+        
+        do_we_have_ball = (byte_in - initial_light_value) > 30;
       }
       
       sensor_state = 0;
       break;
   }
   
+}
+
+void have_ball() {
+  Serial.println(do_we_have_ball);
+}
+
+void reset_have_ball() {
+ initial_has_been_set = false; 
 }
 
 // Test Commands
