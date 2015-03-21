@@ -30,11 +30,11 @@ public class DefenderStrategy extends GeneralStrategy {
 		// TODO check if enemyAttackerHasBall?
 		boolean enemyAttackerHasBall = RobotPlanner.doesEnemyAttackerHaveBall(
 				worldState, robotX, ballX);
-
 		double predictedY = getEnemyAttackerHeadingY(worldState);
+		System.out.println("inGoalRange "
+				+ RobotPlanner.isInGoalRange(predictedY, worldState));
 		if (enemyAttackerHasBall
-				&& RobotPlanner.isInGoalRange(leftGoalY, rightGoalY,
-						predictedY, worldState.weAreShootingRight, worldState)) {
+				&& RobotPlanner.isInGoalRange(predictedY, worldState)) {
 			Debug.out("Going to attacker heading. Go to y ", predictedY);
 			sh.goTo(goalCenterX, predictedY, worldState);
 		} else if (movingTowardsUs) {
@@ -52,7 +52,6 @@ public class DefenderStrategy extends GeneralStrategy {
 		double collisionY = ballY;
 		double goalCenterX = getOurGoalX(worldState);
 		boolean isInGoalRange = isInGoalRange(collisionY, worldState);
-
 		if (isInGoalRange) {
 			if (RobotPlanner.isHeadingVertically(robotAngleDeg)) {
 				if (shouldWeMoveForward(collisionY, robotY, robotAngleDeg,
@@ -174,6 +173,7 @@ public class DefenderStrategy extends GeneralStrategy {
 
 	public static double getEnemyAttackerHeadingY(WorldState worldState) {
 		MovingObject enemyAttacker = worldState.getEnemyAttackerRobot();
+		System.out.println("Enemy attacker Y " + enemyAttacker.y);
 		if (enemyAttacker.x == 0 && enemyAttacker.y == 0)
 			return -1;
 		double heading = enemyAttacker.orientationAngle;
@@ -183,8 +183,7 @@ public class DefenderStrategy extends GeneralStrategy {
 			return -1;
 		double deltaX = Math.abs(enemyAttacker.x - getOurGoalX(worldState));
 		double deltaY = deltaX * Math.tan(Math.toRadians(angle));
-		double predictedY = enemyAttacker.y - deltaY;
+		double predictedY = enemyAttacker.y + deltaY;
 		return predictedY;
-
 	}
 }
