@@ -74,11 +74,11 @@ public class RobotPlanner {
 			double ballX, double ballY) {
 
 		double deltaTotal = getDeltaTotal(robotX, robotY, ballX, ballY);
-		System.out.println("Distance from ball: " + deltaTotal);
+		//System.out.println("Distance from ball: " + deltaTotal);
 
 		if (deltaTotal < MAX_CATCH_DIST && deltaTotal > MIN_CATCH_DIST) {
 			return true;
-		} else if (deltaTotal < MIN_CATCH_DIST && deltaTotal > 95) {
+		} else if (deltaTotal < MIN_CATCH_DIST || deltaTotal > 95) {
 			return false;
 		} else {
 			return false;
@@ -155,6 +155,8 @@ public class RobotPlanner {
 
 	public static boolean doesOurRobotHaveBall(double robotX, double robotY,
 			double ballX, double ballY) {
+		
+		
 		int diffInPos = 30;
 		double deltaX = robotX - ballX;
 		double deltaY = robotY - ballY;

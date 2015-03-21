@@ -2,7 +2,7 @@ package com.sdp.strategy;
 
 import java.util.ArrayList;
 
-import com.sdp.Debug;
+//import com.sdp.Debug;
 import com.sdp.planner.RobotCommands;
 import com.sdp.planner.RobotPlanner;
 import com.sdp.prediction.Oracle;
@@ -39,16 +39,16 @@ public class DefenderStrategy extends GeneralStrategy {
 		System.out.println("robotX " + ourRobotAvg.x + " robotY " + robotY);
 		double predictedY = getEnemyAttackerHeadingY(worldState);
 		if (movingTowardsUs) {
-			Debug.out("Going to ball moving. Go to y ", ballY);
+//			Debug.out("Going to ball moving. Go to y ", ballY);
 			defendMovingBall(worldState);
 		} else if (enemyAttackerHasBall
 				&& RobotPlanner.isInGoalRange(predictedY, worldState)) {
-			Debug.out("Going to attacker heading. Go to y ", predictedY);
+//			Debug.out("Going to attacker heading. Go to y ", predictedY);
 			double goalCenterX = getOurGoalX(worldState);
 			sh.goTo(goalCenterX, predictedY, ourRobotAvg.x, ourRobotAvg.y,
 					worldState);
 		} else {
-			Debug.out("Going to default position.");
+//			Debug.out("Going to default position.");
 			double goalCenterY = getOurGoalY(worldState);
 			double goalCenterX = getOurGoalX(worldState);
 			sh.goTo(goalCenterX, goalCenterY, ourRobotAvg.x, ourRobotAvg.y,
@@ -91,7 +91,7 @@ public class DefenderStrategy extends GeneralStrategy {
 						worldState);
 			}
 		} else {
-			Debug.out("Ball is not in goal range");
+//			Debug.out("Ball is not in goal range");
 		}
 	}
 
