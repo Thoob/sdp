@@ -26,7 +26,7 @@ public class DefenderStrategy extends GeneralStrategy {
 		boolean movingTowardsUs = isBallMovingTowardsUs(worldState);
 		boolean enemyAttackerHasBall = RobotPlanner.doesEnemyAttackerHaveBall(
 				worldState, robotX, ballX);
-		
+		System.out.println("robotX " + robotX + " robotY " + robotY);
 		double predictedY = getEnemyAttackerHeadingY(worldState);
 		if (movingTowardsUs) {
 			Debug.out("Going to ball moving. Go to y ", ballY);
@@ -86,17 +86,6 @@ public class DefenderStrategy extends GeneralStrategy {
 			}
 			return false;
 		}
-	}
-
-	private boolean isBallShaky(Point2 ballPos, Point2 predictedPos) {
-		double crosshairThreshX = Math
-				.abs(ballPos.getX() - predictedPos.getX());
-		double crosshairThreshY = Math
-				.abs(ballPos.getY() - predictedPos.getY());
-		if (crosshairThreshX > 2 || crosshairThreshY > 2) {
-			return false;
-		}
-		return true;
 	}
 
 	private boolean shouldWeMoveForward(double collisionY, double robotY,

@@ -229,7 +229,7 @@ public class RobotPlanner {
 		}
 	}
 
-	// TODO implement
+	// TODO improve?
 	public static boolean doesEnemyAttackerHaveBall(WorldState worldState,
 			double robotX, double ballX) {
 		if (RobotPlanner.inZone(robotX, worldState) == RobotPlanner.inZone(
