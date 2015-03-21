@@ -16,7 +16,6 @@ public class StrategyHelper extends GeneralStrategy {
 
 	private boolean isRobotFacingBall = false;
 	private boolean isRobotFacingTarget = false;
-	// private boolean isRobotFacingAwayFromTarget = false;
 	private boolean isNearTarget = false;
 
 	void acquireBall(WorldState worldState) {
@@ -113,9 +112,10 @@ public class StrategyHelper extends GeneralStrategy {
 		}
 	}
 
-	void goTo(double targetX, double targetY, WorldState worldState) {
+	void goTo(double targetX, double targetY, double robotX, double robotY,
+			WorldState worldState) {
 		initializeVars(worldState);
-		
+
 		isNearTarget = (RobotPlanner.nearTarget(robotX, robotY, targetX,
 				targetY));
 		// Desired angle to face target
@@ -151,9 +151,10 @@ public class StrategyHelper extends GeneralStrategy {
 			if (SimpleWorldState.previousOperation == Operation.FORWARD
 					|| SimpleWorldState.previousOperation == Operation.BACKWARD)
 				RobotCommands.stop();
+
 			// 3 - Stop once we've reached target and rotate to neutral defender
-			// position, which is (facing south)
-			rotateToDesiredAngle(robotAngleDeg, 90);
+			double neutralAngle = (robotAngleDeg > 180) ? 270 : 90;
+			rotateToDesiredAngle(robotAngleDeg, neutralAngle);
 		}
 	}
 

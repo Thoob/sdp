@@ -14,6 +14,9 @@ public class DefenderStrategy extends GeneralStrategy {
 	private Oracle predictor = null;
 	private final int framesForward = 20;
 	StrategyHelper sh;
+	private final int FRAMES_TO_AVERAGE = 3;
+	private int currentFrames = 0;
+	MovingObject ourRobotAvg;
 
 	public DefenderStrategy() {
 		this.predictor = new Oracle(300, 300, 600, 600);
@@ -23,10 +26,17 @@ public class DefenderStrategy extends GeneralStrategy {
 	public void sendWorldState(WorldState worldState) {
 		initializeVars(worldState);
 
+		if (currentFrames < FRAMES_TO_AVERAGE) {
+			calcOurRobotAvg(worldState.getDefenderRobot());
+			currentFrames++;
+		} else {
+			currentFrames = 0;
+		}
+
 		boolean movingTowardsUs = isBallMovingTowardsUs(worldState);
 		boolean enemyAttackerHasBall = RobotPlanner.doesEnemyAttackerHaveBall(
-				worldState, robotX, ballX);
-		System.out.println("robotX " + robotX + " robotY " + robotY);
+				worldState, ourRobotAvg.x, ballX);
+		System.out.println("robotX " + ourRobotAvg.x + " robotY " + robotY);
 		double predictedY = getEnemyAttackerHeadingY(worldState);
 		if (movingTowardsUs) {
 			Debug.out("Going to ball moving. Go to y ", ballY);
@@ -35,12 +45,28 @@ public class DefenderStrategy extends GeneralStrategy {
 				&& RobotPlanner.isInGoalRange(predictedY, worldState)) {
 			Debug.out("Going to attacker heading. Go to y ", predictedY);
 			double goalCenterX = getOurGoalX(worldState);
-			sh.goTo(goalCenterX, predictedY, worldState);
+			sh.goTo(goalCenterX, predictedY, ourRobotAvg.x, ourRobotAvg.y,
+					worldState);
 		} else {
 			Debug.out("Going to default position.");
 			double goalCenterY = getOurGoalY(worldState);
 			double goalCenterX = getOurGoalX(worldState);
-			sh.goTo(goalCenterX, goalCenterY, worldState);
+			sh.goTo(goalCenterX, goalCenterY, ourRobotAvg.x, ourRobotAvg.y,
+					worldState);
+		}
+	}
+
+	private void calcOurRobotAvg(MovingObject ourRobot) {
+		if (currentFrames == 0)
+			ourRobotAvg = ourRobot;
+		else {
+			ourRobotAvg.x = (ourRobotAvg.x * currentFrames + ourRobot.x)
+					/ (currentFrames + 1);
+			ourRobotAvg.y = (ourRobotAvg.y * currentFrames + ourRobot.y)
+					/ (currentFrames + 1);
+			ourRobotAvg.orientationAngle = (ourRobotAvg.orientationAngle
+					* currentFrames + ourRobot.orientationAngle)
+					/ (currentFrames + 1);
 		}
 	}
 
@@ -61,7 +87,8 @@ public class DefenderStrategy extends GeneralStrategy {
 					RobotCommands.brakeStop();
 				}
 			} else {
-				sh.goTo(goalCenterX, collisionY, worldState);
+				sh.goTo(goalCenterX, collisionY, ourRobotAvg.x, ourRobotAvg.y,
+						worldState);
 			}
 		} else {
 			Debug.out("Ball is not in goal range");
