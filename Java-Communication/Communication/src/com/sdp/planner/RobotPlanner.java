@@ -247,13 +247,9 @@ public class RobotPlanner {
 		return false;
 	}
 
-	public static boolean isInGoalRange(
-			double predictedY, WorldState worldState) {
+	public static boolean isInGoalRange(double predictedY, WorldState worldState) {
 		float[] ourGoal = GeneralStrategy.getOurGoalYArr(worldState);
-		System.out.println("predictedY " + predictedY + " ourGoal[0] "
-				+ ourGoal[0] + " ourGoal[2] " + ourGoal[2]);
-		if (ourGoal[0] <= predictedY
-				&& ourGoal[2] >= predictedY) {
+		if (ourGoal[0] - 10 <= predictedY && ourGoal[2] + 10 >= predictedY) {
 			return true;
 		} else {
 			return false;

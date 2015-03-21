@@ -114,7 +114,5 @@ public class GeneralStrategy {
 		TRCorner = PitchConstants.getPitchOutlineTR();
 		BLCorner = PitchConstants.getPitchOutlineBL();
 		BRCorner = PitchConstants.getPitchOutlineBR();
-
 	}
-
 }

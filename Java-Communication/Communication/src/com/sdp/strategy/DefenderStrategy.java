@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import com.sdp.Debug;
 import com.sdp.planner.RobotCommands;
 import com.sdp.planner.RobotPlanner;
-import com.sdp.prediction.Calculations;
 import com.sdp.prediction.Oracle;
 import com.sdp.world.MovingObject;
 import com.sdp.world.Point2;
@@ -24,24 +23,23 @@ public class DefenderStrategy extends GeneralStrategy {
 	public void sendWorldState(WorldState worldState) {
 		initializeVars(worldState);
 
-		double goalCenterX = getOurGoalX(worldState);
-
 		boolean movingTowardsUs = isBallMovingTowardsUs(worldState);
-
-		// TODO check if enemyAttackerHasBall?
 		boolean enemyAttackerHasBall = RobotPlanner.doesEnemyAttackerHaveBall(
 				worldState, robotX, ballX);
+		
 		double predictedY = getEnemyAttackerHeadingY(worldState);
-		if (enemyAttackerHasBall
-				&& RobotPlanner.isInGoalRange(predictedY, worldState)) {
-			Debug.out("Going to attacker heading. Go to y ", predictedY);
-			sh.goTo(goalCenterX, predictedY, worldState);
-		} else if (movingTowardsUs) {
+		if (movingTowardsUs) {
 			Debug.out("Going to ball moving. Go to y ", ballY);
 			defendMovingBall(worldState);
+		} else if (enemyAttackerHasBall
+				&& RobotPlanner.isInGoalRange(predictedY, worldState)) {
+			Debug.out("Going to attacker heading. Go to y ", predictedY);
+			double goalCenterX = getOurGoalX(worldState);
+			sh.goTo(goalCenterX, predictedY, worldState);
 		} else {
 			Debug.out("Going to default position.");
 			double goalCenterY = getOurGoalY(worldState);
+			double goalCenterX = getOurGoalX(worldState);
 			sh.goTo(goalCenterX, goalCenterY, worldState);
 		}
 	}
@@ -49,7 +47,8 @@ public class DefenderStrategy extends GeneralStrategy {
 	private void defendMovingBall(WorldState worldState) {
 		double collisionY = ballY;
 		double goalCenterX = getOurGoalX(worldState);
-		boolean isInGoalRange = isInGoalRange(collisionY, worldState);
+		boolean isInGoalRange = RobotPlanner.isInGoalRange(collisionY,
+				worldState);
 		if (isInGoalRange) {
 			if (RobotPlanner.isHeadingVertically(robotAngleDeg)) {
 				if (shouldWeMoveForward(collisionY, robotY, robotAngleDeg,
@@ -66,34 +65,6 @@ public class DefenderStrategy extends GeneralStrategy {
 			}
 		} else {
 			Debug.out("Ball is not in goal range");
-		}
-	}
-
-	private boolean isInGoalRange(double collisionY, WorldState worldState) {
-		if (worldState.weAreShootingRight) {
-			return collisionY > worldState.leftGoal[0] - 10
-					&& collisionY < worldState.leftGoal[2] + 10;
-		} else {
-			return collisionY > worldState.rightGoal[0] - 10
-					&& collisionY < worldState.rightGoal[2] + 10;
-		}
-	}
-
-	private float getSlope(WorldState worldState) {
-		ArrayList<Point2> ballPositionHistory = worldState
-				.getBallPositionHistory();
-		Point2 ballPos = new Point2((float) ballX, (float) ballY);
-		Point2 predictedPos = this.predictor.predictState(ballPositionHistory,
-				framesForward);
-		System.out.println("current pos " + ballPos.getY() + " Predicted pos "
-				+ predictedPos.getY());
-		float slope = Calculations.getSlopeOfLine(ballPos, predictedPos);
-
-		boolean shaky = isBallShaky(ballPos, predictedPos);
-		if (Float.isInfinite(slope) || shaky) {
-			return 0;
-		} else {
-			return slope;
 		}
 	}
 
@@ -115,25 +86,6 @@ public class DefenderStrategy extends GeneralStrategy {
 			}
 			return false;
 		}
-	}
-
-	private double predictedYCoord(WorldState worldState) {
-		float slope = getSlope(worldState);
-
-		double collisionX = robotX;
-		double collisionY = -1;
-		if (slope * collisionX > leftGoalY[2]) {
-			collisionY = leftGoalY[2];
-		} else if (slope * collisionX < leftGoalY[0]) {
-			collisionY = leftGoalY[0];
-		} else {
-			collisionY = collisionX * slope;
-		}
-
-		System.out.println("Collision coordinates " + collisionX + " "
-				+ collisionY);
-
-		return robotY;
 	}
 
 	private boolean isBallShaky(Point2 ballPos, Point2 predictedPos) {
