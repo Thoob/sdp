@@ -34,7 +34,7 @@ public class DefenderStrategy extends GeneralStrategy {
 		double predictedY = getEnemyAttackerHeadingY(worldState);
 		if (enemyAttackerHasBall
 				&& RobotPlanner.isInGoalRange(leftGoalY, rightGoalY,
-						predictedY, worldState.weAreShootingRight)) {
+						predictedY, worldState.weAreShootingRight, worldState)) {
 			Debug.out("Going to attacker heading. Go to y ", predictedY);
 			sh.goTo(goalCenterX, predictedY, worldState);
 		} else if (movingTowardsUs) {

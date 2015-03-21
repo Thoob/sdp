@@ -2,6 +2,7 @@ package com.sdp.planner;
 
 import java.awt.geom.Point2D;
 
+import com.sdp.strategy.GeneralStrategy;
 import com.sdp.world.DynamicWorldState.Robot;
 import com.sdp.world.SimpleWorldState;
 import com.sdp.world.SimpleWorldState.Operation;
@@ -247,13 +248,12 @@ public class RobotPlanner {
 	}
 
 	public static boolean isInGoalRange(float[] leftGoalY, float[] rightGoalY,
-			double predictedY, boolean weAreShootingRight) {
-		System.out.println("predictedY " + predictedY + " " + leftGoalY[2]);
-		if (weAreShootingRight && leftGoalY[0] <= predictedY
-				&& leftGoalY[2] >= predictedY) {
-			return true;
-		} else if (!weAreShootingRight && rightGoalY[0] <= predictedY
-				&& rightGoalY[2] >= predictedY) {
+			double predictedY, boolean weAreShootingRight, WorldState worldState) {
+		float[] ourGoal = GeneralStrategy.getOurGoalYArr(worldState);
+		System.out.println("predictedY " + predictedY + " ourGoal[0] "
+				+ ourGoal[0] + " ourGoal[2] " + ourGoal[2]);
+		if (weAreShootingRight && ourGoal[0] >= predictedY
+				&& ourGoal[2] <= predictedY) {
 			return true;
 		} else {
 			return false;
