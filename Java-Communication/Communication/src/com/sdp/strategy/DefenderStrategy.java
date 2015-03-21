@@ -15,7 +15,6 @@ public class DefenderStrategy extends GeneralStrategy {
 	private Oracle predictor = null;
 	private final int framesForward = 20;
 	StrategyHelper sh;
-	boolean debug = true;
 
 	public DefenderStrategy() {
 		this.predictor = new Oracle(300, 300, 600, 600);
@@ -25,14 +24,14 @@ public class DefenderStrategy extends GeneralStrategy {
 	public void sendWorldState(WorldState worldState) {
 		initializeVars(worldState);
 
-		boolean movingTowardsUs = isBallMovingTowardsUs(worldState);
 		double goalCenterX = getOurGoalX(worldState);
+
+		boolean movingTowardsUs = isBallMovingTowardsUs(worldState);
+
 		// TODO check if enemyAttackerHasBall?
 		boolean enemyAttackerHasBall = RobotPlanner.doesEnemyAttackerHaveBall(
 				worldState, robotX, ballX);
 		double predictedY = getEnemyAttackerHeadingY(worldState);
-		System.out.println("inGoalRange "
-				+ RobotPlanner.isInGoalRange(predictedY, worldState));
 		if (enemyAttackerHasBall
 				&& RobotPlanner.isInGoalRange(predictedY, worldState)) {
 			Debug.out("Going to attacker heading. Go to y ", predictedY);
@@ -45,7 +44,6 @@ public class DefenderStrategy extends GeneralStrategy {
 			double goalCenterY = getOurGoalY(worldState);
 			sh.goTo(goalCenterX, goalCenterY, worldState);
 		}
-
 	}
 
 	private void defendMovingBall(WorldState worldState) {
@@ -102,7 +100,6 @@ public class DefenderStrategy extends GeneralStrategy {
 	private boolean isBallMovingTowardsUs(WorldState worldState) {
 		ArrayList<Point2> ballPositionHistory = worldState
 				.getBallPositionHistory();
-
 		boolean predictionIsGenerated = ballPositionHistory.size() > framesForward;
 		if (!predictionIsGenerated)
 			return false;
@@ -173,7 +170,6 @@ public class DefenderStrategy extends GeneralStrategy {
 
 	public static double getEnemyAttackerHeadingY(WorldState worldState) {
 		MovingObject enemyAttacker = worldState.getEnemyAttackerRobot();
-		System.out.println("Enemy attacker Y " + enemyAttacker.y);
 		if (enemyAttacker.x == 0 && enemyAttacker.y == 0)
 			return -1;
 		double heading = enemyAttacker.orientationAngle;
