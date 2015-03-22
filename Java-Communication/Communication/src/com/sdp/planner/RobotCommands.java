@@ -85,8 +85,6 @@ public class RobotCommands {
 	public static void stop() {
 		System.out.println("stop");
 		RobotCommunication.getInstance().stop();
-		brakeStop();
-
 	}
 
 	public static void catchUp() {

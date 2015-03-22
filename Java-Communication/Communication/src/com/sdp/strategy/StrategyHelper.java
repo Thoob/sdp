@@ -112,6 +112,74 @@ public class StrategyHelper extends GeneralStrategy {
 		}
 	}
 
+	void rotateToDesiredAngleForDef(double robotAngleDeg, double desiredAngleDeg) {
+		double diffInHeadings = Math.abs(robotAngleDeg - desiredAngleDeg);
+		if ((diffInHeadings < 25) || (diffInHeadings > 360 - 25)) {
+			if (SimpleWorldState.previousOperation == Operation.RIGHT
+					|| SimpleWorldState.previousOperation == Operation.LEFT) {
+				RobotCommands.brakeStop();
+				SimpleWorldState.previousOperation = Operation.NONE;
+			}
+		} else {
+			boolean shouldRotateRight = RobotPlanner.shouldRotateRight(
+					desiredAngleDeg, robotAngleDeg);
+			if (shouldRotateRight
+					&& SimpleWorldState.previousOperation != Operation.RIGHT) {
+				RobotCommands.rotateRight();
+				SimpleWorldState.previousOperation = Operation.RIGHT;
+			} else if (!shouldRotateRight
+					&& SimpleWorldState.previousOperation != Operation.LEFT) {
+				RobotCommands.rotateLeft();
+				SimpleWorldState.previousOperation = Operation.LEFT;
+			}
+			return;
+		}
+	}
+
+	void goToForDef(double targetX, double targetY, double robotX,
+			double robotY, WorldState worldState) {
+		initializeVars(worldState);
+
+		isNearTarget = (RobotPlanner.nearTargetForDef(robotY, targetY));
+		System.out.println("goTo for def " + targetY + " robotY " + robotY
+				+ " near " + isNearTarget);
+		if (isNearTarget || !isSameZone(robotX, targetX, worldState)) {
+			RobotCommands.brakeStop();
+			//RobotCommands.stop();
+		} else {
+			// Desired angle to face target
+			double targetAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
+					targetX, targetY);
+
+			boolean shouldMoveBackwards = RobotPlanner.shouldMoveBackwards(
+					robotAngleDeg, targetAngleDeg);
+			if (shouldMoveBackwards)
+				targetAngleDeg = RobotPlanner.getOppositeAngle(targetAngleDeg);
+
+			double targetDiffInHeadings = Math.abs(robotAngleDeg
+					- targetAngleDeg);
+			System.out.println("targetAngleDeg = " + targetAngleDeg
+					+ " robotAngle " + robotAngleDeg + " diffInHeadings= "
+					+ targetDiffInHeadings);
+
+			boolean isRobotFacingTarget = (targetDiffInHeadings < allowedDegreeError || targetDiffInHeadings > 360 - allowedDegreeError);
+			// 1 - Rotate to face target
+			if (!isRobotFacingTarget && !isNearTarget) {
+				rotateToDesiredAngleForDef(robotAngleDeg, targetAngleDeg);
+				return;
+			}
+
+			if (!shouldMoveBackwards) {
+				RobotCommands.goStraight(robotX, robotY, targetX, targetY);
+				SimpleWorldState.previousOperation = Operation.FORWARD;
+			} else if (shouldMoveBackwards) {
+				RobotCommands.goStraightBackwards(robotX, robotY, targetX,
+						targetY);
+				SimpleWorldState.previousOperation = Operation.BACKWARD;
+			}
+		}
+	}
+
 	void goTo(double targetX, double targetY, double robotX, double robotY,
 			WorldState worldState) {
 		initializeVars(worldState);

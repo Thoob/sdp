@@ -55,7 +55,7 @@ public class GeneralStrategy {
 	public static double getOurGoalY(WorldState worldState) {
 		double ourGoalY = (worldState.weAreShootingRight) ? worldState.leftGoal[1]
 				: worldState.rightGoal[1];
-		return ourGoalY + 20;
+		return ourGoalY;
 	}
 
 	public static float[] getOurGoalYArr(WorldState worldState) {

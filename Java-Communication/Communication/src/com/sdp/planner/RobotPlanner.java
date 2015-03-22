@@ -130,7 +130,17 @@ public class RobotPlanner {
 
 		double deltaTotal = Math.abs(deltaX) + Math.abs(deltaY);
 
-		if (deltaTotal < 20) {
+		if (deltaTotal < 15) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public static boolean nearTargetForDef(double robotY, double targetY) {
+		double deltaY = robotY - targetY;
+
+		if (Math.abs(deltaY) < 10) {
 			return true;
 		} else {
 			return false;
