@@ -93,7 +93,6 @@ void loop() {
       leftStop();
       rightStop();
       function_running = 0;
-      stop_flag = 0;
     }
     break;
   case 2:
@@ -101,7 +100,6 @@ void loop() {
       leftStop();
       rightStop();
       function_running = 0;
-      stop_flag = 0;
     }
     break;
 
@@ -117,15 +115,18 @@ void loop() {
     switch(sensor_state) {
       case(0):
        readI2C(sensorAddr, ch0);
+       sensor_state = 1;
        time_since_last_run = time_since_last_run + 40;
        break;
       case(1):
        readI2C(sensorAddr, ch0);
+       sensor_state = 2;
        time_since_last_run = time_since_last_run + 70;
        break;
       case(2):
        Serial.print("Channel 0 : ");
        readI2C(sensorAddr, ch0);
+       sensor_state = 0;
        time_since_last_run = millis();
        break;
     }
@@ -142,7 +143,6 @@ void readI2C(int portAddress, int channelAddr){
       Wire.beginTransmission(portAddress); 
       Wire.write(byte(0x18)); // Write command to assert extended range mode - 0x1D
       //delay(40);              // Write command to reset or return to standard range mode - 0x18
-      sensor_state = 1;
       break;
     case(1):
       Wire.write(byte(0x03)); // Power-up state/Read command register
@@ -170,8 +170,6 @@ void readI2C(int portAddress, int channelAddr){
         
         do_we_have_ball = (byte_in - initial_light_value) > 30;
       }
-      
-      sensor_state = 0;
       break;
   }
   
@@ -215,19 +213,17 @@ void run_engine() {
 
 
 
-  //Stops the motors when the signal given is 0
+  //Stops the motors when the signal given is 0 0
   if(new_left_power == 0 && new_right_power == 0){
-    left_power = 0;
-    right_power = 0;
     if(!stop_flag) {
       brake_motors();
       stop_flag = 1;
     }
-  } 
-  else
-  {
-    function_running = 0;
+  } else {
+    stop_flag = 0;
   }
+    
+  function_running = 0;
     
 
 
@@ -408,6 +404,7 @@ void move_shortrotL() {
 
     motorForward(right, srot_power);
     motorBackward(left, srot_power);
+    stop_flag = 0;
 
     function_running = 1;
     function_run_time = millis();
@@ -443,6 +440,7 @@ void move_shortrotR() {
 
     motorForward(left, srot_power);
     motorBackward(right, srot_power);
+    stop_flag = 0;
 
     function_running = 2;
     function_run_time = millis();
@@ -487,6 +485,8 @@ void unrecognized(const char *command) {
 }
 
 void brake_motors(){
+  left_power = 0;
+  right_power = 0;
   function_running = 1;
   interval = 100;
   function_run_time = millis();
