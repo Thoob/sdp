@@ -225,6 +225,34 @@ public class StrategyHelper extends GeneralStrategy {
 			rotateToDesiredAngle(robotAngleDeg, neutralAngle);
 		}
 	}
+	
+	void goToPoint(double targetX, double targetY, double robotX, double robotY,
+					WorldState worldState) {
+		System.out.println("trying to acquire the ball (GTP)");
+		initializeVars(worldState);
+		// Desired angle to face ball
+		double ballAngleDeg = RobotPlanner.desiredAngle(robotX, robotY, targetX,
+				targetY);
+		double ballDiffInHeadings = Math.abs(robotAngleDeg - ballAngleDeg);
+		// Robot is facing the ball if within this angle in degrees of the ball
+		boolean isRobotFacingtarget = (ballDiffInHeadings < allowedDegreeError || ballDiffInHeadings > 360 - allowedDegreeError);
+
+		// 1 - Rotate to face ball
+		if (!isRobotFacingtarget) {
+			rotateToDesiredAngle(robotAngleDeg, ballAngleDeg);
+			System.out.println("Rotating");
+		}
+
+		// 2 - Go towards ball if it is in our zone
+		/* Frame counter may be useful here later */
+		if (isRobotFacingBall
+				&& (RobotPlanner.inZone(ballX, worldState) == RobotPlanner
+						.inZone(robotX, worldState))) {
+			RobotCommands.goStraight();
+			SimpleWorldState.previousOperation = Operation.NONE;
+			System.out.println("Moving.");
+		}
+	}
 
 	private boolean shouldMoveBackward(double targetX, double targetY,
 			WorldState worldState) {
