@@ -34,6 +34,17 @@ public class RobotCommunication {
 		String command = "CATCH\n";
 		Communication.getInstance().sendCommandViaPort(command);
 	}
+	
+	public String haveBall() {
+		String command = "HAVEBALL\n";
+		Communication.getInstance().sendCommandViaPort(command);
+//		String result = null;
+//		while (result == null) {
+//			result = Communication.getInstance().readStringFromSerialPort();
+//		}
+//		System.out.println(result);
+		return "NO";
+	}
 
 	public void stop() {
 		String command = "MOVE 0 0\n";

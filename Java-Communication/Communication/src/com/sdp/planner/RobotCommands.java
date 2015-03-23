@@ -21,6 +21,12 @@ public class RobotCommands {
 		System.out.println("kick");
 		RobotCommunication.getInstance().sendKick(400);
 	}
+	
+	public static String haveBall() {
+		System.out.println("haveBall");
+		//System.out.println(RobotCommunication.getInstance().haveBall());
+		return RobotCommunication.getInstance().haveBall();
+	}
 
 	public static void shortRotateLeft() {
 		System.out.println("shortRotateLeft");

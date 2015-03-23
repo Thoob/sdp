@@ -178,6 +178,12 @@ public class RobotPlanner {
 		} else {
 			return false;
 		}
+		
+//		if(RobotCommands.haveBall().equals("YES"))
+//			return true;
+//		else
+//			return false;
+		
 	}
 
 	public static double desiredAngle(double robotX, double robotY,
