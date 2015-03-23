@@ -46,10 +46,15 @@ public class DefenderStrategy extends GeneralStrategy {
 				&& RobotPlanner.isInGoalRange(predictedY, worldState)) {
 			Debug.out("Going to attacker heading. Go to y ", predictedY);
 			double goalCenterX = getOurGoalX(worldState);
-			sh.goToForDef(goalCenterX, predictedY, ourRobotAvg.x,
-					ourRobotAvg.y, worldState);
-			double neutralAngle = (robotAngleDeg > 180) ? 270 : 90;
-			sh.rotateToDesiredAngle(robotAngleDeg, neutralAngle);
+			boolean shouldGoTo = shouldGoTo(goalCenterX, predictedY,
+					ourRobotAvg.x, ourRobotAvg.y, worldState);
+			if (shouldGoTo)
+				sh.goToForDef(goalCenterX, predictedY, ourRobotAvg.x,
+						ourRobotAvg.y, worldState);
+			else {
+				double neutralAngle = (robotAngleDeg > 180) ? 270 : 90;
+				sh.rotateToDesiredAngleForDef(robotAngleDeg, neutralAngle, true);
+			}
 		} else {
 			Debug.out("Going to default position.");
 			double goalCenterY = getOurGoalY(worldState);
