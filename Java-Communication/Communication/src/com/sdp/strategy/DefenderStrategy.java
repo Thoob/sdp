@@ -46,18 +46,37 @@ public class DefenderStrategy extends GeneralStrategy {
 				&& RobotPlanner.isInGoalRange(predictedY, worldState)) {
 			Debug.out("Going to attacker heading. Go to y ", predictedY);
 			double goalCenterX = getOurGoalX(worldState);
-			sh.goToForDef(goalCenterX, predictedY, ourRobotAvg.x, ourRobotAvg.y,
-					worldState);
+			sh.goToForDef(goalCenterX, predictedY, ourRobotAvg.x,
+					ourRobotAvg.y, worldState);
 			double neutralAngle = (robotAngleDeg > 180) ? 270 : 90;
 			sh.rotateToDesiredAngle(robotAngleDeg, neutralAngle);
 		} else {
 			Debug.out("Going to default position.");
 			double goalCenterY = getOurGoalY(worldState);
 			double goalCenterX = getOurGoalX(worldState);
-			sh.goToForDef(goalCenterX, goalCenterY, ourRobotAvg.x, ourRobotAvg.y,
-					worldState);
-			double neutralAngle = (robotAngleDeg > 180) ? 270 : 90;
-			sh.rotateToDesiredAngle(robotAngleDeg, neutralAngle);
+
+			boolean shouldGoTo = shouldGoTo(goalCenterX, goalCenterY,
+					ourRobotAvg.x, ourRobotAvg.y, worldState);
+			if (shouldGoTo)
+				sh.goToForDef(goalCenterX, goalCenterY, ourRobotAvg.x,
+						ourRobotAvg.y, worldState);
+			else {
+				double neutralAngle = (robotAngleDeg > 180) ? 270 : 90;
+				Debug.out("Rotating to neutral angle ", neutralAngle);
+				sh.rotateToDesiredAngleForDef(robotAngleDeg, neutralAngle, true);
+			}
+		}
+	}
+
+	private boolean shouldGoTo(double targetX, double targetY, double robotX,
+			double robotY, WorldState worldState) {
+		boolean isNearTarget = (RobotPlanner.nearTargetForDef(robotY, targetY));
+		System.out.println("goTo for def " + targetY + " robotY " + robotY
+				+ " near " + isNearTarget);
+		if (isNearTarget || !sh.isSameZone(robotX, targetX, worldState)) {
+			return false;
+		} else {
+			return true;
 		}
 	}
 
@@ -96,7 +115,7 @@ public class DefenderStrategy extends GeneralStrategy {
 						worldState);
 			}
 		} else {
-//			Debug.out("Ball is not in goal range");
+			// Debug.out("Ball is not in goal range");
 		}
 	}
 
