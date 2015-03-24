@@ -20,7 +20,7 @@ public class RobotCommunication {
 	}
 
 	public void passKick() {
-		String command = String.format("KICK 400 70\n");
+		String command = String.format("KICK 400 100\n");
 		Communication.getInstance().sendCommandViaPort(command);
 	}
 

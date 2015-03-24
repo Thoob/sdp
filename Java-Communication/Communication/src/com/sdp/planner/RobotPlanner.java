@@ -4,8 +4,6 @@ import java.awt.geom.Point2D;
 
 import com.sdp.strategy.GeneralStrategy;
 import com.sdp.world.DynamicWorldState.Robot;
-import com.sdp.world.SimpleWorldState;
-import com.sdp.world.SimpleWorldState.Operation;
 import com.sdp.world.WorldState;
 
 public class RobotPlanner {
@@ -163,16 +161,15 @@ public class RobotPlanner {
 		}
 	}
 
-	public static boolean doesOurRobotHaveBall(boolean isBallNotOnPitch, double robotX, double robotY,
-			double ballX, double ballY) {
+	public static boolean doesOurRobotHaveBall(boolean isBallNotOnPitch,
+			double robotX, double robotY, double ballX, double ballY) {
 
-		int diffInPos = 22;
+		int diffInPos = 27;
 		double deltaX = robotX - ballX;
 		double deltaY = robotY - ballY;
 		double deltaTotal = Math.abs(deltaX) + Math.abs(deltaY);
 
-		if (SimpleWorldState.previousOperation == Operation.CATCH
-				&& deltaTotal < diffInPos ||isBallNotOnPitch) {
+		if ( deltaTotal < diffInPos || isBallNotOnPitch) {
 			return true;
 		} else {
 			return false;
