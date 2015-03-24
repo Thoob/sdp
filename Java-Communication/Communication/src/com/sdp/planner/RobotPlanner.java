@@ -73,7 +73,8 @@ public class RobotPlanner {
 	public static boolean canCatchBall(double robotX, double robotY,
 			double ballX, double ballY) {
 
-		double deltaTotal = getDeltaTotal(robotX, robotY, ballX, ballY);;
+		double deltaTotal = getDeltaTotal(robotX, robotY, ballX, ballY);
+		;
 
 		if (deltaTotal < MAX_CATCH_DIST && deltaTotal > MIN_CATCH_DIST) {
 			return true;
@@ -90,7 +91,7 @@ public class RobotPlanner {
 		double deltaY = robotY - ballY;
 
 		double deltaTotal = Math.abs(deltaX) + Math.abs(deltaY);
-		System.out.println("Distance from ball: " + deltaTotal);
+		System.out.println("Distance from ball(prep): " + deltaTotal);
 
 		if (deltaTotal < MAX_CATCH_DIST * 2) {
 			return true;
@@ -115,7 +116,7 @@ public class RobotPlanner {
 		double deltaTotal = Math.abs(deltaX) + Math.abs(deltaY);
 		System.out.println("Distance from ball: " + deltaTotal);
 
-		if (deltaTotal < MAX_CATCH_DIST && deltaTotal > MIN_CATCH_DIST) {
+		if (deltaTotal < MAX_CATCH_DIST) {
 			return true;
 		} else {
 			return false;
@@ -164,25 +165,24 @@ public class RobotPlanner {
 
 	public static boolean doesOurRobotHaveBall(double robotX, double robotY,
 			double ballX, double ballY) {
-		
-		
-		int diffInPos = 30;
+
+		int diffInPos = 22;
 		double deltaX = robotX - ballX;
 		double deltaY = robotY - ballY;
 		double deltaTotal = Math.abs(deltaX) + Math.abs(deltaY);
 
 		if (SimpleWorldState.previousOperation == Operation.CATCH
-				&& deltaTotal < diffInPos || ballX == 0 && ballY == 0) {
+				&& deltaTotal < diffInPos || (ballX == 0 && ballY == 0)) {
 			return true;
 		} else {
 			return false;
 		}
-		
-//		if(RobotCommands.haveBall().equals("YES"))
-//			return true;
-//		else
-//			return false;
-		
+
+		// if(RobotCommands.haveBall().equals("YES"))
+		// return true;
+		// else
+		// return false;
+
 	}
 
 	public static double desiredAngle(double robotX, double robotY,

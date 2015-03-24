@@ -35,7 +35,9 @@ public class PassingStrategy extends GeneralStrategy {
 		boolean doWeHaveBall = RobotPlanner.doesOurRobotHaveBall(robotX,
 				robotY, ballX, ballY);
 		if (doWeHaveBall) {
+			System.out.println("ASDASDASD");
 			passKick(worldState);
+			RobotCommands.stop();
 		} else if (RobotPlanner.inZone(ballX, worldState) == RobotPlanner
 						.inZone(robotX, worldState)) {
 			sh.acquireBall(worldState);
@@ -96,7 +98,7 @@ public class PassingStrategy extends GeneralStrategy {
 
 		if (isFacingAttacker
 				&& RobotPlanner.inZone(ballX, worldState) == RobotPlanner
-						.inZone(robotX, worldState) && enemyBlocking == false) {
+						.inZone(robotX, worldState) && !enemyBlocking) {
 			if (stoppedRotating) {
 				framesPassed++;
 			}
@@ -121,38 +123,24 @@ public class PassingStrategy extends GeneralStrategy {
 				}
 			}
 		}// Bounce pass is needed
-		else if (enemyBlocking == true) {
-			// TODO: Check correctness of BP
-			// Here is where we should do a BP, it only seems to rotate towards
-			// our team mate...//
-			System.out.println("rotating for Bounce Pass");
-			double desiredbounceAngle = Calculations.getBounceAngle(robotX,
-					robotY, Math.toRadians(robotAngleDeg), attackerX,
-					attackerY, enemyAttackerX, enemyAttackerY);
-			System.out.println("desired angle " + desiredbounceAngle);
-			sh.rotateToDesiredAngle(robotAngleDeg, desiredbounceAngle);
-		}
+//		else if (enemyBlocking == true) {
+//			// TODO: Check correctness of BP
+//			// Here is where we should do a BP, it only seems to rotate towards
+//			// our team mate...//
+//			System.out.println("rotating for Bounce Pass");
+//			double desiredbounceAngle = Calculations.getBounceAngle(robotX,
+//					robotY, Math.toRadians(robotAngleDeg), attackerX,
+//					attackerY, enemyAttackerX, enemyAttackerY);
+//			System.out.println("desired angle " + desiredbounceAngle);
+//			sh.rotateToDesiredAngle(robotAngleDeg, desiredbounceAngle);
+//		}
 
 		else {
 			framesPassed = 0;
 			sh.rotateToDesiredAngle(robotAngleDeg, attAngleDeg);
 			return;
 		}
-
 	}
-
-	/* BOUNCE PASS */
-	// } else {
-	// /* Not facing so attempt bounce shot */
-	// if (enemyBlocking) {
-	// double desiredAngle = Calculations.getBounceAngle(robotX, robotY,
-	// Math.toRadians(robotAngleDeg), attackerX, attackerY, enemyAttackerX,
-	// enemyAttackerY);
-	// System.out.println("desired angle "+desiredAngle);
-	// sh.rotateToDesiredAngle(robotAngleDeg, desiredAngle);
-	// }
-	// }
-	//
 
 	private boolean ballInUpperTri(WorldState worldState, double ballX,
 			double ballY, int TlX, int lowerTLY) {

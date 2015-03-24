@@ -94,11 +94,12 @@ public class RobotCommands {
 	}
 
 	public static void catchUp() {
+		System.out.println("CATCH UP");
 		RobotCommunication.getInstance().catchUp();
 	}
 
 	public static void catchDown() {
-		System.out.println("Catching!");
+		System.out.println("CATCH DOWN");
 		RobotCommunication.getInstance().catchDown();
 	}
 }

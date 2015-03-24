@@ -34,6 +34,8 @@ public class GeneralStrategy {
 
 	protected double ballX;
 	protected double ballY;
+	
+	protected static boolean isCatcherUp = false;
 
 	// Allowed errors
 	protected final int allowedDegreeError = 15;
