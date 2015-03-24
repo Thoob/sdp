@@ -3,7 +3,6 @@ package com.sdp.strategy;
 import com.sdp.RobotCommunication;
 import com.sdp.planner.RobotCommands;
 import com.sdp.planner.RobotPlanner;
-import com.sdp.prediction.Calculations;
 import com.sdp.vision.PitchConstants;
 import com.sdp.world.SimpleWorldState;
 import com.sdp.world.SimpleWorldState.Operation;
@@ -32,20 +31,20 @@ public class PassingStrategy extends GeneralStrategy {
 
 	public void sendWorldState(WorldState worldState) {
 		initializeVars(worldState);
-		boolean doWeHaveBall = RobotPlanner.doesOurRobotHaveBall(robotX,
+		boolean doWeHaveBall = RobotPlanner.doesOurRobotHaveBall(worldState.ballNotOnPitch, robotX,
 				robotY, ballX, ballY);
 		if (doWeHaveBall) {
-			System.out.println("ASDASDASD");
+			System.out.println("we have the ball");
 			passKick(worldState);
-			RobotCommands.stop();
 		} else if (RobotPlanner.inZone(ballX, worldState) == RobotPlanner
 						.inZone(robotX, worldState)) {
+			System.out.println("we do not have the ball");
 			sh.acquireBall(worldState);
 		}
 	}
 
 	public void adjust() {
-		boolean doWeHaveBall = RobotPlanner.doesOurRobotHaveBall(robotX,
+		boolean doWeHaveBall = RobotPlanner.doesOurRobotHaveBall(worldState.ballNotOnPitch, robotX,
 				robotY, ballX, ballY);
 
 		if (atBoundaryPos == false) {
@@ -68,7 +67,7 @@ public class PassingStrategy extends GeneralStrategy {
 			if (doWeHaveBall == false) {
 				sh.acquireBall(worldState);
 			}
-			if (RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)
+			if (RobotPlanner.doesOurRobotHaveBall(worldState.ballNotOnPitch, robotX, robotY, ballX, ballY)
 					&& RobotPlanner.inZone(ballX, worldState) == RobotPlanner
 							.inZone(robotX, worldState)) {
 				if (adjusted == false) {
@@ -118,6 +117,7 @@ public class PassingStrategy extends GeneralStrategy {
 							.println("We are facing Attacker, and have the ball");
 					RobotCommands.passKick();
 					SimpleWorldState.previousOperation = Operation.PASSKICK;
+					isCatcherUp = false;
 
 					return;
 				}

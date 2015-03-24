@@ -54,7 +54,7 @@ public class DefenderStrategy extends GeneralStrategy {
 						ourRobotAvg.y, worldState);
 			else {
 				double neutralAngle = (robotAngleDeg > 180) ? 270 : 90;
-				sh.rotateToDesiredAngleForDef(robotAngleDeg, neutralAngle, true);
+				sh.rotateToDesiredAngleForDef(robotAngleDeg, neutralAngle, true, 18);
 			}
 		} else {
 			Debug.out("Going to default position.");
@@ -69,7 +69,7 @@ public class DefenderStrategy extends GeneralStrategy {
 			else {
 				double neutralAngle = (robotAngleDeg > 180) ? 270 : 90;
 				Debug.out("Rotating to neutral angle ", neutralAngle);
-				sh.rotateToDesiredAngleForDef(robotAngleDeg, neutralAngle, true);
+				sh.rotateToDesiredAngleForDef(robotAngleDeg, neutralAngle, true, 18);
 			}
 		}
 	}

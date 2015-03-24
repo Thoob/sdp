@@ -23,7 +23,7 @@ public class AttackerStrategy extends GeneralStrategy {
 		sh.acquireBall(worldState);
 
 		// 4 - Face goal and kick ball (hopefully into the goal!)
-		if (RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)) {
+		if (RobotPlanner.doesOurRobotHaveBall(worldState.ballNotOnPitch, robotX, robotY, ballX, ballY)) {
 			scoreGoal(worldState);
 			System.out.println("Scoring goal!");
 		}
@@ -61,7 +61,7 @@ public class AttackerStrategy extends GeneralStrategy {
 
 		if (SimpleWorldState.previousOperation != Operation.KICK
 				&& facingGoal
-				&& RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX,
+				&& RobotPlanner.doesOurRobotHaveBall(worldState.ballNotOnPitch, robotX, robotY, ballX,
 						ballY)) {
 			RobotCommands.kick();
 			SimpleWorldState.previousOperation = Operation.KICK;

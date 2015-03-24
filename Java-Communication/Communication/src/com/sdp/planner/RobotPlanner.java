@@ -15,7 +15,7 @@ public class RobotPlanner {
 	}
 
 	// Distance the robot must be from the ball in order to catch it
-	private static final int MAX_CATCH_DIST = 50;
+	private static final int MAX_CATCH_DIST = 40;
 	private static final int MIN_CATCH_DIST = 20;
 
 	private RobotPlanner() {
@@ -163,7 +163,7 @@ public class RobotPlanner {
 		}
 	}
 
-	public static boolean doesOurRobotHaveBall(double robotX, double robotY,
+	public static boolean doesOurRobotHaveBall(boolean isBallNotOnPitch, double robotX, double robotY,
 			double ballX, double ballY) {
 
 		int diffInPos = 22;
@@ -172,7 +172,7 @@ public class RobotPlanner {
 		double deltaTotal = Math.abs(deltaX) + Math.abs(deltaY);
 
 		if (SimpleWorldState.previousOperation == Operation.CATCH
-				&& deltaTotal < diffInPos || (ballX == 0 && ballY == 0)) {
+				&& deltaTotal < diffInPos ||isBallNotOnPitch) {
 			return true;
 		} else {
 			return false;
