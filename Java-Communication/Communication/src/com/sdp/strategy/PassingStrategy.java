@@ -34,7 +34,6 @@ public class PassingStrategy extends GeneralStrategy {
 		initializeVars(worldState);
 		boolean doWeHaveBall = RobotPlanner.doesOurRobotHaveBall(
 				worldState.ballNotOnPitch, robotX, robotY, ballX, ballY);
-		doWeHaveBall = true;
 		if (doWeHaveBall) {
 			System.out.println("we have the ball");
 			passKick(worldState);
