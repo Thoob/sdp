@@ -164,22 +164,24 @@ public class RobotPlanner {
 	public static boolean doesOurRobotHaveBall(boolean isBallNotOnPitch,
 			double robotX, double robotY, double ballX, double ballY) {
 
-		int diffInPos = 27;
-		double deltaX = robotX - ballX;
-		double deltaY = robotY - ballY;
-		double deltaTotal = Math.abs(deltaX) + Math.abs(deltaY);
+//		int diffInPos = 27;
+//		double deltaX = robotX - ballX;
+//		double deltaY = robotY - ballY;
+//		double deltaTotal = Math.abs(deltaX) + Math.abs(deltaY);
+//
+//		if ( deltaTotal < diffInPos || isBallNotOnPitch) {
+//			return true;
+//		} else {
+//			return false;
+//		}
 
-		if ( deltaTotal < diffInPos || isBallNotOnPitch) {
+		if (RobotCommands.haveBall()){
+			System.out.println("Robot has the ball!");
 			return true;
 		} else {
+			System.out.println("Robot doesn't have the ball.");
 			return false;
 		}
-
-		// if(RobotCommands.haveBall().equals("YES"))
-		// return true;
-		// else
-		// return false;
-
 	}
 
 	public static double desiredAngle(double robotX, double robotY,

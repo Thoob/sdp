@@ -22,9 +22,8 @@ public class RobotCommands {
 		RobotCommunication.getInstance().sendKick(400);
 	}
 	
-	public static String haveBall() {
+	public static boolean haveBall() {
 		System.out.println("haveBall");
-		//System.out.println(RobotCommunication.getInstance().haveBall());
 		return RobotCommunication.getInstance().haveBall();
 	}
 

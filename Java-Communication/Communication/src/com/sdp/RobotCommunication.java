@@ -35,15 +35,17 @@ public class RobotCommunication {
 		Communication.getInstance().sendCommandViaPort(command);
 	}
 	
-	public String haveBall() {
+	public boolean haveBall() {
 		String command = "HAVEBALL\n";
 		Communication.getInstance().sendCommandViaPort(command);
-//		String result = null;
-//		while (result == null) {
-//			result = Communication.getInstance().readStringFromSerialPort();
-//		}
-//		System.out.println(result);
-		return "NO";
+		//TODO: discuss value for threshold
+		int threshold = 190;
+		int value = Integer.parseInt(Communication.getInstance().readStringFromSerialPort());
+		if(value >= threshold){
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	public void stop() {
