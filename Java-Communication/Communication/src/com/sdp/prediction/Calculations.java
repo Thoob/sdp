@@ -150,18 +150,20 @@ public final class Calculations {
 		double y1 = (double) robotY;
 		double x2 = (double) targetX;
 		double y2 = (double) targetY;
-		
+
 		int bottomBoundary = PitchConstants.getPitchOutlineBottom();
 		int topBoundary = PitchConstants.getPitchOutlineTop();
 		int middleBoundary = (bottomBoundary + topBoundary) / 2;
 		double y3;
 
-		if (blockerY < middleBoundary) {
+		if (blockerY > middleBoundary) {
 			y3 = topBoundary - 50;
 		} else {
 			y3 = bottomBoundary + 20;
 		}
-		
+		System.out.println("milddleBoundary = " + middleBoundary + " blY "
+				+ blockerY + " y3 " + y3);
+
 		double a = Math.abs(y3 - y2);
 		double b = Math.abs(y3 - y1);
 
@@ -179,7 +181,8 @@ public final class Calculations {
 		else
 			x3 = x2 + deltaA;
 
-		double choiceAngle = RobotPlanner.desiredAngle(robotX, robotY, targetX, targetY);
+		double choiceAngle = RobotPlanner.desiredAngle(robotX, robotY, x3,
+				y3);
 
 		return (float) choiceAngle;
 	}

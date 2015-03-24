@@ -1,6 +1,5 @@
 package com.sdp.vision;
 
-
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -9,7 +8,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Observable;
 import java.util.Scanner;
-
 
 /**
  * A class that holds the constants for various values about the pitch, such as
@@ -45,17 +43,17 @@ public class PitchConstants extends Observable {
 	public static final float HSVMAX = 1.0f;
 
 	public static final int NUM_CHANNELS = 6;
-	
+
 	public static final int CHANNEL_RED = 0;
-	
+
 	public static final int CHANNEL_GREEN = 1;
-	
+
 	public static final int CHANNEL_BLUE = 2;
-	
+
 	public static final int CHANNEL_HUE = 3;
-	
+
 	public static final int CHANNEL_SATURATION = 4;
-	
+
 	public static final int CHANNEL_BRIGHTNESS = 5;
 
 	// The pitch number. 0 is the main pitch, 1 is the side pitch
@@ -93,103 +91,106 @@ public class PitchConstants extends Observable {
 			notifyObservers();
 		}
 	}
-	
+
 	private float[] leftGoal = new float[3];
 	private float[] rightGoal = new float[3];
-	
+
 	private static Position[] pitchOutline = new Position[8];
-	
+
 	/**
-	 * Order of the values is clockwise from the top edge of the pitch
-	 * at the left side.
+	 * Order of the values is clockwise from the top edge of the pitch at the
+	 * left side.
+	 * 
 	 * @return the array of Positions that make up the pitch walls
 	 */
 	public static Position[] getPitchOutline() {
 		return pitchOutline;
 	}
-	
-	
+
 	/* These may need to be changed */
-	public static int[] getPitchOutlineTR(){
+	public static int[] getPitchOutlineTR() {
 		int[] TL = new int[2];
 		TL[0] = (int) pitchOutline[1].getX();
-		TL[1] = (int)pitchOutline[1].getY();
-		return  TL;
+		TL[1] = (int) pitchOutline[1].getY();
+		return TL;
 	}
-	
-	public static int[] getPitchOutlineLowerTR(){
+
+	public static int[] getPitchOutlineLowerTR() {
 		int[] TL = new int[2];
 		TL[0] = (int) pitchOutline[2].getX();
 		TL[1] = (int) pitchOutline[2].getY();
-		return  TL;
+		return TL;
 	}
-	
-	public static int[] getPitchOutlineUpperBR(){
+
+	public static int[] getPitchOutlineUpperBR() {
 		int[] TL = new int[2];
 		TL[0] = (int) pitchOutline[3].getX();
 		TL[1] = (int) pitchOutline[3].getY();
-		return  TL;
+		return TL;
 	}
-	public static int[] getPitchOutlineBR(){
+
+	public static int[] getPitchOutlineBR() {
 		int[] TL = new int[2];
 		TL[0] = (int) pitchOutline[4].getX();
 		TL[1] = (int) pitchOutline[4].getY();
-		return  TL;
+		return TL;
 	}
-	
-	public static int[] getPitchOutlineTL(){
+
+	public static int[] getPitchOutlineTL() {
 		int[] TL = new int[2];
 		TL[0] = (int) pitchOutline[0].getX();
 		TL[1] = (int) pitchOutline[0].getY();
-		return  TL;
+		return TL;
 	}
-	
-	public static int[] getPitchOutlineLowerTL(){
+
+	public static int[] getPitchOutlineLowerTL() {
 		int[] TL = new int[2];
 		TL[0] = (int) pitchOutline[7].getX();
 		TL[1] = (int) pitchOutline[7].getY();
-		return  TL;
+		return TL;
 	}
-	
-	public static int[] getPitchOutlineUpperBL(){
+
+	public static int[] getPitchOutlineUpperBL() {
 		int[] TL = new int[2];
 		TL[0] = (int) pitchOutline[6].getX();
 		TL[1] = (int) pitchOutline[6].getY();
-		return  TL;
+		return TL;
 	}
-	public static int[] getPitchOutlineBL(){
+
+	public static int[] getPitchOutlineBL() {
 		int[] TL = new int[2];
 		TL[0] = (int) pitchOutline[5].getX();
 		TL[1] = (int) pitchOutline[5].getY();
-		return  TL;
+		return TL;
 	}
-	
-	
-	
-	public static int getPitchOutlineTop(){
-		return (int) (( pitchOutline[0].getY() + (pitchOutline[1]).getY()) / 2);
+
+	public static int getPitchOutlineTop() {
+		return (int) ((pitchOutline[0].getY() + (pitchOutline[1]).getY()) / 2);
 	}
-	
-	public static int getPitchOutlineBottom(){
+
+	public static int getPitchOutlineBottom() {
 		return (int) (((pitchOutline[4]).getY() + (pitchOutline[5]).getY()) / 2);
 	}
-	
-		/**
-	 * Order of the values is top to bottom. 	
+
+	/**
+	 * Order of the values is top to bottom.
+	 * 
 	 * @return the array of y values for the left goal
 	 */
-	public float[] getLeftGoal(){
+	public float[] getLeftGoal() {
 		return leftGoal;
 	}
+
 	/**
-	 * Order of the values is top to bottom. 	
+	 * Order of the values is top to bottom.
+	 * 
 	 * @return the array of y values for the right goal
 	 */
-	public float[] getRightGoal(){
+	public float[] getRightGoal() {
 		return rightGoal;
 	}
-	
-	public void setLeftGoal(float[] leftGoal){
+
+	public void setLeftGoal(float[] leftGoal) {
 		if (leftGoal.length != 3) {
 			System.err.println("Left Goal array not the right size to set!");
 		} else {
@@ -200,8 +201,8 @@ public class PitchConstants extends Observable {
 			notifyObservers();
 		}
 	}
-	
-	public void setRightGoal(float[] rightGoal){
+
+	public void setRightGoal(float[] rightGoal) {
 		if (rightGoal.length != 3) {
 			System.err.println("Right Goal array not the right size to set!");
 		} else {
@@ -402,9 +403,13 @@ public class PitchConstants extends Observable {
 			pitchDimFile.write(String.valueOf(this.rightGoal[0]) + "\n");
 			pitchDimFile.write(String.valueOf(this.rightGoal[1]) + "\n");
 			pitchDimFile.write(String.valueOf(this.rightGoal[2]) + "\n");
-			for (int i = 0; i < 8; i++){
-				pitchDimFile.write(String.valueOf((PitchConstants.pitchOutline[i]).getX()) + "\n");
-				pitchDimFile.write(String.valueOf((PitchConstants.pitchOutline[i]).getY()) + "\n");
+			for (int i = 0; i < 8; i++) {
+				pitchDimFile.write(String
+						.valueOf((PitchConstants.pitchOutline[i]).getX())
+						+ "\n");
+				pitchDimFile.write(String
+						.valueOf((PitchConstants.pitchOutline[i]).getY())
+						+ "\n");
 			}
 			pitchDimFile.close();
 
@@ -456,19 +461,19 @@ public class PitchConstants extends Observable {
 			this.dividers[0] = scannerDim.nextInt();
 			this.dividers[1] = scannerDim.nextInt();
 			this.dividers[2] = scannerDim.nextInt();
-			
+
 			this.leftGoal[0] = scannerDim.nextFloat();
 			this.leftGoal[1] = scannerDim.nextFloat();
 			this.leftGoal[2] = scannerDim.nextFloat();
-			
+
 			this.rightGoal[0] = scannerDim.nextFloat();
 			this.rightGoal[1] = scannerDim.nextFloat();
 			this.rightGoal[2] = scannerDim.nextFloat();
-			
-			for (int i = 0; i < 8; i++){
+
+			for (int i = 0; i < 8; i++) {
 				int x = scannerDim.nextInt();
 				int y = scannerDim.nextInt();
-				PitchConstants.pitchOutline[i] = new Position(x,y);
+				PitchConstants.pitchOutline[i] = new Position(x, y);
 			}
 
 			scannerDim.close();
@@ -532,17 +537,17 @@ public class PitchConstants extends Observable {
 		this.dividers[0] = 70;
 		this.dividers[1] = 120;
 		this.dividers[2] = 170;
-		
+
 		this.leftGoal[0] = 20;
 		this.leftGoal[1] = 30;
 		this.leftGoal[2] = 40;
-		
+
 		this.rightGoal[0] = 20;
 		this.rightGoal[1] = 30;
 		this.rightGoal[2] = 40;
-		
-		for (int i = 0; i < 8; i++){
-			PitchConstants.pitchOutline[i] = new Position(0,0);
+
+		for (int i = 0; i < 8; i++) {
+			PitchConstants.pitchOutline[i] = new Position(0, 0);
 		}
 	}
 }

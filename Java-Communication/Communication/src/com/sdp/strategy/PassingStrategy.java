@@ -3,6 +3,7 @@ package com.sdp.strategy;
 import com.sdp.RobotCommunication;
 import com.sdp.planner.RobotCommands;
 import com.sdp.planner.RobotPlanner;
+import com.sdp.prediction.Calculations;
 import com.sdp.vision.PitchConstants;
 import com.sdp.world.SimpleWorldState;
 import com.sdp.world.SimpleWorldState.Operation;
@@ -33,6 +34,7 @@ public class PassingStrategy extends GeneralStrategy {
 		initializeVars(worldState);
 		boolean doWeHaveBall = RobotPlanner.doesOurRobotHaveBall(
 				worldState.ballNotOnPitch, robotX, robotY, ballX, ballY);
+		doWeHaveBall = true;
 		if (doWeHaveBall) {
 			System.out.println("we have the ball");
 			passKick(worldState);
@@ -87,44 +89,55 @@ public class PassingStrategy extends GeneralStrategy {
 		double attAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
 				attackerX, attackerY);
 		double attDiffInHeadings = Math.abs(robotAngleDeg - attAngleDeg);
-		boolean isFacingAttacker = (attDiffInHeadings < 8 || attDiffInHeadings > 360 - 8);
 
 		double blockerAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
 				enemyAttackerX, enemyAttackerY);
 		enemyBlocking = Math
 				.abs((diffInHeadings(robotAngleDeg, blockerAngleDeg) - diffInHeadings(
-						robotAngleDeg, attAngleDeg))) < 10;
-
-		if (isFacingAttacker && !enemyBlocking) {
-			framesPassed++;
-
-			if (SimpleWorldState.previousOperation != Operation.PASSKICK
-					&& framesPassed > 2) {
-				System.out.println("We are facing Attacker, and have the ball");
-				RobotCommands.passKick();
-				SimpleWorldState.previousOperation = Operation.PASSKICK;
-				isCatcherUp = false;
-
+						robotAngleDeg, attAngleDeg))) < 20;
+		if (!enemyBlocking) {
+			System.out.println("Straigt pass");
+			boolean isFacingAttacker = (attDiffInHeadings < allowedDegreeError || attDiffInHeadings > 360 - allowedDegreeError);
+			if (isFacingAttacker) {
+				framesPassed++;
+				if (SimpleWorldState.previousOperation != Operation.PASSKICK
+						&& framesPassed > 2) {
+					RobotCommands.passKick();
+					SimpleWorldState.previousOperation = Operation.PASSKICK;
+					isCatcherUp = false;
+					return;
+				}
+			} else {
+				framesPassed = 0;
+				sh.rotateToDesiredAngle(robotAngleDeg, attAngleDeg);
 				return;
 			}
 		} else {
-			framesPassed = 0;
-			sh.rotateToDesiredAngle(robotAngleDeg, attAngleDeg);
-			return;
+			double desiredbounceAngle = Calculations.getBounceAngle(robotX,
+					robotY, Math.toRadians(robotAngleDeg), attackerX,
+					attackerY, enemyAttackerX, enemyAttackerY);
+			System.out.println("Bounce pass angle " + desiredbounceAngle);
+			// double desiredbounceAngle = 220;
+			boolean isFacingBouncePass = (Math.abs(desiredbounceAngle
+					- robotAngleDeg) < allowedDegreeError);
+			if (isFacingBouncePass) {
+				framesPassed++;
+				if (SimpleWorldState.previousOperation != Operation.PASSKICK
+						&& framesPassed > 2) {
+					System.out
+							.println("We are facing Attacker, and have the ball");
+					RobotCommands.passKick();
+					SimpleWorldState.previousOperation = Operation.PASSKICK;
+					isCatcherUp = false;
+					return;
+				}
+			} else {
+				System.out
+						.println("desired bounce angle " + desiredbounceAngle);
+				sh.rotateToDesiredAngleForDef(robotAngleDeg,
+						desiredbounceAngle, false, 18);
+			}
 		}
-
-		// Bounce pass is needed
-		// else if (enemyBlocking == true) {
-		// // TODO: Check correctness of BP
-		// // Here is where we should do a BP, it only seems to rotate towards
-		// // our team mate...//
-		// System.out.println("rotating for Bounce Pass");
-		// double desiredbounceAngle = Calculations.getBounceAngle(robotX,
-		// robotY, Math.toRadians(robotAngleDeg), attackerX,
-		// attackerY, enemyAttackerX, enemyAttackerY);
-		// System.out.println("desired angle " + desiredbounceAngle);
-		// sh.rotateToDesiredAngle(robotAngleDeg, desiredbounceAngle);
-		// }
 	}
 
 	private boolean ballInUpperTri(WorldState worldState, double ballX,
