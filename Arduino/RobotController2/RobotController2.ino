@@ -111,20 +111,20 @@ void loop() {
 
 
   //Makes the sensor code run once per second. Change the int for different values
-  if(millis() > time_since_last_run + 1000) {
+  if(millis() > time_since_last_run + 15) {
     switch(sensor_state) {
       case(0):
        readI2C(sensorAddr, ch0);
        sensor_state = 1;
-       time_since_last_run = time_since_last_run + 40;
+       time_since_last_run = time_since_last_run + 15 ;
        break;
       case(1):
        readI2C(sensorAddr, ch0);
        sensor_state = 2;
-       time_since_last_run = time_since_last_run + 70;
+       time_since_last_run = time_since_last_run + 15;
        break;
       case(2):
-       Serial.print("Channel 0 : ");
+       //Serial.print("Channel 0 : ");
        readI2C(sensorAddr, ch0);
        sensor_state = 0;
        time_since_last_run = millis();
