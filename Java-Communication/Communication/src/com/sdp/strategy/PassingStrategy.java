@@ -36,9 +36,7 @@ public class PassingStrategy extends GeneralStrategy {
 				robotY, ballX, ballY);
 		if (doWeHaveBall) {
 			passKick(worldState);
-		} else if (RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX,
-				ballY)
-				&& RobotPlanner.inZone(ballX, worldState) == RobotPlanner
+		} else if (RobotPlanner.inZone(ballX, worldState) == RobotPlanner
 						.inZone(robotX, worldState)) {
 			sh.acquireBall(worldState);
 		}
@@ -84,23 +82,18 @@ public class PassingStrategy extends GeneralStrategy {
 
 	public void passKick(WorldState worldState) {
 
-		double AttAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
+		double attAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
 				attackerX, attackerY);
-		double AttDiffInHeadings = Math.abs(robotAngleDeg - AttAngleDeg);
-		boolean isFacingAttacker = (AttDiffInHeadings < allowedDegreeError || AttDiffInHeadings > 360 - allowedDegreeError);
-		boolean stoppedRotating = (AttDiffInHeadings < 8 || AttDiffInHeadings > 360 - 8);
+		double attDiffInHeadings = Math.abs(robotAngleDeg - attAngleDeg);
+		boolean isFacingAttacker = (attDiffInHeadings < allowedDegreeError || attDiffInHeadings > 360 - allowedDegreeError);
+		boolean stoppedRotating = (attDiffInHeadings < 8 || attDiffInHeadings > 360 - 8);
 
 		double blockerAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
 				enemyAttackerX, enemyAttackerY);
 		enemyBlocking = Math
 				.abs((diffInHeadings(robotAngleDeg, blockerAngleDeg) - diffInHeadings(
-						robotAngleDeg, AttAngleDeg))) < 10;
+						robotAngleDeg, attAngleDeg))) < 10;
 
-		double out = Math
-				.abs((diffInHeadings(robotAngleDeg, blockerAngleDeg) - diffInHeadings(
-						robotAngleDeg, AttAngleDeg)));
-
-		// TODO: Test
 		if (isFacingAttacker
 				&& RobotPlanner.inZone(ballX, worldState) == RobotPlanner
 						.inZone(robotX, worldState) && enemyBlocking == false) {
@@ -124,15 +117,10 @@ public class PassingStrategy extends GeneralStrategy {
 					RobotCommands.passKick();
 					SimpleWorldState.previousOperation = Operation.PASSKICK;
 
-					// Setting flag to false allows us to acquire the ball again
-					// when necessary
-					flag = false;
 					return;
 				}
 			}
-		}
-
-		// Bounce pass is needed
+		}// Bounce pass is needed
 		else if (enemyBlocking == true) {
 			// TODO: Check correctness of BP
 			// Here is where we should do a BP, it only seems to rotate towards
@@ -147,7 +135,7 @@ public class PassingStrategy extends GeneralStrategy {
 
 		else {
 			framesPassed = 0;
-			sh.rotateToDesiredAngle(robotAngleDeg, AttAngleDeg);
+			sh.rotateToDesiredAngle(robotAngleDeg, attAngleDeg);
 			return;
 		}
 
@@ -355,8 +343,6 @@ public class PassingStrategy extends GeneralStrategy {
 
 	}
 
-	// Jordan! The problem was you had (double robotY, double robotX, ...)
-	// instead of the other way around; (x, y). - Theo
 	public void boundaryHelper(double robotX, double robotY,
 			WorldState worldState) {
 
