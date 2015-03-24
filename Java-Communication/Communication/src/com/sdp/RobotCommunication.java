@@ -36,11 +36,11 @@ public class RobotCommunication {
 	}
 	
 	public boolean haveBall() {
-		String command = "HAVEBALL\n";
-		Communication.getInstance().sendCommandViaPort(command);
 		//TODO: discuss value for threshold
 		int threshold = 190;
-		int value = Integer.parseInt(Communication.getInstance().readStringFromSerialPort());
+		String valueString = Communication.getInstance().readStringFromSerialPort();
+		System.out.println(valueString);
+		int value = Integer.parseInt(valueString);
 		if(value >= threshold){
 			return true;
 		} else {
