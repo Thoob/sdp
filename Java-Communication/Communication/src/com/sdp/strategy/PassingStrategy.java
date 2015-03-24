@@ -34,69 +34,55 @@ public class PassingStrategy extends GeneralStrategy {
 		initializeVars(worldState);
 		boolean doWeHaveBall = RobotPlanner.doesOurRobotHaveBall(robotX,
 				robotY, ballX, ballY);
-
-		System.out.println("we have ball " + doWeHaveBall);
-		System.out.println("Ball position: " + ballX + " " + ballY);
-		if (RobotPlanner.inZone(ballX, worldState) != RobotPlanner.inZone(
-				robotX, worldState)) {
-			System.out.println("Ball is not in zone");
-			RobotCommunication.getInstance().stop();
-			return;
+		if (doWeHaveBall) {
+			passKick(worldState);
+		} else if (RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX,
+				ballY)
+				&& RobotPlanner.inZone(ballX, worldState) == RobotPlanner
+						.inZone(robotX, worldState)) {
+			sh.acquireBall(worldState);
 		}
+	}
 
-		robotAngleRad = Math.toRadians(robotAngleDeg);
-		if (robot == null || ball == null)
-			return;
-		
-		if(atBoundaryPos == false){
+	public void adjust() {
+		boolean doWeHaveBall = RobotPlanner.doesOurRobotHaveBall(robotX,
+				robotY, ballX, ballY);
+
+		if (atBoundaryPos == false) {
 			System.out.println("we are heading to non collision point");
 		}
-		
-		if(flag == false){
+
+		if (flag == false) {
 			System.out.println("flag is false");
 		}
-		
+
 		boolean adjusted = false;
-		if (Math.abs(robotY - topOfPitch) < 15 || Math.abs(robotY - botOfPitch) < 15){
+		if (Math.abs(robotY - topOfPitch) < 15
+				|| Math.abs(robotY - botOfPitch) < 15) {
 			adjusted = false;
-		}
-		else adjusted = true;
+		} else
+			adjusted = true;
 
 		if (flag == false) {
 			framesPassed = 0;
-			//boundaryHelper(robotX, robotY, worldState);
-			//if (atBoundaryPos){
-			//	System.out.println("Tartget position aquired");
-			if (doWeHaveBall == false){
+			if (doWeHaveBall == false) {
 				sh.acquireBall(worldState);
 			}
-				if (RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)
-						&& RobotPlanner.inZone(ballX, worldState) == RobotPlanner
-						.inZone(robotX, worldState)) {
-					if (adjusted == false){
-						RobotCommunication.getInstance().shortMoveBackwards();
-					}
-					else {
-						flag = true;
-						System.out.println("Attempted Catch, adjusting");
-					}
+			if (RobotPlanner.doesOurRobotHaveBall(robotX, robotY, ballX, ballY)
+					&& RobotPlanner.inZone(ballX, worldState) == RobotPlanner
+							.inZone(robotX, worldState)) {
+				if (adjusted == false) {
+					RobotCommunication.getInstance().shortMoveBackwards();
+				} else {
+					flag = true;
+					System.out.println("Attempted Catch, adjusting");
+				}
 				return;
-			//	}
 			}
-		} else if (flag == true && adjusted == true) {
-			passKick(worldState);
-			atBoundaryPos = false;
 		}
-		sh.acquireBall(worldState);
-
-
 	}
 
 	public void passKick(WorldState worldState) {
-
-		System.out.println("FRAMES PASSED " + framesPassed);
-		
-		boolean facingAttacker = isFacingAttacker();
 
 		double AttAngleDeg = RobotPlanner.desiredAngle(robotX, robotY,
 				attackerX, attackerY);
@@ -137,7 +123,7 @@ public class PassingStrategy extends GeneralStrategy {
 							.println("We are facing Attacker, and have the ball");
 					RobotCommands.passKick();
 					SimpleWorldState.previousOperation = Operation.PASSKICK;
-					
+
 					// Setting flag to false allows us to acquire the ball again
 					// when necessary
 					flag = false;
@@ -148,14 +134,15 @@ public class PassingStrategy extends GeneralStrategy {
 
 		// Bounce pass is needed
 		else if (enemyBlocking == true) {
-				//TODO: Check correctness of BP 
-			// Here is where we should do a BP, it only seems to rotate towards our team mate...//
-			 System.out.println("rotating for Bounce Pass");
-			 double desiredbounceAngle = Calculations.getBounceAngle(robotX, robotY,
-					 		Math.toRadians(robotAngleDeg), attackerX, attackerY, enemyAttackerX,
-					 		enemyAttackerY);
-			 System.out.println("desired angle "+desiredbounceAngle);
-			 sh.rotateToDesiredAngle(robotAngleDeg, desiredbounceAngle);
+			// TODO: Check correctness of BP
+			// Here is where we should do a BP, it only seems to rotate towards
+			// our team mate...//
+			System.out.println("rotating for Bounce Pass");
+			double desiredbounceAngle = Calculations.getBounceAngle(robotX,
+					robotY, Math.toRadians(robotAngleDeg), attackerX,
+					attackerY, enemyAttackerX, enemyAttackerY);
+			System.out.println("desired angle " + desiredbounceAngle);
+			sh.rotateToDesiredAngle(robotAngleDeg, desiredbounceAngle);
 		}
 
 		else {
@@ -179,36 +166,36 @@ public class PassingStrategy extends GeneralStrategy {
 	// }
 	//
 
-	private boolean ballInUpperTri(WorldState worldState, double ballX, double ballY,
-					int TlX, int lowerTLY){
-		if (worldState.weAreShootingRight){
-			if ((ballX < TlX) && (ballY < lowerTLY)){
+	private boolean ballInUpperTri(WorldState worldState, double ballX,
+			double ballY, int TlX, int lowerTLY) {
+		if (worldState.weAreShootingRight) {
+			if ((ballX < TlX) && (ballY < lowerTLY)) {
 				return true;
 			}
 		} else {
-			if ((ballX > TlX) && (ballY < lowerTLY)){
+			if ((ballX > TlX) && (ballY < lowerTLY)) {
 				return true;
 			}
 		}
-		
-		return false;
-	}
-	
-	private boolean ballInLowerTri(WorldState worldState, double ballX, double ballY,
-					int BlX, int UpperBLY){
-		if (worldState.weAreShootingRight){
-			if ((ballX < BlX) && (ballY > UpperBLY)){
-				return true;
-			}
-			} else {
-				if ((ballX > BlX) && (ballY > UpperBLY)){
-					return true;
-				}
-			}
 
 		return false;
 	}
-	
+
+	private boolean ballInLowerTri(WorldState worldState, double ballX,
+			double ballY, int BlX, int UpperBLY) {
+		if (worldState.weAreShootingRight) {
+			if ((ballX < BlX) && (ballY > UpperBLY)) {
+				return true;
+			}
+		} else {
+			if ((ballX > BlX) && (ballY > UpperBLY)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	private boolean isEnemyBlocking() {
 		double enemyAttackerAngle = RobotPlanner.desiredAngle(robotX, robotY,
 				enemyAttackerX, enemyAttackerY);
@@ -227,30 +214,30 @@ public class PassingStrategy extends GeneralStrategy {
 				attackerX, attackerY);
 		return attackerAngle;
 	}
-	
-	private int[] getTopCorner(WorldState worldState){
-		if (worldState.weAreShootingRight){
+
+	private int[] getTopCorner(WorldState worldState) {
+		if (worldState.weAreShootingRight) {
 			return PitchConstants.getPitchOutlineTL();
 		} else
 			return PitchConstants.getPitchOutlineTR();
 	}
-	
-	private int[] getLowerTopCorner(WorldState worldState){
-		if (worldState.weAreShootingRight){
+
+	private int[] getLowerTopCorner(WorldState worldState) {
+		if (worldState.weAreShootingRight) {
 			return PitchConstants.getPitchOutlineLowerTL();
 		} else
 			return PitchConstants.getPitchOutlineLowerTR();
 	}
-	
-	private int[] getBotCorner(WorldState worldState){
-		if (worldState.weAreShootingRight){
+
+	private int[] getBotCorner(WorldState worldState) {
+		if (worldState.weAreShootingRight) {
 			return PitchConstants.getPitchOutlineBL();
 		} else
 			return PitchConstants.getPitchOutlineBR();
 	}
-	
-	private int[] getUpperBotCorner(WorldState worldState){
-		if (worldState.weAreShootingRight){
+
+	private int[] getUpperBotCorner(WorldState worldState) {
+		if (worldState.weAreShootingRight) {
 			return PitchConstants.getPitchOutlineUpperBL();
 		} else
 			return PitchConstants.getPitchOutlineUpperBR();
@@ -367,67 +354,68 @@ public class PassingStrategy extends GeneralStrategy {
 		}
 
 	}
-	
-	
-	
+
 	// Jordan! The problem was you had (double robotY, double robotX, ...)
 	// instead of the other way around; (x, y). - Theo
 	public void boundaryHelper(double robotX, double robotY,
 			WorldState worldState) {
-		
-	//	Commented out, as no way to currently test (should work though, probably better to shove
-	//  in a method)
+
+		// Commented out, as no way to currently test (should work though,
+		// probably better to shove
+		// in a method)
 		int[] topCorner = getTopCorner(worldState);
 		int[] lowerTopCorner = getLowerTopCorner(worldState);
 		int[] upperBotCorner = getUpperBotCorner(worldState);
 		int[] botCorner = getBotCorner(worldState);
-		
+
 		double distFromTop = Math.abs(ballY - topOfPitch);
 		double distFromBot = Math.abs(ballY - botOfPitch);
-		double rightAngX = (worldState.weAreShootingRight) ? ballX + 15 : ballX - 15;
+		double rightAngX = (worldState.weAreShootingRight) ? ballX + 15
+				: ballX - 15;
 
 		double distFromTopCor = Math.abs(ballX - topCorner[0]);
 		System.out.println("Dist from top corner " + distFromTopCor);
-		
+
 		double distFromTopCorD = Math.abs(ballY - lowerTopCorner[1]);
 		System.out.println("Dist from top corner Y " + distFromTopCorD);
 
-		
-		boolean BallInUpperTri = ballInUpperTri(worldState, ballX, ballY, topCorner[0], lowerTopCorner[1]);
-		boolean ballInLowerTri = ballInLowerTri(worldState, ballX, ballY, botCorner[0], upperBotCorner[1]);
-		
-		
-		// TRIs represent the triangles formed at between the y of the inner corner,
+		boolean BallInUpperTri = ballInUpperTri(worldState, ballX, ballY,
+				topCorner[0], lowerTopCorner[1]);
+		boolean ballInLowerTri = ballInLowerTri(worldState, ballX, ballY,
+				botCorner[0], upperBotCorner[1]);
+
+		// TRIs represent the triangles formed at between the y of the inner
+		// corner,
 		// and the x of the outer corners
-		
-		// May need to adjust values 
-		 if (BallInUpperTri){
+
+		// May need to adjust values
+		if (BallInUpperTri) {
 			System.out.println("Ball is in upper tri");
 			sh.goToPoint(rightAngX, ballY + 15, robotX, robotY, worldState);
-			if (Math.abs(robotX - rightAngX) + Math.abs(robotY - (ballY + 15)) < 8){
+			if (Math.abs(robotX - rightAngX) + Math.abs(robotY - (ballY + 15)) < 8) {
 				atBoundaryPos = true;
 			}
-		}else if (ballInLowerTri){
+		} else if (ballInLowerTri) {
 			System.out.println("Ball is in lower tri");
 			sh.goToPoint(rightAngX, ballY - 15, robotX, robotY, worldState);
-			if (Math.abs(robotX - rightAngX) + Math.abs(robotY - (ballY - 15)) < 8){
+			if (Math.abs(robotX - rightAngX) + Math.abs(robotY - (ballY - 15)) < 8) {
 				atBoundaryPos = true;
 			}
-		}else if (distFromTop < 15){
+		} else if (distFromTop < 15) {
 			System.out.println("Ball is near top, adjusting");
 			sh.goToPoint(ballX, ballY + 20, robotX, robotY, worldState);
-			if (Math.abs(robotX - ballX) + Math.abs(robotY - (ballY + 20)) < 8){
+			if (Math.abs(robotX - ballX) + Math.abs(robotY - (ballY + 20)) < 8) {
 				atBoundaryPos = true;
 			}
-		}else if (distFromBot < 15){
+		} else if (distFromBot < 15) {
 			System.out.println("Ball is near bottom, adjusting");
-			sh.goToPoint(ballX,  ballY - 20, robotX, robotY, worldState);
-			if (Math.abs(robotX - ballX) + Math.abs(robotY - (ballY + 20)) < 8){
+			sh.goToPoint(ballX, ballY - 20, robotX, robotY, worldState);
+			if (Math.abs(robotX - ballX) + Math.abs(robotY - (ballY + 20)) < 8) {
 				atBoundaryPos = true;
 			}
-		}
-		else atBoundaryPos = true;
-		
+		} else
+			atBoundaryPos = true;
+
 	}
 
 }

@@ -39,10 +39,11 @@ public class DefenderStrategy extends GeneralStrategy {
 				worldState, ourRobotAvg.x, ballX);
 		System.out.println("robotX " + ourRobotAvg.x + " robotY " + robotY);
 		double predictedY = getEnemyAttackerHeadingY(worldState);
-		if (movingTowardsUs) {
-			Debug.out("Going to ball moving. Go to y ", ballY);
-			defendMovingBall(worldState);
-		} else if (enemyAttackerHasBall
+//		if (movingTowardsUs) {
+//			Debug.out("Going to ball moving. Go to y ", ballY);
+//			defendMovingBall(worldState);
+//		} else
+			if (enemyAttackerHasBall
 				&& RobotPlanner.isInGoalRange(predictedY, worldState)) {
 			Debug.out("Going to attacker heading. Go to y ", predictedY);
 			double goalCenterX = getOurGoalX(worldState);
