@@ -40,6 +40,11 @@ boolean do_we_have_ball;
 int initial_light_value = 0;
 boolean initial_has_been_set = false;
 
+//Kicking
+int kicking = 0;
+long kick_interval;
+int kick_state = 0;
+
 void setup() {
   pinMode(arduinoLED, OUTPUT);               // Configure the onboard LED for output
   digitalWrite(arduinoLED, LOW);             // default to LED off
@@ -56,7 +61,7 @@ void setup() {
     //Movement commands
   sCmd.addCommand("MOVE", run_engine);       // Runs wheel motors
   sCmd.addCommand("FSTOP", force_stop);      // Force stops all motors
-  sCmd.addCommand("KICK", move_kick);        // Runs kick script
+  sCmd.addCommand("KICK", kick);        // Runs kick script
   sCmd.addCommand("CATCHUP", move_catchup);      // Runs catch script
   sCmd.addCommand("CATCHDOWN", move_catchdown);      // Runs catch script
 
@@ -109,7 +114,27 @@ void loop() {
 
   sCmd.readSerial();                         // Processes serial commands
 
-
+  if(kicking) {
+   if(millis() > kick_interval) {
+    switch(kick_state) {
+      case(0):
+       move_kick();
+       kick_state = 1;
+       kick_interval = kick_interval + 300;
+       break;
+      case(1):
+       move_kick();
+       kick_state = 2;
+       kick_interval = kick_interval + 300;
+       break;
+      case(2):
+       move_kick();
+       kick_state = 0;
+       break;
+    }
+    }
+  }
+  
   //Makes the sensor code run once per second. Change the int for different values
   if(millis() > time_since_last_run + 15) {
     switch(sensor_state) {
@@ -148,7 +173,6 @@ void readI2C(int portAddress, int channelAddr){
       Wire.write(byte(0x03)); // Power-up state/Read command register
       Wire.endTransmission(); // stop transmitting 
       //delay(70);
-      sensor_state = 2;
       break;
     case(2):
       Wire.beginTransmission(portAddress);             
@@ -296,41 +320,38 @@ void run_engine() {
 
 
 // Kick script
+
+void kick() {
+  kicking = 1;
+}
+
 void move_kick() {
 
-  function_running = 0; // Set as a non scripted function. Is still blocking currently, may be changed
+  switch(kick_state) {
+    case(0):
+      function_running = 0; // Set as a non scripted function. Is still blocking currently, may be changed
+      
+      kick_interval = millis();
 
-  char *arg1;
-  char *arg2;
-  int time;
-  int power;
+      leftStop();
+      rightStop();
 
-  arg1 = sCmd.next();
-  time = atoi(arg1);
+      Serial.println("Kicking");
 
-  arg2 = sCmd.next();
-  power = atoi(arg2);
+      motorBackward(catcher, 100);
+      break;
+      //delay(300);
+    case(1):
+      motorForward(kicker, 100);
 
-  leftStop();
-  rightStop();
-
-  Serial.println("Kicking");
-
-  motorBackward(catcher, 100);
-  delay(300);
-
-  motorForward(kicker, power);
-
-
-  delay(time);
-  motorForward(catcher, 100);
-  motorStop(kicker);
-
-  delay(100);
-  motorStop(catcher);
-
-
-  delay(1000);
+      break;
+      //delay(time);
+    case(2):
+      motorStop(kicker);
+      motorStop(catcher);
+      kicking = 0;
+      break;
+  }
 
 }
 
