@@ -64,58 +64,7 @@ public class Communication {
 		return lastLine;
 	}
 	
-    public String getReply() {
-
-
-        int receiveState = 0;
-        byte[] recvdBytes; // bytes received
-        byte[] oneByte;
-        int byteCounter = 0;
-
-
-        recvdBytes = new byte[80];
-        oneByte = new byte[80];
-
-        // initialize array
-        for (int i = 0; i < 80; i++) {
-            recvdBytes[i] = 0;
-        }
-
-        /* wait for reply */
-        oneByte[0] = 0;
-
-        // keep collecting data until newline is received
-        while ((oneByte[0] != ('\n'))) {
-            try {
-
-                while (receiveState == 0) {
-                    receiveState =
-                            serialPort.getEventsMask();
-                    receiveState &= SerialPort.MASK_RXCHAR;
-                }
-
-                // wait up until 20 seconds for data
-                // when we get data, put it into the buffer
-                oneByte = serialPort.readBytes(1, 20000);
-                recvdBytes[byteCounter] = oneByte[0];
-                byteCounter++;
-                //arduinoReply += oneChar;
-
-            } catch (SerialPortException | SerialPortTimeoutException ex) {
-                ex.printStackTrace();
-            }
-        }
-        // put the bytes into string format
-        String arduinoReply;
-        arduinoReply = new String(recvdBytes, 0, byteCounter);
-
-        char[] charArray;
-        charArray = arduinoReply.toCharArray();
-
-        // send the reply back to caller
-        System.out.println(arduinoReply);
-        return arduinoReply;
-    }
+    
     
     
 

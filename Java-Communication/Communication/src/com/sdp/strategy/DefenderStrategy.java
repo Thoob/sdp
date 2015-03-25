@@ -27,6 +27,8 @@ public class DefenderStrategy extends GeneralStrategy {
 	public void sendWorldState(WorldState worldState) {
 		initializeVars(worldState);
 
+		RobotCommands.catchDown();
+
 		if (currentFrames < FRAMES_TO_AVERAGE) {
 			calcOurRobotAvg(worldState.getDefenderRobot());
 			currentFrames++;
@@ -39,11 +41,11 @@ public class DefenderStrategy extends GeneralStrategy {
 				worldState, ourRobotAvg.x, ballX);
 		System.out.println("robotX " + ourRobotAvg.x + " robotY " + robotY);
 		double predictedY = getEnemyAttackerHeadingY(worldState);
-//		if (movingTowardsUs) {
-//			Debug.out("Going to ball moving. Go to y ", ballY);
-//			defendMovingBall(worldState);
-//		} else
-			if (enemyAttackerHasBall
+		// if (movingTowardsUs) {
+		// Debug.out("Going to ball moving. Go to y ", ballY);
+		// defendMovingBall(worldState);
+		// } else
+		if (enemyAttackerHasBall
 				&& RobotPlanner.isInGoalRange(predictedY, worldState)) {
 			Debug.out("Going to attacker heading. Go to y ", predictedY);
 			double goalCenterX = getOurGoalX(worldState);
@@ -54,7 +56,8 @@ public class DefenderStrategy extends GeneralStrategy {
 						ourRobotAvg.y, worldState);
 			else {
 				double neutralAngle = (robotAngleDeg > 180) ? 270 : 90;
-				sh.rotateToDesiredAngleForDef(robotAngleDeg, neutralAngle, true, 18);
+				sh.rotateToDesiredAngleForDef(robotAngleDeg, neutralAngle,
+						true, 18);
 			}
 		} else {
 			Debug.out("Going to default position.");
@@ -69,7 +72,8 @@ public class DefenderStrategy extends GeneralStrategy {
 			else {
 				double neutralAngle = (robotAngleDeg > 180) ? 270 : 90;
 				Debug.out("Rotating to neutral angle ", neutralAngle);
-				sh.rotateToDesiredAngleForDef(robotAngleDeg, neutralAngle, true, 18);
+				sh.rotateToDesiredAngleForDef(robotAngleDeg, neutralAngle,
+						true, 18);
 			}
 		}
 	}
@@ -172,12 +176,24 @@ public class DefenderStrategy extends GeneralStrategy {
 			return -1;
 		double heading = enemyAttacker.orientationAngle;
 		double angle = RobotPlanner.getAngleFromZero(heading);
-		if ((Math.abs(angle) > 50 && !worldState.weAreShootingRight)
-				|| ((Math.abs(angle) > 230 || Math.abs(angle) < 150) && worldState.weAreShootingRight))
-			return -1;
-		double deltaX = Math.abs(enemyAttacker.x - getOurGoalX(worldState));
-		double deltaY = deltaX * Math.tan(Math.toRadians(angle));
-		double predictedY = enemyAttacker.y + deltaY;
-		return predictedY;
+		if (worldState.weAreShootingRight) {
+			if ((Math.abs(angle) < 100) || ((Math.abs(angle) > 260))) {
+				return -1;
+			} else {
+				double deltaX = Math.abs(enemyAttacker.x - getOurGoalX(worldState));
+				double deltaY = deltaX * Math.tan(Math.toRadians(angle));
+				double predictedY = enemyAttacker.y + deltaY;
+				return predictedY;
+			}
+		} else {
+			if ((Math.abs(angle) > 80) && (Math.abs(angle)) < 280) {
+				return -1;
+			} else {
+				double deltaX = Math.abs(enemyAttacker.x - getOurGoalX(worldState));
+				double deltaY = deltaX * Math.tan(Math.toRadians(angle));
+				double predictedY = enemyAttacker.y + deltaY;
+				return predictedY;
+			}
+		}
 	}
 }

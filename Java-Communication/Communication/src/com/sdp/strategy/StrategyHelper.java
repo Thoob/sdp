@@ -33,17 +33,23 @@ public class StrategyHelper extends GeneralStrategy {
 			return;
 		} else {
 			if (!isRobotFacingBall) {
-				rotateToDesiredAngleForDef(robotAngleDeg, ballAngleDeg, false,
-						15);
+				rotateToDesiredAngle(robotAngleDeg, ballAngleDeg);
 				System.out.println("Rotating to face ball.");
 				return;
 			}
 			
-			if (!isCatcherUp
-					&& SimpleWorldState.previousOperation != Operation.CATCH) {
+			if (RobotPlanner.prepareCatch(robotX, robotY, ballX, ballY)) {
 				RobotCommands.catchUp();
 				isCatcherUp = true;
+			} else {
+				RobotCommands.catchDown();
+				isCatcherUp = false;
 			}
+			
+//			if(RobotPlanner.getDeltaTotal(robotX, robotY, ballX, ballY) > 150){
+//				RobotCommands.catchDown();
+//				SimpleWorldState.previousOperation = Operation.NONE;
+//			}
 
 			if (isRobotFacingBall
 					&& !doWeHaveBall

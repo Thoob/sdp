@@ -49,7 +49,7 @@ public class RobotCommands {
 
 	public static void goStraight() {
 		System.out.println("goStraight");
-		RobotCommunication.getInstance().move(45, 45);
+		RobotCommunication.getInstance().move(55, 55);
 	}
 
 	public static void goStraight(double fromX, double fromY, double toX,
