@@ -120,7 +120,7 @@ void loop() {
       case(0):
        move_kick();
        kick_state = 1;
-       kick_interval = kick_interval + 300;
+       kick_interval = kick_interval + 250;
        break;
       case(1):
        move_kick();
@@ -128,6 +128,11 @@ void loop() {
        kick_interval = kick_interval + 300;
        break;
       case(2):
+       move_kick();
+       kick_state = 3;
+       kick_interval = kick_interval + 400;
+       break;
+      case(3):
        move_kick();
        kick_state = 0;
        break;
@@ -343,10 +348,17 @@ void move_kick() {
       //delay(300);
     case(1):
       motorForward(kicker, 100);
+      motorForward(left, 70);
+      motorForward(right, 70);
 
       break;
       //delay(time);
     case(2):
+      motorBackward(kicker, 100);
+      motorBackward(catcher, 100);
+      brake_motors();
+      break;
+    case(3):
       motorStop(kicker);
       motorStop(catcher);
       kicking = 0;
