@@ -2,7 +2,6 @@ package com.sdp.strategy;
 
 import java.util.ArrayList;
 
-import com.sdp.Debug;
 //import com.sdp.Debug;
 import com.sdp.planner.RobotCommands;
 import com.sdp.planner.RobotPlanner;
@@ -47,7 +46,7 @@ public class DefenderStrategy extends GeneralStrategy {
 		// } else
 		if (enemyAttackerHasBall
 				&& RobotPlanner.isInGoalRange(predictedY, worldState)) {
-			Debug.out("Going to attacker heading. Go to y ", predictedY);
+			//Debug.out("Going to attacker heading. Go to y ", predictedY);
 			double goalCenterX = getOurGoalX(worldState);
 			boolean shouldGoTo = shouldGoTo(goalCenterX, predictedY,
 					ourRobotAvg.x, ourRobotAvg.y, worldState);
@@ -60,7 +59,7 @@ public class DefenderStrategy extends GeneralStrategy {
 						true, 18);
 			}
 		} else {
-			Debug.out("Going to default position.");
+			//Debug.out("Going to default position.");
 			double goalCenterY = getOurGoalY(worldState);
 			double goalCenterX = getOurGoalX(worldState);
 
@@ -71,7 +70,7 @@ public class DefenderStrategy extends GeneralStrategy {
 						ourRobotAvg.y, worldState);
 			else {
 				double neutralAngle = (robotAngleDeg > 180) ? 270 : 90;
-				Debug.out("Rotating to neutral angle ", neutralAngle);
+				//Debug.out("Rotating to neutral angle ", neutralAngle);
 				sh.rotateToDesiredAngleForDef(robotAngleDeg, neutralAngle,
 						true, 18);
 			}

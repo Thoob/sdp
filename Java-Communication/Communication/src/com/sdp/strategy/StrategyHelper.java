@@ -115,6 +115,51 @@ public class StrategyHelper extends GeneralStrategy {
 			}
 		}
 	}
+	
+	void rotateToDesiredAngleForPass(double robotAngleDeg, double desiredAngleDeg,
+			int allowedDegreeError) {
+		double diffInHeadings = Math.abs(robotAngleDeg - desiredAngleDeg);
+		if ((diffInHeadings < allowedDegreeError)
+				|| (diffInHeadings > 360 - allowedDegreeError)) {
+			// stopping rotation but not other operations
+			if (SimpleWorldState.previousOperation == Operation.RIGHT
+					|| SimpleWorldState.previousOperation == Operation.LEFT) {
+				RobotCommands.brakeStop();
+				SimpleWorldState.previousOperation = Operation.NONE;
+			}
+		} else {
+			if ((diffInHeadings < allowedDegreeError * 2)
+					|| (diffInHeadings > 360 - allowedDegreeError * 2)) {
+				if (SimpleWorldState.previousOperation == Operation.RIGHT
+						|| SimpleWorldState.previousOperation == Operation.LEFT) {
+					RobotCommands.stop();
+				}
+				boolean shouldRotateRight = RobotPlanner.shouldRotateRight(
+						desiredAngleDeg, robotAngleDeg);
+				if (shouldRotateRight) {
+					RobotCommands.shortRotateRight();
+					SimpleWorldState.previousOperation = Operation.SHORT_RIGHT;
+				} else if (!shouldRotateRight) {
+					RobotCommands.shortRotateLeft();
+					SimpleWorldState.previousOperation = Operation.SHORT_LEFT;
+				}
+				return;
+			} else {
+				boolean shouldRotateRight = RobotPlanner.shouldRotateRight(
+						desiredAngleDeg, robotAngleDeg);
+				if (shouldRotateRight
+						&& SimpleWorldState.previousOperation != Operation.RIGHT) {
+					RobotCommands.rotateRight();
+					SimpleWorldState.previousOperation = Operation.RIGHT;
+				} else if (!shouldRotateRight
+						&& SimpleWorldState.previousOperation != Operation.LEFT) {
+					RobotCommands.rotateLeft();
+					SimpleWorldState.previousOperation = Operation.LEFT;
+				}
+				return;
+			}
+		}
+	}
 
 	void rotateToDesiredAngleForDef(double robotAngleDeg,
 			double desiredAngleDeg, boolean stop, double allowedDegreeError) {

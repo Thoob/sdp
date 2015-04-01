@@ -32,6 +32,18 @@ public class PassingStrategy extends GeneralStrategy {
 
 	public void sendWorldState(WorldState worldState) {
 		initializeVars(worldState);
+		
+		
+		
+		// Prototype OG defence
+		
+		int[] goal = getLowerTopCorner(worldState);
+		System.out.println("Dist to goal from ball " + Math.abs(ballX - goal[0]));
+
+		if (Math.abs(ballX - goal[0]) < 12 ){
+			return;
+		}
+		
 		boolean doWeHaveBall = RobotPlanner.doesOurRobotHaveBall(
 				worldState.ballNotOnPitch, robotX, robotY, ballX, ballY);
 		if (doWeHaveBall) {
@@ -93,14 +105,19 @@ public class PassingStrategy extends GeneralStrategy {
 				enemyAttackerX, enemyAttackerY);
 		enemyBlocking = Math
 				.abs((diffInHeadings(robotAngleDeg, blockerAngleDeg) - diffInHeadings(
-						robotAngleDeg, attAngleDeg))) < 20;
+						robotAngleDeg, attAngleDeg))) < 15;
+		
+		System.out.println("Diff for friend: " + diffInHeadings(
+						robotAngleDeg, attAngleDeg));
+		System.out.println("Diff for enemy: " + diffInHeadings(
+				robotAngleDeg, blockerAngleDeg));
 		if (!enemyBlocking) {
 			System.out.println("Straigt pass");
-			boolean isFacingAttacker = (attDiffInHeadings < allowedDegreeError || attDiffInHeadings > 360 - allowedDegreeError);
+			boolean isFacingAttacker = (attDiffInHeadings < 10 || attDiffInHeadings > 350);
 			if (isFacingAttacker) {
 				framesPassed++;
 				if (SimpleWorldState.previousOperation != Operation.PASSKICK
-						&& framesPassed > 2) {
+						&& framesPassed > 8) {
 					RobotCommands.passKick();
 					SimpleWorldState.previousOperation = Operation.PASSKICK;
 					isCatcherUp = false;
@@ -108,7 +125,8 @@ public class PassingStrategy extends GeneralStrategy {
 				}
 			} else {
 				framesPassed = 0;
-				sh.rotateToDesiredAngle(robotAngleDeg, attAngleDeg);
+				sh.rotateToDesiredAngleForDef(robotAngleDeg,
+						attAngleDeg, false, 10);
 				return;
 			}
 		} else {
@@ -117,12 +135,13 @@ public class PassingStrategy extends GeneralStrategy {
 					attackerY, enemyAttackerX, enemyAttackerY);
 			System.out.println("Bounce pass angle " + desiredbounceAngle);
 			// double desiredbounceAngle = 220;
-			boolean isFacingBouncePass = (Math.abs(desiredbounceAngle
-					- robotAngleDeg) < allowedDegreeError);
+			double desireAng = Math.abs(desiredbounceAngle
+					- robotAngleDeg);
+			boolean isFacingBouncePass = (desireAng < 10);
 			if (isFacingBouncePass) {
 				framesPassed++;
 				if (SimpleWorldState.previousOperation != Operation.PASSKICK
-						&& framesPassed > 2) {
+						&& framesPassed > 8) {
 					System.out
 							.println("We are facing Attacker, and have the ball");
 					RobotCommands.passKick();
@@ -134,7 +153,7 @@ public class PassingStrategy extends GeneralStrategy {
 				System.out
 						.println("desired bounce angle " + desiredbounceAngle);
 				sh.rotateToDesiredAngleForDef(robotAngleDeg,
-						desiredbounceAngle, false, 18);
+						desiredbounceAngle, false, 10);
 			}
 		}
 	}
