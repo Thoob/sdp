@@ -41,6 +41,7 @@ public class PassingStrategy extends GeneralStrategy {
 		System.out.println("Dist to goal from ball " + Math.abs(ballX - goal[0]));
 
 		if (Math.abs(ballX - goal[0]) < 12 ){
+			RobotCommands.stop();
 			return;
 		}
 		
