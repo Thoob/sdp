@@ -141,7 +141,7 @@ public class PassingStrategy extends GeneralStrategy {
 			if (isFacingBouncePass) {
 				framesPassed++;
 				if (SimpleWorldState.previousOperation != Operation.PASSKICK
-						&& framesPassed > 8) {
+						&& framesPassed > 5) {
 					System.out
 							.println("We are facing Attacker, and have the ball");
 					RobotCommands.passKick();
