@@ -69,12 +69,14 @@ public class RobotPlanner {
 	}
 
 	public static boolean canCatchBall(double robotX, double robotY,
-			double ballX, double ballY) {
+			double ballX, double ballY, boolean catchState) {
 
 		double deltaTotal = getDeltaTotal(robotX, robotY, ballX, ballY);
 		;
 
 		if (deltaTotal < MAX_CATCH_DIST && deltaTotal > MIN_CATCH_DIST) {
+			return true;
+		} else if (deltaTotal < MIN_CATCH_DIST && catchState == true ){
 			return true;
 		} else if (deltaTotal < MIN_CATCH_DIST || deltaTotal > 95) {
 			return false;
@@ -91,7 +93,7 @@ public class RobotPlanner {
 		double deltaTotal = Math.abs(deltaX) + Math.abs(deltaY);
 		System.out.println("Distance from ball(prep): " + deltaTotal);
 
-		if (deltaTotal < MAX_CATCH_DIST * 2) {
+		if (deltaTotal < MAX_CATCH_DIST * 3) {
 			return true;
 		} else {
 			return false;

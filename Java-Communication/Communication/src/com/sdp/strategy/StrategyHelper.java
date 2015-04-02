@@ -32,12 +32,6 @@ public class StrategyHelper extends GeneralStrategy {
 			System.out.println("we have the ball");
 			return;
 		} else {
-			if (!isRobotFacingBall) {
-				rotateToDesiredAngle(robotAngleDeg, ballAngleDeg);
-				System.out.println("Rotating to face ball.");
-				return;
-			}
-			
 			if (RobotPlanner.prepareCatch(robotX, robotY, ballX, ballY)) {
 				RobotCommands.catchUp();
 				isCatcherUp = true;
@@ -46,6 +40,14 @@ public class StrategyHelper extends GeneralStrategy {
 				isCatcherUp = false;
 			}
 			
+			if (!isRobotFacingBall) {
+				rotateToDesiredAngle(robotAngleDeg, ballAngleDeg);
+				System.out.println("Rotating to face ball.");
+				return;
+			}
+			
+
+			
 //			if(RobotPlanner.getDeltaTotal(robotX, robotY, ballX, ballY) > 150){
 //				RobotCommands.catchDown();
 //				SimpleWorldState.previousOperation = Operation.NONE;
@@ -53,7 +55,7 @@ public class StrategyHelper extends GeneralStrategy {
 
 			if (isRobotFacingBall
 					&& !doWeHaveBall
-					&& !RobotPlanner.canCatchBall(robotX, robotY, ballX, ballY)
+					&& !RobotPlanner.canCatchBall(robotX, robotY, ballX, ballY, isCatcherUp)
 					&& (RobotPlanner.inZone(ballX, worldState) == RobotPlanner
 							.inZone(robotX, worldState))) {
 				RobotCommands.goStraight();
@@ -62,7 +64,7 @@ public class StrategyHelper extends GeneralStrategy {
 			}
 			// 4 - Catch ball
 			if (!doWeHaveBall && isRobotFacingBall
-					&& RobotPlanner.canCatchBall(robotX, robotY, ballX, ballY)
+					&& RobotPlanner.canCatchBall(robotX, robotY, ballX, ballY, isCatcherUp)
 					&& isCatcherUp) {
 				RobotCommands.catchDown();
 				isCatcherUp = false;

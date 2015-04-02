@@ -181,7 +181,7 @@ public class DefenderStrategy extends GeneralStrategy {
 			} else {
 				double deltaX = Math.abs(enemyAttacker.x - getOurGoalX(worldState));
 				double deltaY = deltaX * Math.tan(Math.toRadians(angle));
-				double predictedY = enemyAttacker.y + deltaY;
+				double predictedY = enemyAttacker.y - deltaY;
 				return predictedY;
 			}
 		} else {
